@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
 
 var path = {
 	scss: {
@@ -10,7 +11,7 @@ var path = {
 		dest: 'build/css'
 	},
 	js: {
-		src: 'src/js/main.js',
+		src: ['src/js/includes/lodash.js', 'src/js/includes/traer.js', 'src/js/main.js'],
 		files: 'src/js/**/*.js',
 		dest: 'build/js'
 	}
@@ -34,7 +35,8 @@ gulp.task('uglify', function() {
 		console.log(err.message);
 		this.emit('end');
 	}))
-	.pipe(uglify())
+	.pipe(concat('main.js'))
+	//.pipe(uglify())
 	.pipe(gulp.dest(path.js.dest));
 });
 
