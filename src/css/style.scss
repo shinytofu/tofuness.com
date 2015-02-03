@@ -1,0 +1,60 @@
+@import 'default.scss';
+
+// Colors 8)
+
+$gold: #f3d77f;
+$gold-dark: #99862c;
+$black: #333333;
+
+/*
+Modular scale
+64
+48
+36
+28
+24
+18
+16
+14
+13
+12
+10
+*/
+
+.playfair {
+	font-family: 'Playfair Display', serif;
+}
+.soleil {
+	font-family: 'soleil', sans-serif;
+}
+
+html {
+	color: $black;
+	font-family: 'Helvetica', sans-serif;
+}
+div {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#wrap {
+	padding: 80px;
+	margin: 0 auto;
+	width: 100%;
+}
+#intro-top {
+	@extend .soleil;
+	padding-bottom: 1em;
+	color: $gold-dark;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+#intro-mid {
+	@extend .soleil;
+	color: $gold;
+	font-size: 48px;
+	font-weight: 900;
+	line-height: 1.5em;
+}
