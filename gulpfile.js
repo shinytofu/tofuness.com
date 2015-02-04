@@ -11,7 +11,12 @@ var path = {
 		dest: 'build/css'
 	},
 	js: {
-		src: ['src/js/includes/lodash.js', 'src/js/includes/traer.js', 'src/js/main.js'],
+		src: [
+			'src/js/includes/lodash.js',
+			'src/js/includes/traer.js',
+			'src/js/includes/*.js',
+			'src/js/main.js'
+		],
 		files: 'src/js/**/*.js',
 		dest: 'build/js'
 	}

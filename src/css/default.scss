@@ -21,6 +21,13 @@
 	-moz-border-radius: $value;
 	border-radius: $value;
 }
+@mixin transform($transforms){
+	-moz-transform: $transforms;
+	-o-transform: $transforms;
+	-ms-transform: $transforms;
+	-webkit-transform: $transforms;
+	transform: $transforms;
+}
 .cf:before, .cf:after {
 	content: " ";
 	display: table;
