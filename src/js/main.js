@@ -30,17 +30,15 @@ $(function() {
 	var ctx = canvas.getContext('2d');
 	var physics = new Physics(0);
 
-	if (window.devicePixelRatio) {
-		var canvasWidth = $(document).width();
-		var canvasHeight = $(document).height();
-		var canvasCssWidth = canvasWidth;
-		var canvasCssHeight = canvasHeight;
+	function reScaleCanvas() {
+		if (window.devicePixelRatio) {
+			var canvasWidth = 640;
+			var canvasHeight = 560;
 
-		$(canvas).attr('width', canvasWidth * window.devicePixelRatio);
-		$(canvas).attr('height', canvasHeight * window.devicePixelRatio);
-		$(canvas).css('width', canvasCssWidth);
-		$(canvas).css('height', canvasCssHeight);
-		ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+			canvas.width = canvasWidth * window.devicePixelRatio;
+			canvas.height = canvasHeight * window.devicePixelRatio;
+			ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+		}
 	}
 
 	Number.prototype.toRads = function() {
@@ -51,9 +49,11 @@ $(function() {
 		return this <= 0 ? -1 : 1;
 	}
 
+	var centerVector = new Physics.Vector(280, 280);
+
 	var Trixel = function() {
-		this.startX = 280;
-		this.startY = 280;
+		this.startX = centerVector.x;
+		this.startY = centerVector.y;
 		this.rotation = Math.random() * 360;
 		this.rotationDirection = Math.random() > 0.5 ? -1 : 1;
 
@@ -61,13 +61,14 @@ $(function() {
 		this.inVision = true;
 
 		this.vel = 0;
-		this.targetVel = 5;
+		this.targetVel = 4;
 
 		this.size = 0;
 		this.targetSize = Math.random() * 10;
 
 		this.alpha = 0;
 		this.targetAlpha = Math.random();
+		this.initialTargetAlpha = this.targetAlpha;
 
 		this.mass = this.targetSize / 4 + 1;
 
@@ -85,8 +86,8 @@ $(function() {
 			ctx.translate(this.particle.position.x, this.particle.position.y);
 			ctx.rotate(this.rotation.toRads());
 			ctx.rect(
-				0,
-				0,
+				-this.size / 2,
+				-this.size / 2,
 				this.size,
 				this.size
 			);
@@ -110,9 +111,19 @@ $(function() {
 		this.particle = physics.makeParticle(this.mass, 0, 0);
 		this.particle.position.x = this.startX;
 		this.particle.position.y = this.startY;
-		this.particle.velocity.x += (Math.random() - Math.random()) * 5;
-		this.particle.velocity.y += (Math.random() - Math.random()) * 5;
-		//physics.makeAttraction(this.particle, this.anchor, 50000, canvas.height);
+
+		var velX = (Math.random() - Math.random()) * this.targetVel;
+		var velY = (Math.random() - Math.random()) * this.targetVel;
+
+		if (Math.abs(velX) < 1) {
+			velX = 1 * velX.getSign();
+		} else if (Math.abs(velY) < 1){
+			velY = 1 * velY.getSign();
+		}
+
+		this.particle.velocity.x += velX;
+		this.particle.velocity.y += velY;
+		//physics.makeAttraction(this.particle, this.anchor, 500000, canvas.height);
 	}
 
 	Trixel.prototype.update = function() {
@@ -121,19 +132,17 @@ $(function() {
 			this.add();
 		}
 
-		if (this.alpha < this.targetAlpha) this.alpha += 0.005;
-		if (this.size < this.targetSize) this.size += 0.05;
+		this.alpha += (this.targetAlpha - this.alpha) * 0.1;
+		this.size += (this.targetSize - this.size) * 0.1;
+
+		if (this.particle.position.distanceToSquared(centerVector) > 62500) {
+			this.targetAlpha = 0;
+		} else {
+			this.targetAlpha = this.initialTargetAlpha
+		}
 
 		if (this.rotation > 360) this.rotation -= 360;
-		this.rotation += 1 * this.rotationDirection;
-
-		if (Math.random() > 1) {
-			if (this.particle.velocity.x > this.particle.velocity.y) {
-				this.particle.velocity.y += (Math.random() - Math.random()) * 2;
-			} else {
-				this.particle.velocity.x += (Math.random() - Math.random()) * 2;
-			}
-		}
+		this.rotation += 2 * this.rotationDirection;
 	}
 
 	Trixel.prototype.draw = function() {
@@ -157,13 +166,17 @@ $(function() {
 		$('#pulse').css({
 			height: $(document).height()
 		});
+		reScaleCanvas();
 	});
 
 	$window.resize();
 
-	for (var i = 0; i < 50; i++) {
+	var addParticleInterval = setInterval(function() {
 		new Trixel();
-	}
+		if (Trixel.all.length > 30) {
+			clearInterval(addParticleInterval);
+		}
+	}, 100);
 
 	physics.play();
 

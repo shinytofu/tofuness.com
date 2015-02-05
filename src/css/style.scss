@@ -5,6 +5,7 @@
 $gold: #f3d77f;
 $gold-dark: #99862c;
 $black: #333333;
+$purple-text: #efe8ff;
 $purple: #1e1433;
 $purple-l: #685199;
 
@@ -42,6 +43,16 @@ div {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.link {
+	color: $purple-text;
+	text-decoration: none;
+	text-shadow: 1px 1px 0 $purple, -1px 1px 0 $purple, 2px 1px 0 $purple, -2px 1px 0 $purple;
+	@include box-shadow(0 1px 0 $purple-text);
+	&:hover {
+		opacity: 0.7;
+	}
 }
 
 #wrap {
@@ -90,7 +101,7 @@ div {
 .me-section-desc {
 	@extend .calluna;
 	padding-top: 1em;
-	color: #efe8ff;
+	color: $purple-text;
 	font-size: 16px;
 	line-height: 2;
 }
