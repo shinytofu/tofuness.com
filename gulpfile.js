@@ -8,7 +8,7 @@ var path = {
 	scss: {
 		src: 'src/css/style.scss',
 		files: 'src/css/**/*.scss',
-		dest: 'build/css'
+		dest: 'public/css'
 	},
 	js: {
 		src: [
@@ -18,7 +18,7 @@ var path = {
 			'src/js/main.js'
 		],
 		files: 'src/js/**/*.js',
-		dest: 'build/js'
+		dest: 'public/js'
 	}
 }
 

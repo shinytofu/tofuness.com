@@ -12681,12 +12681,12 @@ $(function() {
 		}, {
 			delay: 1000,
 			duration: 2000,
-			easing: [0.215, 0.61, 0.355, 1]
+			easing: [0.215, 0.61, 0.355, 1] // easeOutCubic
 		});
 
 		$('#pulse-inner').velocity({
 			opacity: [0, 1],
-			scale: [1.2, 0],
+			scale: [1.1, 0],
 			rotateZ: [45, 45]
 		}, {
 			delay: 1300,
@@ -12697,6 +12697,28 @@ $(function() {
 	}
 
 	pulsate();
+
+	var $tooltip = $('#tools-tip-wrap');
+
+	$('#tools-link').hover(function() {
+		$tooltip.stop(true).show().velocity({
+			opacity: [1, 0],
+			translateY: [0, 10]
+		}, {
+			easing: [0.215, 0.61, 0.355, 1],
+			duration: 230
+		});
+	}, function() {
+		$tooltip.velocity({
+			opacity: [0, 1]
+		}, {
+			easing: [0.55, 0.055, 0.675, 0.19], // easeInCubic
+			duration: 150,
+			complete: function() {
+				$(this).hide();
+			}
+		});
+	});
 
 	// Particle time
 

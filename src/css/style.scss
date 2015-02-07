@@ -3,9 +3,10 @@
 // Colors 8)
 
 $gold: #f3d77f;
-$gold-dark: #99862c;
+$gold-dark: #b5a454;
 $black: #333333;
 $purple-text: #efe8ff;
+$purple-text-hover: #b6aad1;
 $purple: #1e1433;
 $purple-l: #685199;
 
@@ -33,9 +34,9 @@ Modular scale
 .calluna {
 	font-family: 'calluna', sans-serif;
 }
-
 html {
 	color: $black;
+	font-size: 15px;
 	font-family: 'Helvetica', sans-serif;
 	background: $purple;
 }
@@ -44,14 +45,14 @@ div {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
-
 .link {
 	color: $purple-text;
 	text-decoration: none;
 	text-shadow: 1px 1px 0 $purple, -1px 1px 0 $purple, 2px 1px 0 $purple, -2px 1px 0 $purple;
 	@include box-shadow(0 1px 0 $purple-text);
 	&:hover {
-		opacity: 0.7;
+		color: $purple-text-hover;
+		@include box-shadow(0 1px 0 $purple-text-hover);
 	}
 }
 
@@ -80,7 +81,7 @@ div {
 	-letter-kern: 0 4px;
 }
 #me {
-	padding: 0 80px 80px;
+	padding: 0 80px;
 }
 #me-left {
 	width: 480px;
@@ -102,7 +103,6 @@ div {
 	@extend .calluna;
 	padding-top: 1em;
 	color: $purple-text;
-	font-size: 16px;
 	line-height: 2;
 }
 #canvas {
@@ -111,7 +111,6 @@ div {
 	left: 0;
 	z-index: 10;
 }
-
 
 // Pulse
 
@@ -123,7 +122,6 @@ div {
 	right: 0;
 	z-index: -1;
 }
-
 #pulse-inner {
 	opacity: 0;
 	position: absolute;
@@ -143,4 +141,79 @@ div {
 	height: 800px;
 	border: 4px solid $gold;
 	@include transform(rotate(45deg));
+}
+
+.sideproject {
+	margin-top: 1em;
+	padding-top: 1em;
+	color: $purple-text;
+	line-height: 2;
+	border-top: 1px dotted $purple-l;
+}
+.sideproject-title {
+	@extend .soleil;
+	font-weight: 700;
+}
+.sideproject-desc {
+	@extend .calluna;
+}
+
+#footer {
+	@extend .calluna;
+	position: relative;
+	padding: 40px 80px;
+	color: $purple-l;
+}
+#tools-link {
+	position: relative;
+	cursor: pointer;
+}
+#tools-tip-wrap {
+	position: absolute;
+	display: none;
+	opacity: 0;
+	top: -40px;
+	left: 200px;
+	margin-bottom: 12px;
+	@include transform-origin(105px 77px);
+}
+#tools-tip {
+	@extend .cf;
+	padding: 10px;
+	width: auto;
+	background: #fff;
+	@include border-radius(4px);
+
+	&:after {
+		top: 100%;
+		left: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+		border-color: rgba(255, 255, 255, 0);
+		border-top-color: #fff;
+		border-width: 11px;
+		margin-top: -1px;
+		margin-left: -10px;
+	}
+}
+.tools-icon-wrap {
+	float: left;
+	margin-right: 10px;
+	&:last-child {
+		margin-right: 0;
+	}
+}
+.tools-icon-desc {
+	@extend .soleil;
+	font-size: 11px;
+	text-align: center;
+}
+.tools-icon {
+	width: 30px;
+	height: 30px;
+	background-size: cover;
 }
