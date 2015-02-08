@@ -12673,33 +12673,23 @@ common);
 })(jQuery);
 
 $(function() {
-	function pulsate() {
-		$('#pulse-outer').velocity({
-			opacity: [0, 1],
-			scale: [1.2, 0],
-			rotateZ: [45, 45]
-		}, {
-			delay: 1000,
-			duration: 2000,
-			easing: [0.215, 0.61, 0.355, 1] // easeOutCubic
-		});
 
-		$('#pulse-inner').velocity({
-			opacity: [0, 1],
-			scale: [1.1, 0],
-			rotateZ: [45, 45]
-		}, {
-			delay: 1300,
-			duration: 2500,
-			easing: [0.215, 0.61, 0.355, 1],
-			complete: pulsate
-		});
-	}
+	// Logo animation
 
-	pulsate();
+	$('#logo').velocity({
+		opacity: [1, 0],
+		rotateY: [360, 0],
+		translateY: [0, 15],
+		rotateZ: [45, 0]
+	}, {
+		easing: [0.215, 0.61, 0.355, 1],
+		duration: 1000,
+		delay: 1000
+	});
+
+	// Footer tooltip
 
 	var $tooltip = $('#tools-tip-wrap');
-
 	$('#tools-link').hover(function() {
 		$tooltip.stop(true).show().velocity({
 			opacity: [1, 0],
@@ -12710,7 +12700,8 @@ $(function() {
 		});
 	}, function() {
 		$tooltip.velocity({
-			opacity: [0, 1]
+			opacity: [0, 1],
+			translateY: [-10, 0]
 		}, {
 			easing: [0.55, 0.055, 0.675, 0.19], // easeInCubic
 			duration: 150,
@@ -12726,17 +12717,6 @@ $(function() {
 	var ctx = canvas.getContext('2d');
 	var physics = new Physics(0);
 
-	function reScaleCanvas() {
-		if (window.devicePixelRatio) {
-			var canvasWidth = 640;
-			var canvasHeight = 560;
-
-			canvas.width = canvasWidth * window.devicePixelRatio;
-			canvas.height = canvasHeight * window.devicePixelRatio;
-			ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-		}
-	}
-
 	Number.prototype.toRads = function() {
 		return this * Math.PI / 180;
 	}
@@ -12747,7 +12727,7 @@ $(function() {
 
 	var centerVector = new Physics.Vector(280, 280);
 
-	var Trixel = function() {
+	var Polygon = function() {
 		this.startX = centerVector.x;
 		this.startY = centerVector.y;
 		this.rotation = Math.random() * 360;
@@ -12791,12 +12771,12 @@ $(function() {
 			ctx.restore();
 		}
 
-		Trixel.all.push(this);
+		Polygon.all.push(this);
 	}
 
-	Trixel.all = [];
+	Polygon.all = [];
 
-	Trixel.prototype.add = function() {
+	Polygon.prototype.add = function() {
 		this.added = true;
 
 		this.alpha = 0;
@@ -12822,7 +12802,7 @@ $(function() {
 		//physics.makeAttraction(this.particle, this.anchor, 500000, canvas.height);
 	}
 
-	Trixel.prototype.update = function() {
+	Polygon.prototype.update = function() {
 		if (!this.added) {
 			console.log('Add should be called');
 			this.add();
@@ -12841,7 +12821,7 @@ $(function() {
 		this.rotation += 2 * this.rotationDirection;
 	}
 
-	Trixel.prototype.draw = function() {
+	Polygon.prototype.draw = function() {
 		if (
 			this.particle.position.x > $(document).width() + this.size
 			|| this.particle.position.x < -this.size
@@ -12856,7 +12836,20 @@ $(function() {
 
 	canvas.physics = physics;
 
+	// Change stuff on resizing
+
 	var $window = $(window);
+
+	function reScaleCanvas() {
+		if (window.devicePixelRatio) {
+			var canvasWidth = 640;
+			var canvasHeight = 560;
+
+			canvas.width = canvasWidth * window.devicePixelRatio;
+			canvas.height = canvasHeight * window.devicePixelRatio;
+			ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+		}
+	}
 
 	$window.on('resize', function() {
 		$('#pulse').css({
@@ -12867,20 +12860,49 @@ $(function() {
 
 	$window.resize();
 
+	// Add particles and start simulation
+
 	var addParticleInterval = setInterval(function() {
-		new Trixel();
-		if (Trixel.all.length > 30) {
+		new Polygon();
+		if (Polygon.all.length >= 30) {
 			clearInterval(addParticleInterval);
 		}
 	}, 100);
 
 	physics.play();
 
+	// Hompage pulsating square
+
+	function pulsate() {
+		$('#pulse-outer').velocity({
+			opacity: [0, 1],
+			scale: [1, 0],
+			rotateZ: [45, 45]
+		}, {
+			delay: 1000,
+			duration: 2000,
+			easing: [0.215, 0.61, 0.355, 1] // easeOutCubic
+		});
+
+		$('#pulse-inner').velocity({
+			opacity: [0, 1],
+			scale: [0.9, 0],
+			rotateZ: [45, 45]
+		}, {
+			delay: 1300,
+			duration: 2500,
+			easing: [0.215, 0.61, 0.355, 1],
+			complete: pulsate
+		});
+	}
+
+	pulsate();
+
 	function renderFrame() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		_.each(Trixel.all, function(trixel) {
-			trixel.update();
-			trixel.draw();
+		_.each(Polygon.all, function(polygon) {
+			polygon.update();
+			polygon.draw();
 		});
 		requestAnimationFrame(renderFrame);
 	}

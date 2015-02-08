@@ -32,14 +32,15 @@ server.route({
 
 server.route({
 	method: 'GET',
-	path: '/portfolio',
+	path: '/projects',
 	handler: function(request, reply) {
-		reply.view('portfolio');
+		reply.view('projects');
 	}
 });
 
 if (process.env.NODE_ENV === 'development') {
 	process.send({cmd: 'NODE_DEV', required: './views/index.html'});
+	process.send({cmd: 'NODE_DEV', required: './views/projects.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/partials/header.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/partials/footer.html'});
 }

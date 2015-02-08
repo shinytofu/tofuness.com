@@ -36,7 +36,7 @@ Modular scale
 }
 html {
 	color: $black;
-	font-size: 15px;
+	font-size: 16px;
 	font-family: 'Helvetica', sans-serif;
 	background: $purple;
 }
@@ -56,17 +56,50 @@ div {
 	}
 }
 
+// Navigation
+
+#navigation {
+	@extend .cf;
+	margin-left: 80px;
+	padding-top: 10px;
+	width: 480px;
+	border-top: 1px solid $purple-text;
+}
+.navigation-link {
+	@extend .soleil;
+	margin-right: 20px;
+	float: left;
+	color: $purple-text;
+	font-size: 11px;
+	text-transform: uppercase;
+	text-decoration: none;
+	letter-spacing: 0.1em;
+	&:hover {
+		color: $purple-text-hover;
+	}
+}
+#logo-wrap {
+	padding: 0 0 16px 82px;
+}
+#logo {
+	display: block;
+	opacity: 0;
+	width: 0.707em;
+	height: 0.707em;
+	background: $gold;
+}
 #wrap {
+	padding-top: 80px;
 	width: 100%;
 }
 #intro {
-	padding: 160px 80px;
+	padding: 80px;
 }
 #intro-top {
 	@extend .soleil;
 	padding-bottom: 1em;
-	color: $purple-l;
-	font-size: 12px;
+	color: $purple-text;
+	font-size: 11px;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 }
@@ -80,11 +113,36 @@ div {
 	letter-spacing: 0.01em;
 	-letter-kern: 0 4px;
 }
+
+// Me
+
 #me {
 	padding: 0 80px;
+	width: 640px;
 }
-#me-left {
-	width: 480px;
+.me-image-wrap {
+	padding: 40px 0;
+}
+.me-image {
+	margin-left: -40px;
+	width: 560px;
+	height: 287px;
+	background: $purple-l;
+}
+.me-image-caption {
+	margin-left: -40px;
+	padding-top: 0.5em;
+}
+.me-image-caption-text {
+	@extend .calluna;
+	color: $purple-text-hover;
+	font-size: 14px;
+}
+.me-image-caption-credit {
+	@extend .soleil;
+	padding-top: 0.5em;
+	color: $purple-l;
+	font-size: 11px;
 }
 .me-section {
 	padding-top: 2em;
@@ -95,7 +153,7 @@ div {
 .me-section-hd {
 	@extend .soleil;
 	color: $purple-l;
-	font-size: 12px;
+	font-size: 11px;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 }
@@ -107,9 +165,9 @@ div {
 }
 #canvas {
 	position: absolute;
-	top: 0;
+	top: 60px;
 	left: 0;
-	z-index: 10;
+	z-index: -1;
 }
 
 // Pulse
@@ -125,7 +183,7 @@ div {
 #pulse-inner {
 	opacity: 0;
 	position: absolute;
-	top: -120px;
+	top: -60px;
 	left: -120px;
 	width: 800px;
 	height: 800px;
@@ -135,7 +193,7 @@ div {
 #pulse-outer {
 	opacity: 0;
 	position: absolute;
-	top: -120px;
+	top: -60px;
 	left: -120px;
 	width: 800px;
 	height: 800px;
@@ -163,6 +221,7 @@ div {
 	position: relative;
 	padding: 40px 80px;
 	color: $purple-l;
+	font-size: 14px;
 }
 #tools-link {
 	position: relative;
@@ -173,7 +232,7 @@ div {
 	display: none;
 	opacity: 0;
 	top: -40px;
-	left: 200px;
+	left: 185px;
 	margin-bottom: 12px;
 	@include transform-origin(105px 77px);
 }
