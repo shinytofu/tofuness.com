@@ -12674,6 +12674,11 @@ common);
 
 $(function() {
 
+	var easing = {
+		easeInCubic: [0.55, 0.055, 0.675, 0.19],
+		easeOutCubic: [0.215, 0.61, 0.355, 1]
+	}
+
 	// Logo animation
 
 	$('#logo').velocity({
@@ -12682,9 +12687,9 @@ $(function() {
 		translateY: [0, 15],
 		rotateZ: [45, 0]
 	}, {
-		easing: [0.215, 0.61, 0.355, 1],
+		easing: easing.easeOutCubic,
 		duration: 1000,
-		delay: 1000
+		delay: 600
 	});
 
 	// Footer tooltip
@@ -12695,15 +12700,14 @@ $(function() {
 			opacity: [1, 0],
 			translateY: [0, 10]
 		}, {
-			easing: [0.215, 0.61, 0.355, 1],
+			easing: easing.easeOutCubic,
 			duration: 230
 		});
 	}, function() {
 		$tooltip.velocity({
-			opacity: [0, 1],
-			translateY: [-10, 0]
+			opacity: [0, 1]
 		}, {
-			easing: [0.55, 0.055, 0.675, 0.19], // easeInCubic
+			easing: easing.easeInCubic,
 			duration: 150,
 			complete: function() {
 				$(this).hide();
@@ -12714,7 +12718,7 @@ $(function() {
 	// Particle time
 
 	var canvas = document.getElementById('canvas');
-	var ctx = canvas.getContext('2d');
+	if (canvas) var ctx = canvas.getContext('2d');
 	var physics = new Physics(0);
 
 	Number.prototype.toRads = function() {
@@ -12804,7 +12808,6 @@ $(function() {
 
 	Polygon.prototype.update = function() {
 		if (!this.added) {
-			console.log('Add should be called');
 			this.add();
 		}
 
@@ -12834,19 +12837,23 @@ $(function() {
 		}
 	}
 
-	canvas.physics = physics;
-
 	// Change stuff on resizing
 
 	var $window = $(window);
 
 	function reScaleCanvas() {
-		if (window.devicePixelRatio) {
+		if (window.devicePixelRatio && canvas) {
 			var canvasWidth = 640;
 			var canvasHeight = 560;
 
 			canvas.width = canvasWidth * window.devicePixelRatio;
 			canvas.height = canvasHeight * window.devicePixelRatio;
+
+			$('#canvas').css({
+				width: canvasWidth,
+				height: canvasHeight
+			});
+
 			ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 		}
 	}
@@ -12863,6 +12870,7 @@ $(function() {
 	// Add particles and start simulation
 
 	var addParticleInterval = setInterval(function() {
+		if (!canvas) clearInterval(addParticleInterval);
 		new Polygon();
 		if (Polygon.all.length >= 30) {
 			clearInterval(addParticleInterval);
@@ -12881,7 +12889,7 @@ $(function() {
 		}, {
 			delay: 1000,
 			duration: 2000,
-			easing: [0.215, 0.61, 0.355, 1] // easeOutCubic
+			easing: easing.easeOutCubic // easeOutCubic
 		});
 
 		$('#pulse-inner').velocity({
@@ -12891,7 +12899,7 @@ $(function() {
 		}, {
 			delay: 1300,
 			duration: 2500,
-			easing: [0.215, 0.61, 0.355, 1],
+			easing: easing.easeOutCubic,
 			complete: pulsate
 		});
 	}
@@ -12899,6 +12907,7 @@ $(function() {
 	pulsate();
 
 	function renderFrame() {
+		if (!canvas) return;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		_.each(Polygon.all, function(polygon) {
 			polygon.update();

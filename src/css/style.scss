@@ -5,7 +5,7 @@
 $gold: #f3d77f;
 $gold-dark: #b5a454;
 $black: #333333;
-$purple-text: #efe8ff;
+$purple-text: #fff;
 $purple-text-hover: #b6aad1;
 $purple: #1e1433;
 $purple-l: #685199;
@@ -32,7 +32,7 @@ Modular scale
 	font-family: 'soleil', sans-serif;
 }
 .calluna {
-	font-family: 'calluna', sans-serif;
+	font-family: 'calluna', serif;
 }
 html {
 	color: $black;
@@ -48,7 +48,17 @@ div {
 .link {
 	color: $purple-text;
 	text-decoration: none;
-	text-shadow: 1px 1px 0 $purple, -1px 1px 0 $purple, 2px 1px 0 $purple, -2px 1px 0 $purple;
+	text-shadow:
+		0 1px 0 $purple,
+		1px 1px 0 $purple,
+		-1px 1px 0 $purple,
+		2px 1px 0 $purple,
+		-2px 1px 0 $purple,
+		0 2px 0 $purple,
+		-1px 2px 0 $purple,
+		1px 2px 0 $purple,
+		-2px 2px 0 $purple,
+		2px 2px 0 $purple;
 	@include box-shadow(0 1px 0 $purple-text);
 	&:hover {
 		color: $purple-text-hover;
