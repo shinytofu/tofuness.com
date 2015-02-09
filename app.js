@@ -1,5 +1,6 @@
 var Hapi = require('hapi');
 var Path = require('path');
+var Request = require('superagent');
 var server = new Hapi.Server();
 server.connection({ port: 1337 });
 
@@ -38,9 +39,36 @@ server.route({
 	}
 });
 
+server.route({
+	method: 'GET',
+	path: '/games',
+	handler: function(request, reply) {
+		reply.view('games');
+	}
+});
+
+var RIOT = {
+	API_KEY: '10ff4139-d85b-4c00-99df-f90e0aa2c49d',
+	SUMMONER_ID: 22045226
+}
+
+server.route({
+	method: 'GET',
+	path: '/matches',
+	handler: function(request, reply) {
+		Request
+		.get('https://eune.api.pvp.net/api/lol/eune/v1.3/game/by-summoner/' + RIOT.SUMMONER_ID + '/recent?api_key=' + RIOT.API_KEY)
+		.end(function(err, response) {
+			console.log(err);
+			reply(JSON.parse(response.text).games[6]).type('text/json');
+		});
+	}
+});
+
 if (process.env.NODE_ENV === 'development') {
 	process.send({cmd: 'NODE_DEV', required: './views/index.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/projects.html'});
+	process.send({cmd: 'NODE_DEV', required: './views/games.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/partials/header.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/partials/footer.html'});
 }
