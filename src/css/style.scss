@@ -1,6 +1,3 @@
-@import 'default.scss';
-@import 'league.scss';
-
 // Colors 8)
 
 $gold: #f3d77f;
@@ -10,6 +7,11 @@ $purple-text: #fff;
 $purple-text-hover: #b6aad1;
 $purple: #1e1433;
 $purple-l: #685199;
+$w70: rgba(255, 255, 255, 0.7);
+
+@import 'includes/normalize.scss';
+@import 'default.scss';
+@import 'league.scss';
 
 /*
 Modular scale
@@ -28,6 +30,9 @@ Modular scale
 
 .playfair {
 	font-family: 'Playfair Display', serif;
+}
+.oswald {
+	font-family: 'Oswald', sans-serif;
 }
 .soleil {
 	font-family: 'soleil', sans-serif;

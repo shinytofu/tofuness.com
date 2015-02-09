@@ -3,6 +3,8 @@ var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
+var gulpif = require('gulp-if');
+var env = process.env.NODE_ENV.replace(/\W/g, '');
 
 var path = {
 	scss: {
@@ -41,7 +43,7 @@ gulp.task('uglify', function() {
 		this.emit('end');
 	}))
 	.pipe(concat('main.js'))
-	//.pipe(uglify())
+	.pipe(gulpif(env === 'production', uglify()))
 	.pipe(gulp.dest(path.js.dest));
 });
 
@@ -50,4 +52,5 @@ gulp.task('watch', function() {
 	gulp.watch(path.js.files, ['uglify']);
 });
 
-gulp.task('default', ['sass' , 'uglify', 'watch']);
+gulp.task('build', ['uglify', 'sass']);
+gulp.task('default', ['sass' , 'concat', 'watch']);

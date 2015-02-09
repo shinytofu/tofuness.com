@@ -1,15 +1,21 @@
 var Hapi = require('hapi');
 var Path = require('path');
 var Request = require('superagent');
+var Handlebars = require('handlebars');
+require('swag').registerHelpers(Handlebars);
+
 var server = new Hapi.Server();
 server.connection({ port: 1337 });
 
 server.views({
 	engines: {
-		html: require('handlebars')
+		html: Handlebars
 	},
 	path: Path.join(__dirname, 'views'),
-	partialsPath: Path.join(__dirname, 'views/partials')
+	partialsPath: Path.join(__dirname, 'views/partials'),
+	context: {
+		env: process.env.NODE_ENV
+	}
 });
 
 server.route({
@@ -59,8 +65,7 @@ server.route({
 		Request
 		.get('https://eune.api.pvp.net/api/lol/eune/v1.3/game/by-summoner/' + RIOT.SUMMONER_ID + '/recent?api_key=' + RIOT.API_KEY)
 		.end(function(err, response) {
-			console.log(err);
-			reply(JSON.parse(response.text).games[6]).type('text/json');
+			reply(JSON.parse(response.text).games).type('text/json');
 		});
 	}
 });

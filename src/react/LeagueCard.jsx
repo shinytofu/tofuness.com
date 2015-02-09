@@ -10,7 +10,7 @@ var LeagueCard = React.createClass({
 			loaded: false,
 			summonerName: 'Hameru',
 			summonerRegion: 'EUNE',
-			match: {}
+			matches: []
 		}
 	},
 	componentWillMount: function() {
@@ -20,7 +20,7 @@ var LeagueCard = React.createClass({
 			success: function(res) {
 				this.setState({
 					loaded: true,
-					match: res
+					matches: res
 				});
 			}.bind(this)
 		});
@@ -28,18 +28,47 @@ var LeagueCard = React.createClass({
 	render: function() {
 		if (!this.state.loaded) return <div />;
 
-		var championName = _.findKey(championsData, {
-			'key': '' + this.state.match.championId
-		});
-		var champion = championsData[championName];
-		var style = {
-			backgroundImage: 'url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champion.id + '_0.jpg)'
-		}
-
-		console.log(champion);
+		var mergedMatches = this.state.matches.map(function(match) {
+			var championName = _.findKey(championsData, {
+				'key': '' + match.championId
+			});
+			var champion = championsData[championName];
+			champion.cover = 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champion.id + '_0.jpg';
+			match.champion = champion;
+			return match;
+		}.bind(this));
 
 		return (
-			<div className="league-card" style={style}>
+			<div className="cf">
+				{
+					mergedMatches.map(function(match) {
+						var style = {
+							backgroundImage: 'url(' + match.champion.cover + ')'
+						}
+						return (
+							<div className="league-card" style={style}>
+								<div className="league-card-ovl">
+									<div className="league-card-top">
+										Played as {match.champion.name}
+									</div>
+									<div className="league-card-stats">
+										<div className="league-card-kda">
+											{match.stats.championsKilled || '0'} / {match.stats.numDeaths || '0'} / {match.stats.assists || '0'}
+										</div>
+										<div className="league-card-finance">
+											<div className="league-card-gold">
+												Earned {Math.round(match.stats.goldEarned / 1000)}k gold
+											</div>
+											<div className="league-card-creeps">
+												Killed {match.stats.minionsKilled + match.stats.neutralMinionsKilled} creeps
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						);
+					})
+				}
 			</div>
 		);
 	}

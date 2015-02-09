@@ -235,7 +235,7 @@ $(function() {
 	function renderFrame() {
 		if (!canvas) return;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		_.each(Polygon.all, function(polygon) {
+		Polygon.all.forEach(function(polygon) {
 			polygon.update();
 			polygon.draw();
 		});
