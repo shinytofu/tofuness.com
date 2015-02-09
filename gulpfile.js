@@ -4,7 +4,9 @@ var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var gulpif = require('gulp-if');
-var env = process.env.NODE_ENV.replace(/\W/g, '');
+var env = process.env.NODE_ENV;
+
+if (env) env = env.replace(/\W/g, '');
 
 var path = {
 	scss: {
@@ -53,4 +55,4 @@ gulp.task('watch', function() {
 });
 
 gulp.task('build', ['uglify', 'sass']);
-gulp.task('default', ['sass' , 'concat', 'watch']);
+gulp.task('default', ['sass' , 'uglify', 'watch']);

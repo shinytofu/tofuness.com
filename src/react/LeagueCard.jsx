@@ -57,10 +57,10 @@ var LeagueCard = React.createClass({
 										</div>
 										<div className="league-card-finance">
 											<div className="league-card-gold">
-												Earned {Math.round(match.stats.goldEarned / 1000)}k gold
+												$: Earned {Math.round(match.stats.goldEarned / 1000)}k gold
 											</div>
 											<div className="league-card-creeps">
-												Killed {match.stats.minionsKilled + match.stats.neutralMinionsKilled} creeps
+												X: Killed {match.stats.minionsKilled + match.stats.neutralMinionsKilled} creeps
 											</div>
 										</div>
 									</div>

@@ -42,7 +42,7 @@ Modular scale
 }
 html {
 	color: $black;
-	font-size: 14px;
+	font-size: 16px;
 	font-family: 'Helvetica', sans-serif;
 	background: $purple;
 }
@@ -180,7 +180,6 @@ div {
 	@extend .calluna;
 	padding-top: 1em;
 	color: $purple-text;
-	font-size: 14px;
 	line-height: 2;
 }
 #canvas {

@@ -1,1 +1,2123 @@
-!function(){{var t=this;t.Physics}common=function(){var t={},i=Array.prototype,e=Object.prototype,s=e.hasOwnProperty,n=i.slice,r=i.forEach,a=i.indexOf,o=e.toString,c=function(t,i){return s.call(t,i)},h=function(i,e,s){if(null!=i)if(r&&i.forEach===r)i.forEach(e,s);else if(i.length===+i.length){for(var n=0,a=i.length;a>n;n++)if(n in i&&e.call(s,i[n],n,i)===t)return}else for(var o in i)if(_.has(i,o)&&e.call(s,i[o],o,i)===t)return},l=function(t){return t},u=function(t,i,e){e||(e=l);for(var s=0,n=t.length;n>s;){var r=s+n>>1;e(t[r])<e(i)?s=r+1:n=r}return s};return{has:c,each:h,extend:function(t){return h(n.call(arguments,1),function(i){for(var e in i)t[e]=i[e]}),t},indexOf:function(t,i,e){if(null==t)return-1;var s,n;if(e)return s=u(t,i),t[s]===i?s:-1;if(a&&t.indexOf===a)return t.indexOf(i);for(s=0,n=t.length;n>s;s++)if(s in t&&t[s]===i)return s;return-1},sortedIndex:u,identity:l,isNumber:function(t){return"[object Number]"==o.call(t)},isFunction:function(t){return"[object Function]"==o.call(t)||"function"==typeof t},isUndefined:function(t){return void 0===t},isNull:function(t){return null===t}}}(),Vector=function(t){var i=function(t,i){this.x=t||0,this.y=i||0};return t.extend(i.prototype,{set:function(t,i){return this.x=t,this.y=i,this},copy:function(t){return this.x=t.x,this.y=t.y,this},clear:function(){return this.x=0,this.y=0,this},clone:function(){return new i(this.x,this.y)},add:function(t,i){return this.x=t.x+i.x,this.y=t.y+i.y,this},addSelf:function(t){return this.x+=t.x,this.y+=t.y,this},sub:function(t,i){return this.x=t.x-i.x,this.y=t.y-i.y,this},subSelf:function(t){return this.x-=t.x,this.y-=t.y,this},multiplySelf:function(t){return this.x*=t.x,this.y*=t.y,this},multiplyScalar:function(t){return this.x*=t,this.y*=t,this},divideScalar:function(t){return t?(this.x/=t,this.y/=t):this.set(0,0),this},negate:function(){return this.multiplyScalar(-1)},dot:function(t){return this.x*t.x+this.y*t.y},lengthSquared:function(){return this.x*this.x+this.y*this.y},length:function(){return Math.sqrt(this.lengthSquared())},normalize:function(){return this.divideScalar(this.length())},distanceTo:function(t){return Math.sqrt(this.distanceToSquared(t))},distanceToSquared:function(t){var i=this.x-t.x,e=this.y-t.y;return i*i+e*e},setLength:function(t){return this.normalize().multiplyScalar(t)},equals:function(t){return this.distanceTo(t)<1e-4},lerp:function(t,i){var e=(t.x-this.x)*i+this.x,s=(t.y-this.y)*i+this.y;return this.set(e,s)},isZero:function(){return this.length()<1e-4}}),i}(common),t.Physics=Physics=function(t,i,e){function s(){i(s);for(var t=0;t<n.length;t++){var e=n[t];e.playing&&e.update()}}var n=[],r=function(){this.playing=!1,t.apply(this,arguments),this.animations=[],this.equilibriumCallbacks=[],n.push(this)};return e.extend(r,t,{superclass:t}),e.extend(r.prototype,t.prototype,{play:function(){return this.playing?this:(this.playing=!0,this.__equilibrium=!1,this)},pause:function(){return this.playing=!1,this},toggle:function(){return this.playing?this.pause():this.play(),this},onUpdate:function(t){return e.indexOf(this.animations,t)>=0||!e.isFunction(t)?this:(this.animations.push(t),this)},onEquilibrium:function(t){return e.indexOf(this.equilibriumCallbacks,t)>=0||!e.isFunction(t)?this:(this.equilibriumCallbacks.push(t),this)},update:function(){if(this.__optimized&&this.__equilibrium)return this;var t;for(this.tick(),t=0;t<this.animations.length;t++)this.animations[t]();if(this.__optimized&&this.__equilibrium)for(t=0;t<this.equilibriumCallbacks.length;t++)this.equilibriumCallbacks[t]();return this}}),s(),r}(ParticleSystem=function(t,i,e,s,n,r){var a=function(){this.__equilibriumCriteria={particles:!0,springs:!0,attractions:!0},this.__equilibrium=!1,this.__optimized=!1,this.particles=[],this.springs=[],this.attractions=[],this.forces=[],this.integrator=new n(this),this.hasDeadParticles=!1;var i=arguments.length;1===i?(this.gravity=new t(0,arguments[0]),this.drag=a.DEFAULT_DRAG):2===i?(this.gravity=new t(0,arguments[0]),this.drag=arguments[1]):3===i?(this.gravity=new t(arguments[0],arguments[1]),this.drag=arguments[3]):(this.gravity=new t(0,a.DEFAULT_GRAVITY),this.drag=a.DEFAULT_DRAG)};return r.extend(a,{DEFAULT_GRAVITY:0,DEFAULT_DRAG:.001,Attraction:s,Integrator:n,Particle:i,Spring:e,Vector:t}),r.extend(a.prototype,{optimize:function(t){return this.__optimized=!!t,this},setGravity:function(t,i){return this.gravity.set(t,i),this},setEquilibriumCriteria:function(t,i,e){this.__equilibriumCriteria.particles=!!t,this.__equilibriumCriteria.springs=!!i,this.__equilibriumCriteria.attractions=!!e},tick:function(){return this.integrator.step(0===arguments.length?1:arguments[0]),this.__optimized&&(this.__equilibrium=!this.needsUpdate()),this},needsUpdate:function(){var t=0;if(this.__equilibriumCriteria.particles)for(t=0,l=this.particles.length;t<l;t++)if(!this.particles[t].resting())return!0;if(this.__equilibriumCriteria.springs)for(t=0,l=this.springs.length;t<l;t++)if(!this.springs[t].resting())return!0;if(this.__equilibriumCriteria.attractions)for(t=0,l=this.attractions.length;t<l;t++)if(!this.attractions[t].resting())return!0;return!1},addParticle:function(t){return this.particles.push(t),this},addSpring:function(t){return this.springs.push(t),this},addAttraction:function(t){return this.attractions.push(t),this},makeParticle:function(t,e,s){var n=r.isNumber(t)?t:1,e=e||0,s=s||0,a=new i(n);return a.position.set(e,s),this.addParticle(a),a},makeSpring:function(t,i,s,n,r){var a=new e(t,i,s,n,r);return this.addSpring(a),a},makeAttraction:function(t,i,e,n){var r=new s(t,i,e,n);return this.addAttraction(r),r},clear:function(){this.particles.length=0,this.springs.length=0,this.attractions.length=0},applyForces:function(){var i,e;if(!this.gravity.isZero())for(i=0;i<this.particles.length;i++)this.particles[i].force.addSelf(this.gravity);var s=new t;for(i=0;i<this.particles.length;i++)e=this.particles[i],s.set(-1*e.velocity.x*this.drag,-1*e.velocity.y*this.drag),e.force.addSelf(s);for(i=0;i<this.springs.length;i++)this.springs[i].update();for(i=0;i<this.attractions.length;i++)this.attractions[i].update();for(i=0;i<this.forces.length;i++)this.forces[i].update();return this},clearForces:function(){for(var t=0;t<this.particles.length;t++)this.particles[t].clear();return this}}),a}(Vector,Particle=function(t,i){var e=function(i){this.position=new t,this.velocity=new t,this.force=new t,this.mass=i,this.fixed=!1,this.age=0,this.dead=!1};return i.extend(e.prototype,{distanceTo:function(t){return this.position.distanceTo(t.position)},makeFixed:function(){return this.fixed=!0,this.velocity.clear(),this},reset:function(){return this.age=0,this.dead=!1,this.position.clear(),this.velocity.clear(),this.force.clear(),this.mass=1,this},resting:function(){return this.fixed||this.velocity.isZero()&&this.force.isZero()}}),e}(Vector,common),Spring=function(t,i){var e=function(t,i,e,s,n){this.constant=e,this.damping=s,this.length=n,this.a=t,this.b=i,this.on=!0};return i.extend(e.prototype,{currentLength:function(){return this.a.position.distanceTo(this.b.position)},update:function(){var i=this.a,e=this.b;if(!this.on||i.fixed&&e.fixed)return this;var s=(new t).sub(i.position,e.position),n=s.length();0===n?s.clear():s.divideScalar(n);var r=-1*(n-this.length)*this.constant,a=(new t).sub(i.velocity,e.velocity),o=-1*this.damping*a.dot(s),c=r+o;return s.multiplyScalar(c),i.fixed||i.force.addSelf(s),e.fixed||e.force.subSelf(s),this},resting:function(){var t=this.a,i=this.b,e=this.length;return!this.on||t.fixed&&i.fixed||t.fixed&&(0===e?i.position.equals(t.position):i.position.distanceTo(t.position)<=e)&&i.resting()||i.fixed&&(0===e?t.position.equals(i.position):t.position.distanceTo(i.position)<=e)&&t.resting()}}),e}(Vector,common),Attraction=function(t,i){var e=function(t,i,e,s){this.a=t,this.b=i,this.constant=e,this.on=!0,this.distanceMin=s,this.distanceMinSquared=s*s};return i.extend(e.prototype,{update:function(){var i=this.a,e=this.b;if(!(!this.on||i.fixed&&e.fixed)){var s=(i.position.x-e.position.x,i.position.y-e.position.y,(new t).sub(i.position,e.position)),n=Math.max(s.lengthSquared(),this.distanceMinSquared),r=this.constant*i.mass*e.mass/n,a=Math.sqrt(n);return 0===r||0===a?s.clear():s.divideScalar(a).multiplyScalar(r),i.fixed||i.force.subSelf(s),e.fixed||e.force.addSelf(s),this}},resting:function(){var t=this.a,i=this.b,e=this.distanceMin;return!this.on||t.fixed&&i.fixed||t.fixed&&i.position.distanceTo(t.position)<=e&&i.resting()||i.fixed&&t.position.distanceTo(i.position)<=e&&t.resting()}}),e}(Vector,common),Integrator=function(t,i){var e=function(t){this.s=t,this.originalPositions=[],this.originalVelocities=[],this.k1Forces=[],this.k1Velocities=[],this.k2Forces=[],this.k2Velocities=[],this.k3Forces=[],this.k3Velocities=[],this.k4Forces=[],this.k4Velocities=[]};return i.extend(e.prototype,{allocateParticles:function(){for(;this.s.particles.length>this.originalPositions.length;)this.originalPositions.push(new t),this.originalVelocities.push(new t),this.k1Forces.push(new t),this.k1Velocities.push(new t),this.k2Forces.push(new t),this.k2Velocities.push(new t),this.k3Forces.push(new t),this.k3Velocities.push(new t),this.k4Forces.push(new t),this.k4Velocities.push(new t);return this},step:function(t){var i,e,s,n,r,a,o,c,h,l,u,p,f,d,m=this.s;for(this.allocateParticles(),n=0;n<m.particles.length;n++)i=m.particles[n],i.fixed||(this.originalPositions[n].copy(i.position),this.originalVelocities[n].copy(i.velocity)),i.force.clear();for(m.applyForces(),n=0;n<m.particles.length;n++)i=m.particles[n],i.fixed||(this.k1Forces[n].copy(i.force),this.k1Velocities[n].copy(i.velocity)),i.force.clear();for(n=0;n<m.particles.length;n++)i=m.particles[n],i.fixed||(r=this.originalPositions[n],a=this.k1Velocities[n],e=r.x+.5*a.x*t,s=r.y+.5*a.y*t,i.position.set(e,s),l=this.originalVelocities[n],u=this.k1Forces[n],e=l.x+.5*u.x*t/i.mass,s=l.y+.5*u.y*t/i.mass,i.velocity.set(e,s));for(m.applyForces(),n=0;n<m.particles.length;n++)i=m.particles[n],i.fixed||(this.k2Forces[n].copy(i.force),this.k2Velocities[n].copy(i.velocity)),i.force.clear();for(n=0;n<m.particles.length;n++)i=m.particles[n],i.fixed||(r=this.originalPositions[n],o=this.k2Velocities[n],i.position.set(r.x+.5*o.x*t,r.y+.5*o.y*t),l=this.originalVelocities[n],p=this.k2Forces[n],i.velocity.set(l.x+.5*p.x*t/i.mass,l.y+.5*p.y*t/i.mass));for(m.applyForces(),n=0;n<m.particles.length;n++)i=m.particles[n],i.fixed||(this.k3Forces[n].copy(i.force),this.k3Velocities[n].copy(i.velocity)),i.force.clear();for(n=0;n<m.particles.length;n++)i=m.particles[n],i.fixed||(r=this.originalPositions[n],c=this.k3Velocities[n],i.position.set(r.x+c.x*t,r.y+c.y*t),l=this.originalVelocities[n],f=this.k3Forces[n],i.velocity.set(l.x+f.x*t/i.mass,l.y+f.y*t/i.mass));for(m.applyForces(),n=0;n<m.particles.length;n++)i=m.particles[n],i.fixed||(this.k4Forces[n].copy(i.force),this.k4Velocities[n].copy(i.velocity));for(n=0;n<m.particles.length;n++)i=m.particles[n],i.age+=t,i.fixed||(r=this.originalPositions[n],a=this.k1Velocities[n],o=this.k2Velocities[n],c=this.k3Velocities[n],h=this.k4Velocities[n],e=r.x+t/6*(a.x+2*o.x+2*c.x+h.x),s=r.y+t/6*(a.y+2*o.y+2*c.y+h.y),i.position.set(e,s),l=this.originalVelocities[n],u=this.k1Forces[n],p=this.k2Forces[n],f=this.k3Forces[n],d=this.k4Forces[n],e=l.x+t/(6*i.mass)*(u.x+2*p.x+2*f.x+d.x),s=l.y+t/(6*i.mass)*(u.y+2*p.y+2*f.y+d.y),i.velocity.set(e,s));return this}}),e}(Vector,common),common),requestAnimationFrame=function(){return window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(t){window.setTimeout(t,1e3/60)}}(),common)}(),function($){!function(){function parsedeclarations(t){var i=munged[t].replace(/^{|}$/g,"");i=munge(i);var e={};return $.each(i.split(";"),function(t,i){i=i.split(":"),i.length<2||(e[restore(i[0])]=restore(i.slice(1).join(":")))}),e}function munge(t,i){t=t.replace(REatcomment,"$1").replace(REcomment_string,function(t,i){if(!i)return"";var e="%s`"+ ++uid+"`s%";return munged[uid]=i.replace(/^\\/,""),e});for(var e=i?REfull:REbraces;match=e.exec(t);)replacement="%b`"+ ++uid+"`b%",munged[uid]=match[0],t=t.replace(e,replacement);return t}function restore(t){if(void 0===t)return t;for(;match=REmunged.exec(t);)t=t.replace(REmunged,munged[match[1]]);return $.trim(t)}function processAtRule(t,i){var e=t.split(/\s+/),s=e.shift();if("media"==s){var n=restore(e.pop()).slice(1,-1);$.parsecss.mediumApplies(e.join(" "))&&$.parsecss(n,i)}else if("import"==s){var r=restore(e.shift());$.parsecss.mediumApplies(e.join(" "))&&(r=r.replace(/^url\(|\)$/gi,"").replace(/^["']|["']$/g,""),$.get(r,function(t){$.parsecss(t,i)}))}}function styleAttributes(t,i){var e,s="",n={};t=t.replace(RESGMLcomment,"").replace(REnotATag,"$1"),munge(t).replace(REtag,function(t,i,r){if(i=i.toLowerCase(),n[i]?++n[i]:n[i]=1,e=/\bstyle\s*=\s*(%s`\d+`s%)/i.exec(r)){var a=/\bid\s*=\s*(\S+)/i.exec(r);a=a?"#"+restore(a[1]).replace(/^['"]|['"]$/g,""):i+":eq("+(n[i]-1)+")",s+=[a,"{",restore(e[1]).replace(/^['"]|['"]$/g,""),"}"].join("")}}),$.parsecss(s,i)}$.fn.findandfilter=function(t){var i=this.filter(t).add(this.find(t));return i.prevObject=i.prevObject.prevObject,i},$.fn.parsecss=function(t,i){var e=function(i){$.parsecss(i,t)};return this.findandfilter("style").each(function(){e(this.innerHTML)}).end().findandfilter('link[type="text/css"],link[rel="stylesheet"]').each(function(){this.disabled||/^\w+:/.test($(this).attr("href"))||!$.parsecss.mediumApplies(this.media)||$.get(this.href,e)}).end(),i&&$.get(location.pathname+location.search,"text",function(i){styleAttributes(i,t)}),this},$.parsecss=function(t,i){var e={};t=munge(t).replace(/@(([^;`]|`[^b]|`b[^%])*(`b%)?);?/g,function(t,e){return processAtRule($.trim(e),i),""}),$.each(t.split("`b%"),function(t,i){i=i.split("%b`"),i.length<2||(i[0]=restore(i[0]),e[i[0]]=$.extend(e[i[0]]||{},parsedeclarations(i[1])))}),i(e)},$.parsecss.mediumApplies=window.media&&window.media.query||function(t){if(!t)return!0;if(t in media)return media[t];var i=$('<style media="'+t+'">body {position: relative; z-index: 1;}</style>').appendTo("head");return media[t]=[1==$("body").css("z-index"),i.remove()][0]},$.parsecss.isValidSelector=function(t){var i=$("<style>"+t+"{}</style>").appendTo("head")[0];return[i.styleSheet?!/UNKNOWN/i.test(i.styleSheet.cssText):!!i.sheet.cssRules.length,$(i).remove()][0]},$.parsecss.parseArguments=function(str){if(!str)return[];for(var ret=[],mungedArguments=munge(str,!0).split(/\s+/),i=0;i<mungedArguments.length;++i){var a=restore(mungedArguments[i]);try{ret.push(eval("("+a+")"))}catch(err){ret.push(a)}}return ret},$.parsecss.styleAttributes=styleAttributes;var media={},munged={},REbraces=/{[^{}]*}/,REfull=/\[[^\[\]]*\]|{[^{}]*}|\([^()]*\)|function(\s+\w+)?(\s*%b`\d+`b%){2}/,REatcomment=/\/\*@((?:[^\*]|\*[^\/])*)\*\//g,REcomment_string=/(?:\/\*(?:[^\*]|\*[^\/])*\*\/)|(\\.|"(?:[^\\\"]|\\.|\\\n)*"|'(?:[^\\\']|\\.|\\\n)*')/g,REmunged=/%\w`(\d+)`\w%/,uid=0,_show={show:$.fn.show,hide:$.fn.hide};$.each(["show","hide"],function(){var t=this,i=_show[t],e=t+"Default";$.fn[t]=function(){return arguments.length>0?i.apply(this,arguments):this.each(function(){var t=$.data(this,e),s=$(this);t?($.removeData(this,e),t.call(s),s.queue(function(){s.data(e,t).dequeue()})):i.call(s)})},$.fn[e]=function(){var i=$.makeArray(arguments),s=i[0];if($.fn[s]){i.shift();var n=$.fn[s]}else $.effects&&$.effects[s]?("object"!=typeof i[1]&&i.splice(1,0,{}),n=_show[t]):n=_show[t];return this.data(e,function(){n.apply(this,i)})}});var RESGMLcomment=/<!--([^-]|-[^-])*-->/g,REnotATag=/(>)[^<]*/g,REtag=/<(\w+)([^>]*)>/g}(),function(){function t(t,i,e,s){var n=t.text().split(i),r="";n.length&&($(n).each(function(t,i){r+='<span class="'+e+(t+1)+'">'+i+"</span>"+s}),t.empty().append(r))}var i={init:function(){return this.each(function(){t($(this),"","char","")})},words:function(){return this.each(function(){t($(this)," ","word"," ")})},lines:function(){return this.each(function(){var i="eefec303079ad17405c889e092e105b0";t($(this).children("br").replaceWith(i).end(),i,"line","")})}};$.fn.lettering=function(t){return t&&i[t]?i[t].apply(this,[].slice.call(arguments,1)):"letters"!==t&&t?($.error("Method "+t+" does not exist on jQuery.lettering"),this):i.init.apply(this,[].slice.call(arguments,0))}}();var unstack=function(){var t={init:function(t){var i=$(t).css("font-family").match(/[^'",;\s][^'",;]*/g)||[];return this.analyzeStack(i,t)},analyzeStack:function(i){var e=["monospace","sans-serif","serif","cursive","fantasy"],s=e[0],n=i.length,r=i[n-1];$.inArray(r,e)&&(i.push(s),n++),r==s&&(s=e[1]);for(var a=0;n-1>a;a++)if(font=i[a],t.testFont(font,s))return font},testFont:function(t,i){var e=$('<span id="font_tester" style="font-family:'+i+'; font-size:144px;position:absolute;left:-10000px;top:-10000px;visibility:hidden;">mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmml</span>');$("body").prepend(e);var s=e.width();e.css("font-family",t+","+i);var n=e.width();return e.remove(),n!=s}};return function(i){return t.init(i)}}();window.Kerning=new function(){var t=this,i=navigator.platform,e=["webkitTransform"in document.documentElement.style&&"webkit",navigator.userAgent.indexOf("MSIE")>-1&&"ms","MozTransform"in document.documentElement.style&&"moz",window.opera&&"o"].reduce(function(t,i){return t+(i||"")}),s=[i.match(/Mac/)&&"mac",i.match(/Win/)&&"win",i.match(/Linux/)&&"linux"].reduce(function(t,i){return t+(i||"")}),n={_pairs:function(t,i,e){var s=e.match(/^-(letter|word)-pairs\(([\s\S]+)\)$/i);if(!s||s[1]!==t)return!1;var n,r,a,o="word"===t?i.children("span"):i.find("span > span"),c=e.match(/translate|rotate|skew|perspective/i),h=$.trim(s[2].replace(/,\s+?'/g,",'").replace(/:\s+?(\d)/g,":$1")).split(c?"),":","),l=[];if(h)return $.each(h,function(i,e){n=e.split(":"),n[0]=n[0].replace(/^['"](.+)['"]$/g,"$1"),r="word"===t?n[0].split(" "):n[0],a=function(){var i,e,s=$(this).text().match(new RegExp(r[0]));return" "!==r[1]?e=($(this).next().html()||"").match(new RegExp(r[1])):(i="word"==t?$(this).next('[class^="word"]'):$(this).parent().next('[class^="word"]'),e=!$(this).next().length&&i.length),s&&e},l.push([n[1],o.filter(a)])}),l},_repeats:function(t,i,e){var s=e.match(/^-(letter|word)-repeats\(([\s\S]+)\)$/i);if(!s||s[1]!==t)return!1;var n,r="word"===t?i.children("span"):i.find("span > span"),a=e.match(/translate|rotate|skew|perspective/i),o=$.trim(s[2].replace(/,\s+?'/g,",'").replace(/:\s+?(\d)/g,":$1")).split(a?"),":","),c=[];if(o)return $.each(o,function(t,i){n=i.split(":"),a&&")"!==n[1].substring(n[1].length-1)&&(n[1]+=")"),c.push([$.trim(n[1]),r.filter(":nth-child("+$.trim(n[0])+")")])}),c},_conditional:function(t,i,e){var s=e.match(/^(?:-(letter|word)-)?if-font\(([\s\S]+)\)$/i);if(s){var n,r=("all"===t?i:"word"===t?i.children("span"):i.find("span > span"),e.match(/translate|rotate|skew|perspective/i),s[2].replace(/\n/g,"").match(/['"][^'"]+['"]:\s*.+?(\)|(?=\w),\s['"]|$)/g)),a={},o=[];if(r)return i.each(function(t,i){var e=unstack(i).replace(/^['"](.+)['"]$/g,"$1");a[e]?a[e].push(i):a[e]=[i]}),$.each(r,function(t,i){return(n=i.match(/['"]([^'"]+)['"]:\s*(.+)$/))?(n=n.splice(1),void(n[0]in a&&o.push([$.trim(n[1]),$(a[n[0]])]))):!0}),o}},_applyAttribute:function(t,i,e,s){var r=n._conditional(t,i,s);r&&r.length||(r=[[s,i]]),$.each(r,function(i,s){var r=s[0],a=s[1],o=n._pairs(t,a,r)||n._repeats(t,a,r);if(o)$.each(o,function(t,i){if("string"!=typeof e){var s={};$.each(e,function(t,e){s[e]=i[0]}),i[1].css(s)}else i[1].css(e,i[0])});else{var c,h,l;c=(l=r.match(/-transform-group\(([\s\S]+?\([^)]+\))*?\)/g))?$.map(l,function(t){return t.replace(/-transform-group\(([\s\S]+)\)$/,"$1")}):r.replace(/[\n\s]+/g," ").split(" "),a.each(function(i,s){h="all"===t?$(s):"word"===t?$(s).children("span"):$(s).find("span > span"),$.each(c,function(t,i){if("string"!=typeof e){var s={};$.each(e,function(t,e){s[e]=i}),h.eq(t).css(s)}else h.eq(t).css(e,i)})})}})},kern:function(t,i,e){n._applyAttribute(t,i,"margin-right",e)},size:function(t,i,e){n._applyAttribute(t,i,"font-size",e)},weight:function(t,i,e){n._applyAttribute(t,i,"font-weight",e)},color:function(t,i,e){n._applyAttribute(t,i,"color",e)},backgroundcolor:function(t,i,e){n._applyAttribute(t,i,"background-color",e)},transform:function(t,i,e){var s=["-webkit-transform","-moz-transform","-ms-transform","-o-transform","transform"];n._applyAttribute(t,i,s,e)}};this._parse=function(i,r){t._parsedCSS||(t._parsedCSS=i);for(var a in i)for(var o in i[a]){var c,h,l=i[a][o];if(c=o.match(new RegExp("^(-"+e+"|-"+s+")?-(letter|word)-(kern|transform|size|color|backgroundcolor|weight)","i"))){var u=c[2].toLowerCase(),p=c[3].toLowerCase();h=$(a),r&&(h=h.not(".kerningjs")),h.not(".kerningjs").addClass("kerningjs").css("visibility","inherit").lettering("words").children("span").css("display","inline-block").lettering().children("span").css("display","inline-block"),n[p]&&n[p].call(this,u,h,l)}else if((c=o.match(/font-(size|weight)/i))&&l.match(/if-font/i)){var p=c[1].toLowerCase();h=$(a),r&&(h=h.not(".kerningjs")),h.not(".kerningjs").addClass("kerningjs").css("visibility","inherit"),n[p]&&n[p].call(this,"all",h,l)}}},this.live=function(){$(document).bind("DOMNodeInserted",function(i){i.target&&t.refresh(!0)})},this.refresh=function(i){t._parsedCSS&&t._parse(t._parsedCSS,i)},$(function(){$(document).parsecss(t._parse,!0)})}}(jQuery),$(function(){function t(){if(window.devicePixelRatio&&r){var t=640,i=560;r.width=t*window.devicePixelRatio,r.height=i*window.devicePixelRatio,$("#canvas").css({width:t,height:i}),a.scale(window.devicePixelRatio,window.devicePixelRatio)}}function i(){$("#pulse-outer").velocity({opacity:[0,1],scale:[1,0],rotateZ:[45,45]},{delay:1e3,duration:2e3,easing:s.easeOutCubic}),$("#pulse-inner").velocity({opacity:[0,1],scale:[.9,0],rotateZ:[45,45]},{delay:1300,duration:2500,easing:s.easeOutCubic,complete:i})}function e(){r&&(a.clearRect(0,0,r.width,r.height),h.all.forEach(function(t){t.update(),t.draw()}),requestAnimationFrame(e))}var s={easeInCubic:[.55,.055,.675,.19],easeOutCubic:[.215,.61,.355,1]};$("#logo").velocity({opacity:[1,0],rotateY:[360,0],translateY:[0,15],rotateZ:[45,0]},{easing:s.easeOutCubic,duration:1e3,delay:600});var n=$("#tools-tip-wrap");$("#tools-link").hover(function(){n.stop(!0).show().velocity({opacity:[1,0],translateY:[0,10]},{easing:s.easeOutCubic,duration:230})},function(){n.velocity({opacity:[0,1]},{easing:s.easeInCubic,duration:150,complete:function(){$(this).hide()}})});var r=document.getElementById("canvas");if(r)var a=r.getContext("2d");var o=new Physics(0);Number.prototype.toRads=function(){return this*Math.PI/180},Number.prototype.getSign=function(){return 0>=this?-1:1};var c=new Physics.Vector(280,280),h=function(){this.startX=c.x,this.startY=c.y,this.rotation=360*Math.random(),this.rotationDirection=Math.random()>.5?-1:1,this.added=!1,this.inVision=!0,this.vel=0,this.targetVel=4,this.size=0,this.targetSize=10*Math.random(),this.alpha=0,this.targetAlpha=Math.random(),this.initialTargetAlpha=this.targetAlpha,this.mass=this.targetSize/4+1,this.anchor=o.makeParticle(1,0,0),this.anchor.reset(),this.anchor.position.x=this.startX,this.anchor.position.y=this.startY,this.anchor.makeFixed(),this._draw=function(){a.fillStyle="rgba(243, 215, 127, "+this.alpha+")",a.save(),a.beginPath(),a.translate(this.particle.position.x,this.particle.position.y),a.rotate(this.rotation.toRads()),a.rect(-this.size/2,-this.size/2,this.size,this.size),a.fill(),a.restore()},h.all.push(this)};h.all=[],h.prototype.add=function(){this.added=!0,this.alpha=0,this.size=0,this.vel=0,this.rotation=0,this.particle=o.makeParticle(this.mass,0,0),this.particle.position.x=this.startX,this.particle.position.y=this.startY;var t=(Math.random()-Math.random())*this.targetVel,i=(Math.random()-Math.random())*this.targetVel;Math.abs(t)<1?t=1*t.getSign():Math.abs(i)<1&&(i=1*i.getSign()),this.particle.velocity.x+=t,this.particle.velocity.y+=i},h.prototype.update=function(){this.added||this.add(),this.alpha+=.1*(this.targetAlpha-this.alpha),this.size+=.1*(this.targetSize-this.size),this.targetAlpha=this.particle.position.distanceToSquared(c)>62500?0:this.initialTargetAlpha,this.rotation>360&&(this.rotation-=360),this.rotation+=2*this.rotationDirection},h.prototype.draw=function(){this.particle.position.x>$(document).width()+this.size||this.particle.position.x<-this.size||this.particle.position.y>$(document).height()+this.size||this.particle.position.y<-this.size?this.add():this._draw()};var l=$(window);l.on("resize",function(){$("#pulse").css({height:$(document).height()}),t()}),l.resize();var u=setInterval(function(){r||clearInterval(u),new h,h.all.length>=30&&clearInterval(u)},100);o.play(),i(),e()});
+/**
+ * Physics
+ * A requirified port of Traer Physics from Processing to JavaScript.
+ * Copyright (C) 2012 jonobr1
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+(function() {
+
+var root = this, previousShortcut = root.Physics;
+
+common = (function () {
+
+	/**
+	 * Pulled only what's needed from:
+	 *
+	 * Underscore.js 1.3.3
+	 * (c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
+	 * http://documentcloud.github.com/underscore
+	 */
+
+	var breaker = {};
+	var ArrayProto = Array.prototype;
+	var ObjProto = Object.prototype;
+	var hasOwnProperty = ObjProto.hasOwnProperty;
+	var slice = ArrayProto.slice;
+	var nativeForEach = ArrayProto.forEach;
+	var nativeIndexOf      = ArrayProto.indexOf;
+	var toString = ObjProto.toString;
+
+	var has = function(obj, key) {
+		return hasOwnProperty.call(obj, key);
+	};
+
+	var each = function(obj, iterator, context) {
+
+		if (obj == null) return;
+				if (nativeForEach && obj.forEach === nativeForEach) {
+					obj.forEach(iterator, context);
+				} else if (obj.length === +obj.length) {
+					for (var i = 0, l = obj.length; i < l; i++) {
+						if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
+					}
+				} else {
+					for (var key in obj) {
+						if (_.has(obj, key)) {
+							if (iterator.call(context, obj[key], key, obj) === breaker) return;
+						}
+					}
+				}
+
+	};
+
+	var identity = function(value) {
+		return value;
+	};
+
+	var sortedIndex = function(array, obj, iterator) {
+		iterator || (iterator = identity);
+		var low = 0, high = array.length;
+		while (low < high) {
+			var mid = (low + high) >> 1;
+			iterator(array[mid]) < iterator(obj) ? low = mid + 1 : high = mid;
+		}
+		return low;
+	};
+
+	return {
+
+		has: has,
+
+		each: each,
+
+		extend: function(obj) {
+			each(slice.call(arguments, 1), function(source) {
+				for (var prop in source) {
+					obj[prop] = source[prop];
+				}
+			});
+			return obj;
+		},
+
+		indexOf: function(array, item, isSorted) {
+			if (array == null) return -1;
+			var i, l;
+			if (isSorted) {
+				i = sortedIndex(array, item);
+				return array[i] === item ? i : -1;
+			}
+			if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item);
+			for (i = 0, l = array.length; i < l; i++) if (i in array && array[i] === item) return i;
+			return -1;
+		},
+
+		sortedIndex: sortedIndex,
+
+		identity: identity,
+
+		isNumber: function(obj) {
+			return toString.call(obj) == '[object Number]';
+		},
+
+		isFunction: function(obj) {
+			return toString.call(obj) == '[object Function]' || typeof obj == 'function';
+		},
+
+		isUndefined: function(obj) {
+			return obj === void 0;
+		},
+
+		isNull: function(obj) {
+			return obj === null;
+		}
+
+	}
+
+})();
+
+
+Vector = (function (_) {
+
+	/**
+	 * A two dimensional vector.
+	 */
+	var Vector = function(x, y) {
+
+		this.x = x || 0;
+		this.y = y || 0;
+
+	};
+
+	_.extend(Vector.prototype, {
+
+		set: function(x, y) {
+			this.x = x;
+			this.y = y;
+			return this;
+		},
+
+		copy: function(v) {
+			this.x = v.x;
+			this.y = v.y;
+			return this;
+		},
+
+		clear: function() {
+			this.x = 0;
+			this.y = 0;
+			return this;
+		},
+
+		clone: function() {
+			return new Vector(this.x, this.y);
+		},
+
+		add: function(v1, v2) {
+			this.x = v1.x + v2.x;
+			this.y = v1.y + v2.y;
+			return this;
+		},
+
+		addSelf: function(v) {
+			this.x += v.x;
+			this.y += v.y;
+			return this;
+		},
+
+		sub: function(v1, v2) {
+			this.x = v1.x - v2.x;
+			this.y = v1.y - v2.y;
+			return this;
+		},
+
+		subSelf: function(v) {
+			this.x -= v.x;
+			this.y -= v.y;
+			return this;
+		},
+
+		multiplySelf: function(v) {
+			this.x *= v.x;
+			this.y *= v.y;
+			return this;
+		},
+
+		multiplyScalar: function(s) {
+			this.x *= s;
+			this.y *= s;
+			return this;
+		},
+
+		divideScalar: function(s) {
+			if (s) {
+				this.x /= s;
+				this.y /= s;
+			} else {
+				this.set(0, 0);
+			}
+			return this;
+		},
+
+		negate: function() {
+			return this.multiplyScalar(-1);
+		},
+
+		dot: function(v) {
+			return this.x * v.x + this.y * v.y;
+		},
+
+		lengthSquared: function() {
+			return this.x * this.x + this.y * this.y;
+		},
+
+		length: function() {
+			return Math.sqrt(this.lengthSquared());
+		},
+
+		normalize: function() {
+			return this.divideScalar(this.length());
+		},
+
+		distanceTo: function(v) {
+			return Math.sqrt(this.distanceToSquared(v));
+		},
+
+		distanceToSquared: function(v) {
+			var dx = this.x - v.x, dy = this.y - v.y;
+			return dx * dx + dy * dy;
+		},
+
+		setLength: function(l) {
+			return this.normalize().multiplyScalar(l);
+		},
+
+		equals: function(v) {
+			return (this.distanceTo(v) < 0.0001 /* almost same position */);
+		},
+
+		lerp: function(v, t) {
+			var x = (v.x - this.x) * t + this.x;
+			var y = (v.y - this.y) * t + this.y;
+			return this.set(x, y);
+		},
+
+		isZero: function() {
+			return (this.length() < 0.0001 /* almost zero */ );
+		}
+
+	});
+
+	return Vector;
+
+})(common);
+
+
+root.Physics = Physics = (function (ParticleSystem, raf, _) {
+
+	var instances = [];
+
+	/**
+	 * Extended singleton instance of ParticleSystem with convenience methods for
+	 * Request Animation Frame.
+	 * @class
+	 */
+	var Physics = function() {
+
+		var _this = this;
+
+		this.playing = false;
+
+		ParticleSystem.apply(this, arguments);
+
+		this.animations = [];
+
+		this.equilibriumCallbacks = [];
+
+		instances.push(this);
+
+	};
+
+	_.extend(Physics, ParticleSystem, {
+
+		superclass: ParticleSystem
+
+	});
+
+	_.extend(Physics.prototype, ParticleSystem.prototype, {
+
+		/**
+		 * Play the animation loop. Doesn't affect whether in equilibrium or not.
+		 */
+		play: function() {
+
+			if (this.playing) {
+				return this;
+			}
+
+			this.playing = true;
+			this.__equilibrium = false;
+
+			return this;
+
+		},
+
+		/**
+		 * Pause the animation loop. Doesn't affect whether in equilibrium or not.
+		 */
+		pause: function() {
+
+			this.playing = false;
+			return this;
+
+		},
+
+		/**
+		 * Toggle between playing and pausing the simulation.
+		 */
+		toggle: function() {
+
+			if (this.playing) {
+				this.pause();
+			} else {
+				this.play();
+			}
+
+			return this;
+
+		},
+
+		onUpdate: function(func) {
+
+			if (_.indexOf(this.animations, func) >= 0 || !_.isFunction(func)) {
+				return this;
+			}
+
+			this.animations.push(func);
+
+			return this;
+
+		},
+
+		onEquilibrium: function(func) {
+
+			if (_.indexOf(this.equilibriumCallbacks, func) >= 0 || !_.isFunction(func)) {
+				return this;
+			}
+
+			this.equilibriumCallbacks.push(func);
+
+			return this;
+
+		},
+
+		/**
+		 * Call update after values in the system have changed and this will fire
+		 * it's own Request Animation Frame to update until things have settled
+		 * to equilibrium — at which point the system will stop updating.
+		 */
+		update: function() {
+
+			if (this.__optimized && this.__equilibrium) {
+				return this;
+			}
+
+			var i;
+
+			this.tick();
+
+			for (i = 0; i < this.animations.length; i++) {
+				this.animations[i]();
+			}
+
+			if (this.__optimized && this.__equilibrium){
+
+				for (i = 0; i < this.equilibriumCallbacks.length; i++) {
+					this.equilibriumCallbacks[i]();
+				}
+
+			}
+
+			return this;
+
+		}
+
+	});
+
+	function loop() {
+
+		raf(loop);
+
+		for (var i = 0; i < instances.length; i++) {
+			var system = instances[i];
+			if (system.playing) {
+				system.update();
+			}
+		}
+
+	}
+
+	loop();
+
+	return Physics;
+
+})(ParticleSystem = (function (Vector, Particle, Spring, Attraction, Integrator, _) {
+
+	/**
+	 * traer.js
+	 * A particle-based physics engine ported from Jeff Traer's Processing
+	 * library to JavaScript. This version is intended for use with the
+	 * HTML5 canvas element. It is dependent on Three.js' Vector2 class,
+	 * but can be overridden with any Vector2 class with the methods included.
+	 *
+	 * @author Jeffrey Traer Bernstein <jeff TA traer TOD cc> (original Java library)
+	 * @author Adam Saponara <saponara TA gmail TOD com> (JavaScript port)
+	 * @author Jono Brandel <http://jonobr1.com/> (requirified/optimization port)
+	 *
+	 * @version 0.3
+	 * @date March 25, 2012
+	 */
+
+	/**
+	 * The whole kit and kaboodle.
+	 *
+	 * @class
+	 */
+	var ParticleSystem = function() {
+
+		this.__equilibriumCriteria = { particles: true, springs: true, attractions: true };
+		this.__equilibrium = false; // are we at equilibrium?
+		this.__optimized = false;
+
+		this.particles = [];
+		this.springs = [];
+		this.attractions = [];
+		this.forces = [];
+		this.integrator = new Integrator(this);
+		this.hasDeadParticles = false;
+
+		var args = arguments.length;
+
+		if (args === 1) {
+			this.gravity = new Vector(0, arguments[0]);
+			this.drag = ParticleSystem.DEFAULT_DRAG;
+		} else if (args === 2) {
+			this.gravity = new Vector(0, arguments[0]);
+			this.drag = arguments[1];
+		} else if (args === 3) {
+			this.gravity = new Vector(arguments[0], arguments[1]);
+			this.drag = arguments[3];
+		} else {
+			this.gravity = new Vector(0, ParticleSystem.DEFAULT_GRAVITY);
+			this.drag = ParticleSystem.DEFAULT_DRAG;
+		}
+
+	};
+
+	_.extend(ParticleSystem, {
+
+		DEFAULT_GRAVITY: 0,
+
+		DEFAULT_DRAG: 0.001,
+
+		Attraction: Attraction,
+
+		Integrator: Integrator,
+
+		Particle: Particle,
+
+		Spring: Spring,
+
+		Vector: Vector
+
+	});
+
+	_.extend(ParticleSystem.prototype, {
+
+		/**
+		 * Set whether to optimize the simulation. This enables the check of whether
+		 * particles are moving.
+		 */
+		optimize: function(b) {
+			this.__optimized = !!b;
+			return this;
+		},
+
+		/**
+		 * Set the gravity of the ParticleSystem.
+		 */
+		setGravity: function(x, y) {
+			this.gravity.set(x, y);
+			return this;
+		},
+
+		/**
+		* Sets the criteria for equilibrium
+		*/
+		setEquilibriumCriteria: function(particles, springs, attractions) {
+			this.__equilibriumCriteria.particles = !!particles;
+			this.__equilibriumCriteria.springs = !!springs;
+			this.__equilibriumCriteria.attractions = !!attractions;
+		},
+
+		/**
+		 * Update the integrator
+		 */
+		tick: function() {
+			this.integrator.step(arguments.length === 0 ? 1 : arguments[0]);
+			if (this.__optimized) {
+				this.__equilibrium = !this.needsUpdate();
+			}
+			return this;
+		},
+
+		/**
+		 * Checks all springs and attractions to see if the contained particles are
+		 * inert / resting and returns a boolean.
+		 */
+		needsUpdate: function() {
+
+			var i = 0;
+
+			if (this.__equilibriumCriteria.particles) {
+				for (i = 0, l = this.particles.length; i < l; i++) {
+					if (!this.particles[i].resting()) {
+						return true;
+					}
+				}
+			}
+
+			if (this.__equilibriumCriteria.springs) {
+				for (i = 0, l = this.springs.length; i < l; i++) {
+					if (!this.springs[i].resting()) {
+						return true;
+					}
+				}
+			}
+
+			if (this.__equilibriumCriteria.attractions) {
+				for (i = 0, l = this.attractions.length; i < l; i++) {
+					if (!this.attractions[i].resting()) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+
+		},
+
+		/**
+		 * Add a particle to the ParticleSystem.
+		 */
+		addParticle: function(p) {
+
+			this.particles.push(p);
+			return this;
+
+		},
+
+		/**
+		 * Add a spring to the ParticleSystem.
+		 */
+		addSpring: function(s) {
+
+			this.springs.push(s);
+			return this;
+
+		},
+
+		/**
+		 * Add an attraction to the ParticleSystem.
+		 */
+		addAttraction: function(a) {
+
+			this.attractions.push(a);
+			return this;
+
+		},
+
+		/**
+		 * Makes and then adds Particle to ParticleSystem.
+		 */
+		makeParticle: function(m, x, y) {
+
+			var mass = _.isNumber(m) ? m : 1.0;
+			var x = x || 0;
+			var y = y || 0;
+
+			var p = new Particle(mass);
+			p.position.set(x, y);
+			this.addParticle(p);
+			return p;
+
+		},
+
+		/**
+		 * Makes and then adds Spring to ParticleSystem.
+		 */
+		makeSpring: function(a, b, k, d, l) {
+
+			var spring = new Spring(a, b, k, d, l);
+			this.addSpring(spring);
+			return spring;
+
+		},
+
+		/**
+		 * Makes and then adds Attraction to ParticleSystem.
+		 */
+		makeAttraction: function(a, b, k, d) {
+
+			var attraction = new Attraction(a, b, k, d);
+			this.addAttraction(attraction);
+			return attraction;
+
+		},
+
+		/**
+		 * Wipe the ParticleSystem clean.
+		 */
+		clear: function() {
+
+			this.particles.length = 0;
+			this.springs.length = 0;
+			this.attractions.length = 0;
+
+		},
+
+		/**
+		 * Calculate and apply forces.
+		 */
+		applyForces: function() {
+
+			var i, p;
+
+			if (!this.gravity.isZero()) {
+
+				for (i = 0; i < this.particles.length; i++) {
+					this.particles[i].force.addSelf(this.gravity);
+				}
+
+			}
+
+			var t = new Vector();
+
+			for (i = 0; i < this.particles.length; i++) {
+
+				p = this.particles[i];
+				t.set(p.velocity.x * -1 * this.drag, p.velocity.y * -1 * this.drag);
+				p.force.addSelf(t);
+
+			}
+
+			for (i = 0; i < this.springs.length; i++) {
+				this.springs[i].update();
+			}
+
+			for (i = 0; i < this.attractions.length; i++) {
+				this.attractions[i].update();
+			}
+
+			for (i = 0; i < this.forces.length; i++) {
+				this.forces[i].update();
+			}
+
+			return this;
+
+		},
+
+		/**
+		 * Clear all particles in the system.
+		 */
+		clearForces: function() {
+			for (var i = 0; i < this.particles.length; i++) {
+				this.particles[i].clear();
+			}
+			return this;
+		}
+
+	});
+
+	return ParticleSystem;
+
+})(Vector,
+Particle = (function (Vector, _) {
+
+	var Particle = function(mass) {
+
+		this.position = new Vector();
+		this.velocity = new Vector();
+		this.force = new Vector();
+		this.mass = mass;
+		this.fixed = false;
+		this.age = 0;
+		this.dead = false;
+
+	};
+
+	_.extend(Particle.prototype, {
+
+		/**
+		 * Get the distance between two particles.
+		 */
+		distanceTo: function(p) {
+			return this.position.distanceTo(p.position);
+		},
+
+		/**
+		 * Make the particle fixed in 2D space.
+		 */
+		makeFixed: function() {
+			this.fixed = true;
+			this.velocity.clear();
+			return this;
+		},
+
+		/**
+		 * Reset a particle.
+		 */
+		reset: function() {
+
+			this.age = 0;
+			this.dead = false;
+			this.position.clear();
+			this.velocity.clear();
+			this.force.clear();
+			this.mass = 1.0;
+
+			return this;
+		},
+
+		/**
+		 * Returns a boolean describing whether the particle is in movement.
+		 */
+		resting: function() {
+			return this.fixed || this.velocity.isZero() && this.force.isZero();
+		}
+
+	});
+
+	return Particle;
+
+})(Vector,
+common),
+Spring = (function (Vector, _) {
+
+	var Spring = function(a, b, k, d, l) {
+
+		this.constant = k;
+		this.damping = d;
+		this.length = l;
+		this.a = a;
+		this.b = b;
+		this.on = true;
+
+	};
+
+	_.extend(Spring.prototype, {
+
+		/**
+		 * Returns the distance between particle a and particle b
+		 * in 2D space.
+		 */
+		currentLength: function() {
+			return this.a.position.distanceTo(this.b.position);
+		},
+
+		/**
+		 * Update spring logic.
+		 */
+		update: function() {
+
+			var a = this.a;
+			var b = this.b;
+			if (!(this.on && (!a.fixed || !b.fixed))) return this;
+
+			var a2b = new Vector().sub(a.position, b.position);
+			var d = a2b.length();
+
+			if (d === 0) {
+				a2b.clear();
+			} else {
+				a2b.divideScalar(d);  // Essentially normalize
+			}
+
+			var fspring = -1 * (d - this.length) * this.constant;
+
+			var va2b = new Vector().sub(a.velocity, b.velocity);
+
+			var fdamping = -1 * this.damping * va2b.dot(a2b);
+
+			var fr = fspring + fdamping;
+
+			a2b.multiplyScalar(fr);
+
+			if (!a.fixed) {
+				a.force.addSelf(a2b);
+			}
+			if (!b.fixed) {
+				b.force.subSelf(a2b);
+			}
+
+			return this;
+
+		},
+
+		/**
+		 * Returns a boolean describing whether the spring is resting or not.
+		 * Convenient for knowing whether or not the spring needs another update
+		 * tick.
+		 */
+		resting: function() {
+
+			var a = this.a;
+			var b = this.b;
+			var l = this.length;
+
+			return !this.on || (a.fixed && b.fixed)
+				|| (a.fixed && (l === 0 ? b.position.equals(a.position) : b.position.distanceTo(a.position) <= l) && b.resting())
+				|| (b.fixed && (l === 0 ? a.position.equals(b.position) : a.position.distanceTo(b.position) <= l) && a.resting());
+
+		}
+
+	});
+
+	return Spring;
+
+})(Vector,
+common),
+Attraction = (function (Vector, _) {
+
+	var Attraction = function(a, b, k, d) {
+
+		this.a = a;
+		this.b = b;
+		this.constant = k;
+		this.on = true;
+		this.distanceMin = d;
+		this.distanceMinSquared = d * d;
+
+	};
+
+	_.extend(Attraction.prototype, {
+
+		update: function() {
+
+		 var a = this.a, b = this.b;
+		 if (!this.on || (a.fixed && b.fixed)) {
+			 return;
+		 }
+
+		 var a2bx = a.position.x - b.position.x;
+		 var a2by = a.position.y - b.position.y;
+
+		 var a2b = new Vector().sub(a.position, b.position);
+
+		 var a2bdistanceSquared = Math.max(a2b.lengthSquared(), this.distanceMinSquared);
+
+		 var force = (this.constant * a.mass * b.mass) / a2bdistanceSquared;
+
+		 var length = Math.sqrt(a2bdistanceSquared);
+
+		 if (force === 0 || length === 0) {
+			 a2b.clear();
+		 } else {
+			 a2b.divideScalar(length).multiplyScalar(force);
+		 }
+
+		 if (!a.fixed) {
+			 a.force.subSelf(a2b);
+		 }
+		 if (!b.fixed) {
+			 b.force.addSelf(a2b);
+		 }
+
+		 return this;
+
+		},
+
+		/**
+		 * Returns a boolean describing whether the spring is resting or not.
+		 * Convenient for knowing whether or not the spring needs another update
+		 * tick.
+		 *
+		 * TODO: Test
+		 */
+		resting: function() {
+
+			var a = this.a;
+			var b = this.b;
+			var l = this.distanceMin;
+
+			return !this.on || (a.fixed && b.fixed)
+				|| (a.fixed && b.position.distanceTo(a.position) <= l && b.resting())
+				|| (b.fixed && a.position.distanceTo(b.position) <= l && a.resting());
+
+		}
+
+	});
+
+	return Attraction;
+
+})(Vector,
+common),
+Integrator = (function (Vector, _) {
+
+	/**
+	 * Runge Kutta Integrator
+	 * http://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods
+	 *
+	 * @class
+	 */
+	var Integrator = function(s) {
+		this.s = s;
+		this.originalPositions = [];
+		this.originalVelocities = [];
+		this.k1Forces = [];
+		this.k1Velocities = [];
+		this.k2Forces = [];
+		this.k2Velocities = [];
+		this.k3Forces = [];
+		this.k3Velocities = [];
+		this.k4Forces = [];
+		this.k4Velocities = [];
+	};
+
+	_.extend(Integrator.prototype, {
+
+		allocateParticles: function() {
+
+			while (this.s.particles.length > this.originalPositions.length) {
+				this.originalPositions.push(new Vector());
+				this.originalVelocities.push(new Vector());
+				this.k1Forces.push(new Vector());
+				this.k1Velocities.push(new Vector());
+				this.k2Forces.push(new Vector());
+				this.k2Velocities.push(new Vector());
+				this.k3Forces.push(new Vector());
+				this.k3Velocities.push(new Vector());
+				this.k4Forces.push(new Vector());
+				this.k4Velocities.push(new Vector());
+			}
+
+			return this;
+
+		},
+
+		step: function(dt) {
+
+			var s = this.s;
+			var p, x, y, i;
+
+			var op, k1v, k2v, k3v, k4v, ov, k1f, k2f, k3f, k4f;
+
+			this.allocateParticles();
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				if (!p.fixed) {
+					this.originalPositions[i].copy(p.position);
+					this.originalVelocities[i].copy(p.velocity);
+				}
+
+				p.force.clear();
+
+			}
+
+			// K1
+
+			s.applyForces();
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				if (!p.fixed) {
+					this.k1Forces[i].copy(p.force);
+					this.k1Velocities[i].copy(p.velocity);
+				}
+
+				p.force.clear();
+
+			}
+
+			// K2
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				if (!p.fixed) {
+
+					op = this.originalPositions[i];
+					k1v = this.k1Velocities[i];
+					x = op.x + k1v.x * 0.5 * dt;
+					y = op.y + k1v.y * 0.5 * dt;
+					p.position.set(x, y);
+
+					ov = this.originalVelocities[i];
+					k1f = this.k1Forces[i];
+					x = ov.x + k1f.x * 0.5 * dt / p.mass;
+					y = ov.y + k1f.y * 0.5 * dt / p.mass;
+					p.velocity.set(x, y);
+
+				}
+
+			}
+
+			s.applyForces();
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				if (!p.fixed) {
+					this.k2Forces[i].copy(p.force);
+					this.k2Velocities[i].copy(p.velocity);
+				}
+
+				p.force.clear();
+
+			}
+
+			// K3
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				if (!p.fixed) {
+
+					op = this.originalPositions[i];
+					k2v = this.k2Velocities[i];
+					p.position.set(op.x + k2v.x * 0.5 * dt, op.y + k2v.y * 0.5 * dt);
+
+					ov = this.originalVelocities[i];
+					k2f = this.k2Forces[i];
+					p.velocity.set(ov.x + k2f.x * 0.5 * dt / p.mass, ov.y + k2f.y * 0.5 * dt / p.mass);
+
+				}
+
+			}
+
+			s.applyForces();
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				if (!p.fixed) {
+					this.k3Forces[i].copy(p.force);
+					this.k3Velocities[i].copy(p.velocity);
+				}
+
+				p.force.clear();
+
+			}
+
+			// K4
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				if (!p.fixed) {
+
+					op = this.originalPositions[i];
+					k3v = this.k3Velocities[i];
+					p.position.set(op.x + k3v.x * dt, op.y + k3v.y * dt);
+
+					ov = this.originalVelocities[i];
+					k3f = this.k3Forces[i];
+					p.velocity.set(ov.x + k3f.x * dt / p.mass, ov.y + k3f.y * dt / p.mass);
+
+				}
+
+			}
+
+			s.applyForces();
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				if (!p.fixed) {
+					this.k4Forces[i].copy(p.force);
+					this.k4Velocities[i].copy(p.velocity);
+				}
+
+			}
+
+			// TOTAL
+
+			for (i = 0; i < s.particles.length; i++) {
+
+				p = s.particles[i];
+
+				p.age += dt;
+
+				if (!p.fixed) {
+
+					op = this.originalPositions[i];
+					k1v = this.k1Velocities[i];
+					k2v = this.k2Velocities[i];
+					k3v = this.k3Velocities[i];
+					k4v = this.k4Velocities[i];
+
+					x = op.x + dt / 6.0 * (k1v.x + 2.0 * k2v.x + 2.0 * k3v.x + k4v.x);
+					y = op.y + dt / 6.0 * (k1v.y + 2.0 * k2v.y + 2.0 * k3v.y + k4v.y);
+
+					p.position.set(x, y);
+
+					ov = this.originalVelocities[i];
+					k1f = this.k1Forces[i];
+					k2f = this.k2Forces[i];
+					k3f = this.k3Forces[i];
+					k4f = this.k4Forces[i];
+
+					x = ov.x + dt / (6.0 * p.mass) * (k1f.x + 2.0 * k2f.x + 2.0 * k3f.x + k4f.x);
+					y = ov.y + dt / (6.0 * p.mass) * (k1f.y + 2.0 * k2f.y + 2.0 * k3f.y + k4f.y);
+
+					p.velocity.set(x, y);
+
+				}
+
+			}
+
+			return this;
+
+		}
+
+	});
+
+	return Integrator;
+
+})(Vector,
+common),
+common),
+requestAnimationFrame = (function () {
+
+	/*
+	 * Requirified version of Paul Irish's request animation frame.
+	 * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+	 */
+
+	return  window.requestAnimationFrame       ||
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame    ||
+					window.oRequestAnimationFrame      ||
+					window.msRequestAnimationFrame     ||
+					function (callback) {
+						window.setTimeout(callback, 1000 / 60);
+					};
+})(),
+common);
+
+})();
+
+/*global jQuery */
+/*!
+ * Kerning.js
+ * Version: 0.2
+ * Copyright 2011 Joshua Gross
+ * MIT license
+ *
+ * Usage:
+ *  Include this file anywhere in your HTML
+ *    <script src="kerning.js"></script>
+ *
+ *  Then, add any of the attributes following to your CSS, under any
+ *  selectors you want modified:
+ *    -letter-kern, -letter-size, -letter-weight, -letter-color, -letter-transform
+ *    -word-kern, -word-size, -word-weight, -word-color, -word-transform
+ *
+ *  To use pairings (e.g., modify 'a' if 'ab' is paired):
+ *    -letter-pairs('xy': [value], …)
+ *    -word-pairs('cat mouse': [value], …)
+ *
+ *  To use multiple transforms, you need to use transform "groups":
+ *    -transform-group([transform] [transform] …)
+ *
+ *  Sometimes you need to want to use a different size or weight, depending on what
+ *  font has loaded:
+ *    font-size: [default size];
+ *    font-size: if-font('font name': [size], 'font name': [size], …);
+ *  (The first line is a fallback should Kerning.js not load. This is recommended.)
+ *
+ *  That's it! Attributes will be applied automagically.
+ *
+ * Examples:
+ *  Alter first 3 letters:
+ *    -letter-size: 100px 20px 30px;
+ *
+ *  Modify letter pairs:
+ *    -letter-kern: -letter-pairs('ab': 1px,
+ *                                'bc': 300px,
+ *                                's ': 100px);
+ *
+ *  Transform the first two letters:
+ *    -letter-transform: -transform-group(rotate3d(0,0,1,10deg) translate3d(0,10px,0))
+ *                       -transform-group(translate3d(0,-10px,0) rotate3d(0,0,1,-10deg));
+ *
+ *  Modify word pairs:
+ *    -word-size: -word-pairs('this is': 10em);
+ *
+ *  Modify the first 3 words:
+ *    -word-size: 10em 0.1em 0.2em;
+ *
+ *  Using repeat rules:
+ *    -letter-color: -letter-repeat(even: #f0f0f0, odd: #cccccc);
+ *    -letter-color: -letter-repeat(2n+1: #f0f0f0);
+ *
+ *  Using conditionals:
+ *    -letter-kern: if-font('Helvetica Neue': 0 1px 1px, 'Helvetica': 0 -1px 0);
+ *
+ *  Using conditionals on existing properties for weight or size:
+ *    font-size: 9.5em;
+ *    font-size: if-font('Helvetica Neue': 10em, 'Helvetica': 9em);
+ */
+(function($){
+	/*!
+	 * jQuery based CSS parser
+	 * documentation: http://youngisrael-stl.org/wordpress/2009/01/16/jquery-css-parser/
+	 * Version: 1.3
+	 * Copyright (c) 2011 Daniel Wachsstock
+	 * MIT license
+	 */
+	(function() {
+		// utility function, since we want to allow $('style') and $(document), so we need to look for elements in the jQuery object ($.fn.filter) and elements that are children of the jQuery object ($.fn.find)
+		$.fn.findandfilter = function(selector) {
+			var ret = this.filter(selector).add(this.find(selector));
+			ret.prevObject = ret.prevObject.prevObject; // maintain the filter/end chain correctly (the filter and the find both push onto the chain).
+			return ret;
+		};
+
+		$.fn.parsecss = function(callback, parseAttributes) {
+			var parse = function(str) { $.parsecss(str, callback) }; // bind the callback
+			this.findandfilter('style')
+				.each(function(){
+					parse(this.innerHTML);
+				})
+				.end()
+				.findandfilter('link[type="text/css"],link[rel="stylesheet"]')
+				.each(function(){
+					// only get the stylesheet if it's not disabled, it won't trigger cross-site security (doesn't start with anything like http:) and it uses the appropriate media)
+					if(!this.disabled && !(/^\w+:/.test($(this).attr('href'))) && $.parsecss.mediumApplies(this.media))
+						$.get(this.href, parse);
+				})
+				.end();
+
+			if(parseAttributes) {
+				$.get(location.pathname+location.search, 'text', function(HTMLtext) {
+					styleAttributes(HTMLtext, callback);
+				});
+			}
+
+			return this;
+		};
+
+		$.parsecss = function(str, callback) {
+			var ret = {};
+			str = munge(str).replace(/@(([^;`]|`[^b]|`b[^%])*(`b%)?);?/g, function(s, rule) {
+				// @rules end with ; or a block, with the semicolon not being part of the rule but the closing brace (represented by `b%) is
+				processAtRule($.trim(rule), callback);
+				return '';
+			});
+
+			$.each(str.split('`b%'), function(i, css) { // split on the end of a block
+				css = css.split('%b`'); // css[0] is the selector; css[1] is the index in munged for the cssText
+				if (css.length < 2) return; // invalid css
+				css[0] = restore(css[0]);
+				ret[css[0]] = $.extend(ret[css[0]] || {}, parsedeclarations(css[1]));
+			});
+			callback(ret);
+		};
+		// explanation of the above: munge(str) strips comments and encodes strings and brace-delimited blocks, so that
+		// %b` corresponds to { and `b% corresponds to }
+		// munge(str) replaces blocks with %b`1`b% (for example)
+		//
+		// str.split('`b%') splits the text by '}' (which ends every CSS statement)
+		// Each so the each(munge(str... function(i,css)
+		// is called with css being empty (the string after the last delimiter), an @rule, or a css statement of the form
+		// selector %b`n where n is a number (the block was turned into %b`n`b% by munge). Splitting on %b` gives the selector and the
+		// number corresponding to the declaration block. parsedeclarations will do restore('%b`'+n+'`b%') to get it back.
+
+		// if anyone ever implements http://www.w3.org/TR/cssom-view/#the-media-interface, we're ready
+		$.parsecss.mediumApplies = (window.media && window.media.query) || function(str) {
+			if(!str) return true; // if no descriptor, everything applies
+			if(str in media) return media[str];
+			var style = $('<style media="'+str+'">body {position: relative; z-index: 1;}</style>').appendTo('head');
+			return media[str] = [$('body').css('z-index')==1, style.remove()][0]; // the [x,y][0] is a silly hack to evaluate two expressions and return the first
+		};
+
+		$.parsecss.isValidSelector = function(str) {
+			var s = $('<style>'+str+'{}</style>').appendTo('head')[0];
+			// s.styleSheet is IE; it accepts illegal selectors but converts them to UNKNOWN. Standards-based (s.shee.cssRules) just reject the rule
+			return [s.styleSheet ? !/UNKNOWN/i.test(s.styleSheet.cssText) : !!s.sheet.cssRules.length, $(s).remove()][0]; // the [x,y][0] is a silly hack to evaluate two expressions and return the first
+		};
+
+		$.parsecss.parseArguments = function(str) {
+			if(!str) return [];
+			var ret = [], mungedArguments = munge(str, true).split(/\s+/); // can't use $.map because it flattens arrays !
+			for (var i = 0; i < mungedArguments.length; ++i) {
+				var a = restore(mungedArguments[i]);
+				try {
+					ret.push(eval('('+a+')'));
+				} catch(err) {
+					ret.push(a);
+				}
+			}
+			return ret;
+		};
+
+		// expose the styleAttributes function
+		$.parsecss.styleAttributes = styleAttributes;
+
+		// caches
+		var media = {}; // media description strings
+		var munged = {}; // strings that were removed by the parser so they don't mess up searching for specific characters
+
+		// private functions
+
+		function parsedeclarations(index) { // take a string from the munged array and parse it into an object of property: value pairs
+			var str = munged[index].replace(/^{|}$/g, ''); // find the string and remove the surrounding braces
+			str = munge(str); // make sure any internal braces or strings are escaped
+			var parsed = {};
+			$.each(str.split(';'), function (i, decl) {
+				decl = decl.split(':');
+				if(decl.length < 2) return;
+				parsed[restore(decl[0])] = restore(decl.slice(1).join(':'));
+			});
+			return parsed;
+		}
+
+		// replace strings and brace-surrounded blocks with %s`number`s% and %b`number`b%. By successively taking out the innermost
+		// blocks, we ensure that we're matching braces. No way to do this with just regular expressions. Obviously, this assumes no one
+		// would use %s` in the real world.
+		// Turns out this is similar to the method that Dean Edwards used for his CSS parser in IE7.js (http://code.google.com/p/ie7-js/)
+		var REbraces = /{[^{}]*}/;
+		var REfull = /\[[^\[\]]*\]|{[^{}]*}|\([^()]*\)|function(\s+\w+)?(\s*%b`\d+`b%){2}/; // match pairs of parentheses, brackets, and braces and function definitions.
+		var REatcomment = /\/\*@((?:[^\*]|\*[^\/])*)\*\//g; // comments of the form /*@ text */ have text parsed
+		// we have to combine the comments and the strings because comments can contain string delimiters and strings can contain comment delimiters
+		// var REcomment = /\/\*(?:[^\*]|\*[^\/])*\*\/|<!--|-->/g; // other comments are stripped. (this is a simplification of real SGML comments (see http://htmlhelp.com/reference/wilbur/misc/comment.html) , but it's what real browsers use)
+		// var REstring = /\\.|"(?:[^\\\"]|\\.|\\\n)*"|'(?:[^\\\']|\\.|\\\n)*'/g; //  match escaped characters and strings
+		var REcomment_string = /(?:\/\*(?:[^\*]|\*[^\/])*\*\/)|(\\.|"(?:[^\\\"]|\\.|\\\n)*"|'(?:[^\\\']|\\.|\\\n)*')/g;
+		var REmunged = /%\w`(\d+)`\w%/;
+		var uid = 0; // unique id number
+		function munge(str, full) {
+			str = str
+					.replace(REatcomment,'$1') // strip /*@ comments but leave the text (to let invalid CSS through)
+					.replace(REcomment_string, function (s, string) { // strip strings and escaped characters, leaving munged markers, and strip comments
+						if (!string) return '';
+						var replacement = '%s`'+(++uid)+'`s%';
+						munged[uid] = string.replace(/^\\/,''); // strip the backslash now
+						return replacement;
+					});
+			// need a loop here rather than .replace since we need to replace nested braces
+			var RE = full ? REfull : REbraces;
+			while(match = RE.exec(str)) {
+				replacement = '%b`'+(++uid)+'`b%';
+				munged[uid] = match[0];
+				str = str.replace(RE, replacement);
+			}
+			return str;
+		}
+
+		function restore(str) {
+			if(str === undefined) return str;
+			while(match = REmunged.exec(str)) {
+				str = str.replace(REmunged, munged[match[1]]);
+			}
+			return $.trim(str);
+		}
+
+		function processAtRule (rule, callback) {
+			var split = rule.split(/\s+/); // split on whitespace
+			var type = split.shift(); // first word
+			if(type=='media') {
+				var css = restore(split.pop()).slice(1, -1); // last word is the rule; need to strip the outermost braces
+				if($.parsecss.mediumApplies(split.join(' '))) {
+					$.parsecss(css, callback);
+				}
+			} else if (type=='import') {
+				var url = restore(split.shift());
+				if($.parsecss.mediumApplies(split.join(' '))) {
+					url = url.replace(/^url\(|\)$/gi, '').replace(/^["']|["']$/g, ''); // remove the url('...') wrapper
+					$.get(url, function(str) { $.parsecss(str, callback) });
+				}
+			}
+		}
+
+		// override show and hide. $.data(el, 'showDefault') is a function that is to be used for show if no arguments are passed in (if there are arguments, they override the stored function)
+		// Many of the effects call the native show/hide() with no arguments, resulting in an infinite loop.
+		var _show = {show: $.fn.show, hide: $.fn.hide}; // save the originals
+		$.each(['show', 'hide'], function() {
+			var which = this, show = _show[which], plugin = which+'Default';
+			$.fn[which] = function(){
+				if(arguments.length > 0) return show.apply(this, arguments);
+				return this.each(function() {
+					var fn = $.data(this, plugin), $this = $(this);
+					if(fn) {
+						$.removeData(this, plugin); // prevent the infinite loop
+						fn.call($this);
+						$this.queue(function() { $this.data(plugin, fn).dequeue() }); // put the function back at the end of the animation
+					} else {
+						show.call($this);
+					}
+				});
+			};
+			$.fn[plugin] = function() {
+				var args = $.makeArray(arguments), name = args[0];
+				if($.fn[name]) { // a plugin
+					args.shift();
+					var fn = $.fn[name];
+				} else if($.effects && $.effects[name]) { // a jQuery UI effect. They require an options object as the second argument
+					if(typeof args[1] != 'object') args.splice(1, 0, {});
+					fn = _show[which];
+				} else { // regular show/hide
+					fn = _show[which];
+				}
+				return this.data(plugin, function() { fn.apply(this,args) });
+			};
+		});
+
+		// experimental: find unrecognized style attributes in elements by reloading the code as text
+		var RESGMLcomment = /<!--([^-]|-[^-])*-->/g; // as above, a simplification of real comments. Don't put -- in your HTML comments!
+		var REnotATag = /(>)[^<]*/g;
+		var REtag = /<(\w+)([^>]*)>/g;
+
+		function styleAttributes(HTMLtext, callback) {
+			var ret = '', style, tags = {}; //  keep track of tags so we can identify elements unambiguously
+			HTMLtext = HTMLtext.replace(RESGMLcomment, '').replace(REnotATag, '$1');
+			munge(HTMLtext).replace(REtag, function(s, tag, attrs) {
+				tag = tag.toLowerCase();
+				if(tags[tag]) ++tags[tag]; else tags[tag] = 1;
+				if(style = /\bstyle\s*=\s*(%s`\d+`s%)/i.exec(attrs)) { // style attributes must be of the form style = "a: bc" ; they must be in quotes. After munging, they are marked with numbers. Grab that number
+					var id = /\bid\s*=\s*(\S+)/i.exec(attrs); // find the id if there is one.
+					if (id) id = '#'+restore(id[1]).replace(/^['"]|['"]$/g,''); else id = tag + ':eq(' + (tags[tag]-1) + ')';
+					ret += [id, '{', restore(style[1]).replace(/^['"]|['"]$/g,''),'}'].join('');
+				}
+			});
+			$.parsecss(ret, callback);
+		}
+	})();
+
+
+   /*
+	* Lettering.JS 0.6.1
+	*
+	* Copyright 2010, Dave Rupert http://daverupert.com
+	* Released under the WTFPL license
+	* http://sam.zoy.org/wtfpl/
+	*
+	* Thanks to Paul Irish - http://paulirish.com - for the feedback.
+	*
+	* Date: Mon Sep 20 17:14:00 2010 -0600
+	*/
+	(function() {
+		function injector(t, splitter, klass, after) {
+			var a = t.text().split(splitter), inject = '';
+			if (a.length) {
+				$(a).each(function(i, item) {
+					inject += '<span class="'+klass+(i+1)+'">'+item+'</span>'+after;
+				});
+				t.empty().append(inject);
+			}
+		}
+
+		var methods = {
+			init: function() {
+				return this.each(function() {
+					injector($(this), '', 'char', '');
+				});
+			},
+
+			words: function() {
+				return this.each(function() {
+					injector($(this), ' ', 'word', ' ');
+				});
+			},
+
+			lines: function() {
+				return this.each(function() {
+					var r = "eefec303079ad17405c889e092e105b0";
+					// Because it's hard to split a <br/> tag consistently across browsers,
+					// (*ahem* IE *ahem*), we replaces all <br/> instances with an md5 hash
+					// (of the word "split").  If you're trying to use this plugin on that
+					// md5 hash string, it will fail because you're being ridiculous.
+					injector($(this).children("br").replaceWith(r).end(), r, 'line', '');
+				});
+			}
+		};
+
+		$.fn.lettering = function(method) {
+			// Method calling logic
+			if (method && methods[method]) {
+				return methods[method].apply(this, [].slice.call( arguments, 1 ));
+			} else if (method === 'letters' || !method) {
+				return methods.init.apply(this, [].slice.call( arguments, 0 )); // always pass an array
+			}
+			$.error('Method ' +  method + ' does not exist on jQuery.lettering');
+			return this;
+		};
+	})();
+
+
+	/*
+	 *  Adapted from Font UnStack 0.1
+	 *
+	 *  Developed by Phil Oye
+	 *  Copyright (c) 2009 Phil Oye, http://philoye.com/
+	 *
+	 *  Licensed under the MIT license:
+	 *  http://www.opensource.org/licenses/mit-license.php
+	 *
+	 */
+	var unstack = (function() {
+		var fontunstack = {
+			init: function(elem){
+				var stack = $(elem).css('font-family').match(/[^'",;\s][^'",;]*/g) || [];
+				return this.analyzeStack(stack, elem);
+			},
+
+			analyzeStack: function(stack, elems) {
+				var generics = ["monospace", "sans-serif", "serif", "cursive", "fantasy"];
+				var baseline = generics[0];
+				var num_fonts = stack.length;
+				var last_resort = stack[num_fonts - 1];
+
+				// If author hasn't included a generic (tsk, tsk), let's add one
+				if($.inArray(last_resort, generics)) {
+					stack.push(baseline);
+					num_fonts++;
+				}
+
+				// If the generic is the same as our baseline, let's use another.
+				if(last_resort == baseline) {
+					baseline = generics[1];
+				};
+
+				// At this point we're sure there is a generic fallback font, so we'll only iterate though the non-generics.
+				for(var i=0; i < num_fonts - 1; i++) {
+					font = stack[i];
+					if(fontunstack.testFont(font, baseline)) {
+						return font;
+					}
+				}
+			},
+
+			testFont: function(requested_font, baseline_font) {
+				var span = $('<span id="font_tester" style="font-family:' + baseline_font + '; font-size:144px;position:absolute;left:-10000px;top:-10000px;visibility:hidden;">mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmml</span>');
+				$("body").prepend(span);
+
+				var baseline_width = span.width();
+				span.css("font-family", requested_font + "," + baseline_font );
+				var requested_width = span.width();
+				span.remove();
+
+				// If the dimensions change, the font is installed
+				return (requested_width != baseline_width);
+			}
+		};
+
+		return function(element) {
+			return fontunstack.init(element);
+		};
+	})();
+
+
+	/*
+	 * Kerning.js
+	 */
+	window.Kerning = new (function() {
+		/* Test for browsers & OSes. Ugly, but type rendering differs between
+		 * browsers and operating systems. We need CSS flags to allow for that.
+		 */
+		var self = this
+		  , nav = navigator.platform
+		  , browserPrefix = [
+			  'webkitTransform' in document.documentElement.style && 'webkit'
+			, navigator.userAgent.indexOf("MSIE") > -1 && 'ms'
+			, "MozTransform" in document.documentElement.style && 'moz'
+			, window.opera && 'o'
+			].reduce(function(pv, cv) { return pv + (cv || ''); })
+		  , osPrefix = [
+			  nav.match(/Mac/) && 'mac'
+			, nav.match(/Win/) && 'win'
+			, nav.match(/Linux/) && 'linux'
+			].reduce(function(pv, cv) { return pv + (cv || ''); });
+
+		var methods = {
+			// Match -[letter|word]-pairs(…) values
+			_pairs: function(type, elements, pairString) {
+				// checks for the existence of the letter pair property, i.e.: -letter-pairs(…)
+				var usingPairs = pairString.match(/^-(letter|word)-pairs\(([\s\S]+)\)$/i);
+				if(!usingPairs || usingPairs[1] !== type) return false;
+
+				var els = type === 'word'
+							? elements.children('span') // for -word-pairs
+							: elements.find('span > span') // for -letter-pairs
+
+					// we parse the string slightly differently if a transform is used
+				  , isTransform = pairString.match(/translate|rotate|skew|perspective/i)
+
+					// matches and splits the pairing rules
+				  , pairs = $.trim(usingPairs[2].replace(/,\s+?'/g, ",'").replace(/:\s+?(\d)/g, ':$1')).split(isTransform ? '),' : ',')
+
+				  , pairInfo, pairKeys, pairDown
+				  , pairElements = [];
+				if(!pairs) return;
+
+				$.each(pairs, function(index, pair) {
+					pairInfo = pair.split(':');
+					// match the content inside the pair (stripping the leading and tailing quotes)
+					// pairs may not be in quotes, or may have quotes inside quotes (i.e., 'a"'), so we
+					// prefer to do this with a regex.
+					pairInfo[0] = pairInfo[0].replace(/^['"](.+)['"]$/g, '$1');
+
+					if(type === 'word')
+						pairKeys = pairInfo[0].split(' ');
+					else
+						pairKeys = pairInfo[0];
+
+					pairDown = function(index) {
+						var char1 = $(this).text().match(new RegExp(pairKeys[0])),
+							nextWord, char2;
+						if(pairKeys[1] !== ' ') {
+							char2 = ($(this).next().html() || '').match(new RegExp(pairKeys[1]));
+						} else {
+							nextWord = type == 'word'
+											? $(this).next('[class^="word"]')
+											// if one of the pairKeys is just a space and we're doing letter pairs,
+											// we, instead, need to check for the existence of the next word,
+											// since spaces aren't wrapped
+											: $(this).parent().next('[class^="word"]');
+							char2 = (!$(this).next().length && nextWord.length);
+						}
+						return char1 && char2;
+					};
+
+					pairElements.push([pairInfo[1], els.filter(pairDown)]);
+				});
+
+				return pairElements;
+			},
+
+			// Match -[letter|word]-repeats(…) values
+			_repeats: function(type, elements, repeatString) {
+				var usingRepeats = repeatString.match(/^-(letter|word)-repeats\(([\s\S]+)\)$/i);
+				if(!usingRepeats || usingRepeats[1] !== type) return false;
+
+				var els = type === 'word'
+							? elements.children('span')
+							: elements.find('span > span'),
+					isTransform = repeatString.match(/translate|rotate|skew|perspective/i),
+					repeats = $.trim(usingRepeats[2].replace(/,\s+?'/g, ",'").replace(/:\s+?(\d)/g, ':$1')).split(isTransform ? '),' : ','),
+					repeatInfo, repeatKeys, repeatDown,
+					repeatElements = [];
+				if(!repeats) return;
+
+				$.each(repeats, function(index, repeat) {
+					repeatInfo = repeat.split(':');
+					if(isTransform && repeatInfo[1].substring(repeatInfo[1].length - 1) !== ')')
+						repeatInfo[1] += ')';
+					repeatElements.push([$.trim(repeatInfo[1]), els.filter(':nth-child(' + $.trim(repeatInfo[0]) + ')')]);
+				});
+
+				return repeatElements;
+			},
+
+			// Match [-[letter|word]-]if-font(…) values (-[letter|word]- is optional)
+			_conditional: function(type, elements, rule) {
+				var usingConditional = rule.match(/^(?:-(letter|word)-)?if-font\(([\s\S]+)\)$/i);
+				if(!usingConditional) return;
+
+				var els = type === 'all'
+							? elements
+							: type === 'word'
+								? elements.children('span')
+								: elements.find('span > span'),
+					isTransform = rule.match(/translate|rotate|skew|perspective/i),
+					fonts = usingConditional[2].replace(/\n/g, '').match(/['"][^'"]+['"]:\s*.+?(\)|(?=\w),\s['"]|$)/g),
+					fontInfo, fontElements = {}, elementSet = [];
+				if(!fonts) return;
+
+				elements.each(function(i, el) {
+					var fontInUse = unstack(el).replace(/^['"](.+)['"]$/g, '$1');
+					if(!fontElements[fontInUse])
+						fontElements[fontInUse] = [el];
+					else
+						fontElements[fontInUse].push(el);
+				});
+
+				$.each(fonts, function(index, font) {
+					fontInfo = font.match(/['"]([^'"]+)['"]:\s*(.+)$/);
+					if(!fontInfo) return true;
+					fontInfo = fontInfo.splice(1);
+					if(fontInfo[0] in fontElements)
+						elementSet.push([$.trim(fontInfo[1]), $(fontElements[fontInfo[0]])]);
+				});
+
+				return elementSet;
+			},
+
+			// Parse and apply a CSS property
+			_applyAttribute: function(type, elements, attribute, values) {
+				var conditional = methods._conditional(type, elements, values);
+				if(!conditional || !conditional.length)
+					conditional = [[values, elements]];
+
+				$.each(conditional, function(a, ve) {
+					var vals = ve[0], els = ve[1];
+					var custom = methods._pairs(type, els, vals)
+							  || methods._repeats(type, els, vals);
+					if(custom) {
+						$.each(custom, function(index, valEl) {
+							if(typeof attribute !== 'string') {
+								var attrs = {};
+								$.each(attribute, function(a, attr) { attrs[attr] = valEl[0]; });
+								valEl[1].css(attrs);
+							} else {
+								valEl[1].css(attribute, valEl[0]);
+							}
+						});
+					} else {
+						var indexValues, keys, transformGroups;
+						// check for transform groups, as we need to parse these slightly differently
+						if(transformGroups = vals.match(/-transform-group\(([\s\S]+?\([^)]+\))*?\)/g)) {
+							indexValues = $.map(transformGroups, function(val, i) {
+								return val.replace(/-transform-group\(([\s\S]+)\)$/, '$1');
+							});
+						} else {
+							indexValues = vals.replace(/[\n\s]+/g, ' ').split(' ');
+						}
+
+						els.each(function(i, el) {
+							keys = type === 'all'
+										? $(el) // match the entire word (only used for certain use cases)
+										: type === 'word'
+												? $(el).children('span')
+												: $(el).find('span > span'); // letters are spans inside words
+							$.each(indexValues, function(index, value) {
+								if(typeof attribute !== 'string') {
+									var attrs = {};
+									$.each(attribute, function(a, attr) { attrs[attr] = value; });
+									keys.eq(index).css(attrs);
+								} else {
+									keys.eq(index).css(attribute, value);
+								}
+							});
+						});
+					}
+				});
+			},
+
+			kern: function(type, elements, kerning) {
+				methods._applyAttribute(type, elements, 'margin-right', kerning);
+			},
+
+			size: function(type, elements, sizes) {
+				methods._applyAttribute(type, elements, 'font-size', sizes);
+			},
+
+			weight: function(type, elements, weights) {
+				methods._applyAttribute(type, elements, 'font-weight', weights);
+			},
+
+			color: function(type, elements, colors) {
+				methods._applyAttribute(type, elements, 'color', colors);
+			},
+
+			backgroundcolor: function(type, elements, colors) {
+				methods._applyAttribute(type, elements, 'background-color', colors);
+			},
+
+			transform: function(type, elements, transforms) {
+				var attributes = [
+					'-webkit-transform'
+				  , '-moz-transform'
+				  , '-ms-transform'
+				  , '-o-transform'
+				  , 'transform'
+				];
+				methods._applyAttribute(type, elements, attributes, transforms);
+			}
+		};
+
+		/**
+		 * Scan the parsed CSS for properties we want, break them down and style them.
+		 */
+		this._parse = function(css, ignoreParsed) {
+			if(!self._parsedCSS) self._parsedCSS = css; // cache the parsed CSS
+
+			for(var selector in css) {
+				for(var property in css[selector]) {
+					var match,
+						elements,
+						value = css[selector][property];
+
+					// Kerning.js prefixed selectors
+					if(match = property.match(new RegExp('^(-' + browserPrefix + '|-' + osPrefix +')?-(letter|word)-(kern|transform|size|color|backgroundcolor|weight)', 'i'))) {
+						var specificity = match[2].toLowerCase(),
+							action = match[3].toLowerCase();
+
+						elements = $(selector);
+						if(ignoreParsed)
+							elements = elements.not('.kerningjs');
+
+						elements
+							.not('.kerningjs')
+							.addClass('kerningjs').css('visibility', 'inherit')
+							.lettering('words').children('span').css('display', 'inline-block') // break down into words
+							.lettering().children('span').css('display', 'inline-block'); // break down into letters
+
+						if(methods[action])
+							methods[action].call(this, specificity, elements, value);
+
+					// existing selectors with Kerning.js-custom values
+					} else if((match = property.match(/font-(size|weight)/i)) && value.match(/if-font/i)) {
+						var action = match[1].toLowerCase();
+						elements = $(selector);
+						if(ignoreParsed)
+							elements = elements.not('.kerningjs');
+
+						elements
+							.not('.kerningjs')
+							.addClass('kerningjs').css('visibility', 'inherit');
+
+						if(methods[action])
+							methods[action].call(this, 'all', elements, value);
+					}
+				}
+			}
+		};
+
+		/**
+		 * Automatically re-run the script when a DOM node is inserted. This *could potentially*
+		 * hurt the performance of your page, so I strongly recommend benchmarking what affect
+		 * this will have on your site.
+		 */
+		this.live = function() {
+			// Technically, this event is "depricated," but there isn't exactly a whole
+			// boatload of alternatives. Or any alternatives. At all. Not one.
+			$(document).bind('DOMNodeInserted', function(evt) {
+				if(evt.target) self.refresh(true);
+			});
+		};
+
+		/**
+		 * Re-runs the parser to apply styles; to only apply to new elements, set newElementsOnly to true.
+		 */
+		this.refresh = function(newElementsOnly) {
+			if(self._parsedCSS)
+				self._parse(self._parsedCSS, newElementsOnly);
+		};
+
+		// Run the parser on DOM load
+		$(function() {
+			$(document).parsecss(self._parse, true);
+		});
+	})();
+})(jQuery);
+
+$(function() {
+
+	var easing = {
+		easeInCubic: [0.55, 0.055, 0.675, 0.19],
+		easeOutCubic: [0.215, 0.61, 0.355, 1]
+	}
+
+	// Logo animation
+
+	$('#logo').velocity({
+		opacity: [1, 0],
+		rotateY: [360, 0],
+		translateY: [0, 15],
+		rotateZ: [45, 0]
+	}, {
+		easing: easing.easeOutCubic,
+		duration: 1000,
+		delay: 600
+	});
+
+	// Footer tooltip
+
+	var $tooltip = $('#tools-tip-wrap');
+	$('#tools-link').hover(function() {
+		$tooltip.stop(true).show().velocity({
+			opacity: [1, 0],
+			translateY: [0, 10]
+		}, {
+			easing: easing.easeOutCubic,
+			duration: 230
+		});
+	}, function() {
+		$tooltip.velocity({
+			opacity: [0, 1]
+		}, {
+			easing: easing.easeInCubic,
+			duration: 150,
+			complete: function() {
+				$(this).hide();
+			}
+		});
+	});
+
+	// Particle time
+
+	var canvas = document.getElementById('canvas');
+	if (canvas) var ctx = canvas.getContext('2d');
+	var physics = new Physics(0);
+
+	Number.prototype.toRads = function() {
+		return this * Math.PI / 180;
+	}
+
+	Number.prototype.getSign = function() {
+		return this <= 0 ? -1 : 1;
+	}
+
+	var centerVector = new Physics.Vector(280, 280);
+
+	var Polygon = function() {
+		this.startX = centerVector.x;
+		this.startY = centerVector.y;
+		this.rotation = Math.random() * 360;
+		this.rotationDirection = Math.random() > 0.5 ? -1 : 1;
+
+		this.added = false;
+		this.inVision = true;
+
+		this.vel = 0;
+		this.targetVel = 4;
+
+		this.size = 0;
+		this.targetSize = Math.random() * 10;
+
+		this.alpha = 0;
+		this.targetAlpha = Math.random();
+		this.initialTargetAlpha = this.targetAlpha;
+
+		this.mass = this.targetSize / 4 + 1;
+
+		// Only if it should cicle arund something
+		this.anchor = physics.makeParticle(1, 0, 0);
+		this.anchor.reset();
+		this.anchor.position.x = this.startX;
+		this.anchor.position.y = this.startY;
+		this.anchor.makeFixed();
+
+		this._draw = function() {
+			ctx.fillStyle = 'rgba(243, 215, 127, ' + this.alpha + ')';
+			ctx.save();
+			ctx.beginPath();
+			ctx.translate(this.particle.position.x, this.particle.position.y);
+			ctx.rotate(this.rotation.toRads());
+			ctx.rect(
+				-this.size / 2,
+				-this.size / 2,
+				this.size,
+				this.size
+			);
+			ctx.fill();
+			ctx.restore();
+		}
+
+		Polygon.all.push(this);
+	}
+
+	Polygon.all = [];
+
+	Polygon.prototype.add = function() {
+		this.added = true;
+
+		this.alpha = 0;
+		this.size = 0;
+		this.vel = 0;
+		this.rotation = 0;
+
+		this.particle = physics.makeParticle(this.mass, 0, 0);
+		this.particle.position.x = this.startX;
+		this.particle.position.y = this.startY;
+
+		var velX = (Math.random() - Math.random()) * this.targetVel;
+		var velY = (Math.random() - Math.random()) * this.targetVel;
+
+		if (Math.abs(velX) < 1) {
+			velX = 1 * velX.getSign();
+		} else if (Math.abs(velY) < 1){
+			velY = 1 * velY.getSign();
+		}
+
+		this.particle.velocity.x += velX;
+		this.particle.velocity.y += velY;
+		//physics.makeAttraction(this.particle, this.anchor, 500000, canvas.height);
+	}
+
+	Polygon.prototype.update = function() {
+		if (!this.added) {
+			this.add();
+		}
+
+		this.alpha += (this.targetAlpha - this.alpha) * 0.1;
+		this.size += (this.targetSize - this.size) * 0.1;
+
+		if (this.particle.position.distanceToSquared(centerVector) > 62500) {
+			this.targetAlpha = 0;
+		} else {
+			this.targetAlpha = this.initialTargetAlpha
+		}
+
+		if (this.rotation > 360) this.rotation -= 360;
+		this.rotation += 2 * this.rotationDirection;
+	}
+
+	Polygon.prototype.draw = function() {
+		if (
+			this.particle.position.x > $(document).width() + this.size
+			|| this.particle.position.x < -this.size
+			|| this.particle.position.y > $(document).height() + this.size
+			|| this.particle.position.y < -this.size
+		) {
+			this.add();
+		} else {
+			this._draw();
+		}
+	}
+
+	// Change stuff on resizing
+
+	var $window = $(window);
+
+	function reScaleCanvas() {
+		if (window.devicePixelRatio && canvas) {
+			var canvasWidth = 640;
+			var canvasHeight = 560;
+
+			canvas.width = canvasWidth * window.devicePixelRatio;
+			canvas.height = canvasHeight * window.devicePixelRatio;
+
+			$('#canvas').css({
+				width: canvasWidth,
+				height: canvasHeight
+			});
+
+			ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+		}
+	}
+
+	$window.on('resize', function() {
+		$('#pulse').css({
+			height: $(document).height()
+		});
+		reScaleCanvas();
+	});
+
+	$window.resize();
+
+	// Add particles and start simulation
+
+	var addParticleInterval = setInterval(function() {
+		if (!canvas) clearInterval(addParticleInterval);
+		new Polygon();
+		if (Polygon.all.length >= 30) {
+			clearInterval(addParticleInterval);
+		}
+	}, 100);
+
+	physics.play();
+
+	// Hompage pulsating square
+
+	function pulsate() {
+		$('#pulse-outer').velocity({
+			opacity: [0, 1],
+			scale: [1, 0],
+			rotateZ: [45, 45]
+		}, {
+			delay: 1000,
+			duration: 2000,
+			easing: easing.easeOutCubic // easeOutCubic
+		});
+
+		$('#pulse-inner').velocity({
+			opacity: [0, 1],
+			scale: [0.9, 0],
+			rotateZ: [45, 45]
+		}, {
+			delay: 1300,
+			duration: 2500,
+			easing: easing.easeOutCubic,
+			complete: pulsate
+		});
+	}
+
+	pulsate();
+
+	function renderFrame() {
+		if (!canvas) return;
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		Polygon.all.forEach(function(polygon) {
+			polygon.update();
+			polygon.draw();
+		});
+		requestAnimationFrame(renderFrame);
+	}
+
+	renderFrame();
+});

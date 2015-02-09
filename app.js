@@ -1,3 +1,6 @@
+var dotenv = require('dotenv');
+dotenv.load();
+
 var Hapi = require('hapi');
 var Path = require('path');
 var Request = require('superagent');
@@ -54,7 +57,7 @@ server.route({
 });
 
 var RIOT = {
-	API_KEY: '10ff4139-d85b-4c00-99df-f90e0aa2c49d',
+	API_KEY: process.env.RIOT_API_KEY,
 	SUMMONER_ID: 22045226
 }
 
