@@ -27,6 +27,8 @@
     "react": "^0.12.2",
     "superagent": "^0.21.0",
     "swag": "~0.7.0",
-    "dotenv": "~0.5.1"
+    "dotenv": "~0.5.1",
+    "mapreplace": "~1.0.3",
+    "moment": "~2.9.0"
   }
 }

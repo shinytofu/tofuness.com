@@ -6,7 +6,11 @@
 	margin-top: 20px;
 	margin-left: 40px;
 	width: 560px;
+	background: $purple-l;
 	//height: 287px;
+	@include border-radius(4px);
+}
+.league-card-bg {
 	background-size: cover;
 	background-position: 0 -30px;
 	@include box-shadow(inset 0 1px 0 rgba(255, 255, 255, 0.125));
@@ -15,21 +19,19 @@
 .league-card-ovl {
 	padding: 10px;
 	@include border-radius(4px);
-background: -moz-linear-gradient(left,  rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 82%, rgba(0,0,0,0) 100%);
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.6)), color-stop(82%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0)));
-background: -webkit-linear-gradient(left,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
-background: -o-linear-gradient(left,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
-background: -ms-linear-gradient(left,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
-background: linear-gradient(to right,  rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99000000', endColorstr='#00000000',GradientType=1 );
-
+	background: -moz-linear-gradient(left, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 82%, rgba(0,0,0,0) 100%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.6)), color-stop(82%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0)));
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
+	background: -o-linear-gradient(left, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
+	background: -ms-linear-gradient(left, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
+	background: linear-gradient(to right, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#99000000', endColorstr='#00000000', GradientType=1);
 }
 .league-card-top {
 	@extend .soleil;
 	color: $w70;
 	font-size: 11px;
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
+	letter-spacing: 0.05em;
 }
 .league-card-kda {
 	@extend .oswald;
