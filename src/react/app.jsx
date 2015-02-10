@@ -1,6 +1,6 @@
 'use strict';
 
 var React = require('react');
-var LeagueCard = require('./LeagueCard');
+var LeagueCardList = require('./LeagueCardList');
 
-React.render(<LeagueCard />, document.getElementById('league-card-wrap'));
+React.render(<LeagueCardList />, document.getElementById('league-card-wrap'));
