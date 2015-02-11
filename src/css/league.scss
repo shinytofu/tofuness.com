@@ -6,8 +6,6 @@
 	margin-top: 20px;
 	margin-left: 40px;
 	width: 560px;
-	background: $purple-l;
-	//height: 287px;
 	@include border-radius(4px);
 }
 .league-card-bg {
@@ -19,28 +17,40 @@
 .league-card-ovl {
 	padding: 10px;
 	@include border-radius(4px);
-	background: -moz-linear-gradient(left, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 82%, rgba(0,0,0,0) 100%);
+	background: -moz-linear-gradient(left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 82%, rgba(0,0,0,0) 100%);
 	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.6)), color-stop(82%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0)));
-	background: -webkit-linear-gradient(left, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
-	background: -o-linear-gradient(left, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
-	background: -ms-linear-gradient(left, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
-	background: linear-gradient(to right, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
+	background: -webkit-linear-gradient(left, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
+	background: -o-linear-gradient(left, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
+	background: -ms-linear-gradient(left, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
+	background: linear-gradient(to right, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#99000000', endColorstr='#00000000', GradientType=1);
 }
-.league-card-top {
+.league-card-top, .league-card-bottom {
 	@extend .soleil;
-	color: $w70;
+	color: $w80;
 	font-size: 11px;
 	letter-spacing: 0.05em;
+}
+.league-card-middle {
+	@extend .cf;
 }
 .league-card-kda {
 	@extend .oswald;
+	float: left;
 	color: #fff;
-	font-size: 36px;
+	font-size: 28px;
 }
 .league-card-finance {
 	@extend .soleil;
-	color: $w70;
+	float: left;
+	padding: 4px 0 0 10px;
+	color: $w80;
 	font-size: 11px;
 	letter-spacing: 0.05em;
+}
+.league-card-outcome {
+	color: #d63e2e;
+	&.victory {
+		color: #52b766;
+	}
 }

@@ -1893,7 +1893,7 @@ $(function() {
 		easing: easing.easeOutCubic,
 		duration: 1000,
 		delay: 600
-	});
+  });
 
 	// Footer tooltip
 

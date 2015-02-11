@@ -3,7 +3,6 @@
 var React = require('react');
 var championsData = require('../champions.json').data;
 var _ = require('lodash');
-var mapreplace = require('mapreplace');
 var LeagueCard = require('./LeagueCard');
 
 var LeagueCardList = React.createClass({
