@@ -17,7 +17,7 @@ var LeagueCardList = React.createClass({
 	componentWillMount: function() {
 		$.ajax({
 			type: 'GET',
-			url: '/matches',
+			url: '/recent-matches',
 			success: function(res) {
 				this.setState({
 					loaded: true,

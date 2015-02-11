@@ -21,14 +21,15 @@
     "gulp-if": "~1.2.5"
   },
   "dependencies": {
+    "dotenv": "~0.5.1",
     "handlebars": "~2.0.0",
     "hapi": "~8.1.0",
     "lodash": "^3.1.0",
+    "mapreplace": "~1.0.3",
+    "moment": "~2.9.0",
+    "pubsub-js": "^1.5.0",
     "react": "^0.12.2",
     "superagent": "^0.21.0",
-    "swag": "~0.7.0",
-    "dotenv": "~0.5.1",
-    "mapreplace": "~1.0.3",
-    "moment": "~2.9.0"
+    "swag": "~0.7.0"
   }
 }

@@ -1,11 +1,18 @@
 var React = require('react');
 var moment = require('moment');
 var mapreplace = require('mapreplace');
+var PubSub = require('pubsub-js');
 var cx = React.addons.classSet;
 
 var LeagueCard = React.createClass({
 	propTypes: {
 		match: React.PropTypes.object
+	},
+	openMatchViewer: function() {
+		PubSub.publish('VIEW_MATCH', {
+			match: this.props.match,
+			champion: this.props.match.champion
+		});
 	},
 	render: function() {
 		var style = {
@@ -20,14 +27,17 @@ var LeagueCard = React.createClass({
 		});
 
 		return (
-			<div className="league-card" ref="card">
+			<div className="league-card" ref="card" onClick={this.openMatchViewer}>
 				<div className="league-card-bg" style={style}>
 					<div className="league-card-ovl">
 						<div className="league-card-top">
 							<span className={cx({
 								'league-card-outcome': true,
 								'victory': this.props.match.stats.win
-							})}>{ this.props.match.stats.win ? 'Victory' : 'Defeat' }</span> as {this.props.match.champion.name}
+							})}>{ this.props.match.stats.win ? 'Victory' : 'Defeat' }</span> as {this.props.match.champion.name} on <span className={cx({
+ 								'league-card-team': true,
+ 								'purple': this.props.match.teamId === 200
+							})}>{ this.props.match.teamId === 200 ? 'Purple' : 'Blue' }</span>
 						</div>
 						<div className="league-card-middle">
 							<div className="league-card-kda">

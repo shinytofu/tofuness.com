@@ -63,12 +63,26 @@ var RIOT = {
 
 server.route({
 	method: 'GET',
-	path: '/matches',
+	path: '/recent-matches',
 	handler: function(request, reply) {
 		Request
 		.get('https://eune.api.pvp.net/api/lol/eune/v1.3/game/by-summoner/' + RIOT.SUMMONER_ID + '/recent?api_key=' + RIOT.API_KEY)
 		.end(function(err, response) {
+			if (response.status !== 200) return reply({ status: response.status }, null);
 			reply(JSON.parse(response.text).games).type('text/json');
+		});
+	}
+});
+
+server.route({
+	method: 'GET',
+	path: '/match/{match_id}',
+	handler: function(request, reply) {
+		Request
+		.get('https://eune.api.pvp.net/api/lol/eune/v2.2/match/' + request.params.match_id +'?includeTimeline=true&api_key=' + RIOT.API_KEY)
+		.end(function(err, response) {
+			if (response.status !== 200) return reply({ status: response.status }, null);
+			reply(err, JSON.parse(response.text)).type('text/json');
 		});
 	}
 });
