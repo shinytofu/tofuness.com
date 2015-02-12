@@ -1887,13 +1887,13 @@ $(function() {
 	$('#logo').velocity({
 		opacity: [1, 0],
 		rotateY: [360, 0],
-		translateY: [0, 15],
-		rotateZ: [45, 0]
+		translateY: [0, 30],
+		rotateZ: [45, -45]
 	}, {
 		easing: easing.easeOutCubic,
 		duration: 1000,
 		delay: 600
-  });
+	});
 
 	// Footer tooltip
 

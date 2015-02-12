@@ -3,11 +3,33 @@
 $gold: #f3d77f;
 $gold-dark: #b5a454;
 $black: #333333;
-$purple-text: #fff;
-$purple-text-hover: #b6aad1;
-$purple: #1e1433;
-$purple-l: #685199;
 $w80: rgba(255, 255, 255, 0.8);
+
+// Basically, replace this with whatever fits
+
+/*
+$text: #fff;
+$text-hover: #b6aad1;
+$base: #1e1433;
+$base-l: #685199;
+
+$text: #fff;
+$text-hover: #b6aad1;
+$base: #1e1433;
+$base-l: #685199;
+*/
+/*
+$text: #fff;
+$text-hover: #b6aad1;
+$base: #1e1433;
+$base-l: #685199;
+*/
+
+$text: #fff;
+$text-hover: #d5cedb;
+$base: #1f1c22;
+$base-l: #534b5b;
+
 
 @import 'includes/normalize.scss';
 @import 'default.scss';
@@ -44,7 +66,7 @@ html {
 	color: $black;
 	font-size: 16px;
 	font-family: 'Helvetica', sans-serif;
-	background: $purple;
+	background: $base;
 }
 div {
 	-webkit-box-sizing: border-box;
@@ -52,23 +74,23 @@ div {
 	box-sizing: border-box;
 }
 .link {
-	color: $purple-text;
+	color: $text;
 	text-decoration: none;
 	text-shadow:
-		0 1px 0 $purple,
-		1px 1px 0 $purple,
-		-1px 1px 0 $purple,
-		2px 1px 0 $purple,
-		-2px 1px 0 $purple,
-		0 2px 0 $purple,
-		-1px 2px 0 $purple,
-		1px 2px 0 $purple,
-		-2px 2px 0 $purple,
-		2px 2px 0 $purple;
-	@include box-shadow(0 1px 0 $purple-text);
+		0 1px 0 $base,
+		1px 1px 0 $base,
+		-1px 1px 0 $base,
+		2px 1px 0 $base,
+		-2px 1px 0 $base,
+		0 2px 0 $base,
+		-1px 2px 0 $base,
+		1px 2px 0 $base,
+		-2px 2px 0 $base,
+		2px 2px 0 $base;
+	@include box-shadow(0 1px 0 $text);
 	&:hover {
-		color: $purple-text-hover;
-		@include box-shadow(0 1px 0 $purple-text-hover);
+		color: $text-hover;
+		@include box-shadow(0 1px 0 $text-hover);
 	}
 }
 
@@ -79,23 +101,24 @@ div {
 	margin-left: 80px;
 	padding-top: 10px;
 	width: 480px;
-	border-top: 1px solid $purple-text;
+	border-top: 1px solid $text;
 }
 .navigation-link {
 	@extend .soleil;
 	margin-right: 20px;
 	float: left;
-	color: $purple-text;
+	color: $text;
 	font-size: 11px;
 	text-transform: uppercase;
 	text-decoration: none;
 	letter-spacing: 0.1em;
 	&:hover {
-		color: $purple-text-hover;
+		color: $text-hover;
 	}
 }
 #logo-wrap {
-	padding: 0 0 16px 82px;
+	overflow: hidden;
+	padding: 5px 0 16px 82px;
 }
 #logo {
 	display: block;
@@ -114,7 +137,7 @@ div {
 #intro-top {
 	@extend .soleil;
 	padding-bottom: 1em;
-	color: $purple-text;
+	color: $text;
 	font-size: 11px;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
@@ -147,7 +170,7 @@ div {
 	margin-left: -40px;
 	width: 560px;
 	height: 287px;
-	background: $purple-l;
+	background: $base-l;
 }
 .me-image-caption {
 	margin-left: -40px;
@@ -155,13 +178,13 @@ div {
 }
 .me-image-caption-text {
 	@extend .calluna;
-	color: $purple-text-hover;
+	color: $text-hover;
 	font-size: 14px;
 }
 .me-image-caption-credit {
 	@extend .soleil;
 	padding-top: 0.5em;
-	color: $purple-l;
+	color: $base-l;
 	font-size: 11px;
 }
 .me-section {
@@ -171,7 +194,7 @@ div {
 }
 .me-section-hd {
 	@extend .soleil;
-	color: $purple-l;
+	color: $base-l;
 	font-size: 11px;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
@@ -179,7 +202,7 @@ div {
 .me-section-desc {
 	@extend .calluna;
 	padding-top: 1em;
-	color: $purple-text;
+	color: $text;
 	line-height: 2;
 }
 #canvas {
@@ -223,9 +246,9 @@ div {
 .sideproject {
 	margin-top: 1em;
 	padding-top: 1em;
-	color: $purple-text;
+	color: $text;
 	line-height: 2;
-	border-top: 1px dotted $purple-l;
+	border-top: 1px dotted $base-l;
 }
 .sideproject-title {
 	@extend .soleil;
@@ -239,7 +262,7 @@ div {
 	@extend .calluna;
 	position: relative;
 	padding: 40px 80px;
-	color: $purple-l;
+	color: $base-l;
 	font-size: 14px;
 }
 #tools-link {

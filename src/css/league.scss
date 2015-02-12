@@ -54,17 +54,42 @@
 		color: #52b766;
 	}
 }
+.league-card-team {
+	color: #4a95ff;
+	&.purple {
+		color: #685199;
+	}
+}
 .league-match-modal {
 	position: fixed;
 	top: 0;
 	bottom: 0;
-	left: 0;
+	left: 640px;
 	right: 0;
-	background: rgba(0, 0, 0, 0.6);
+	background: rgba(0,0,0,0.8);
 }
-.league-card-team {
-	color: #4a95ff;
-	&.purple {
-		color: $purple-l;
+.league-match-chart {
+	width: 560px;
+	height: 287px;
+}
+
+// lolc == league of legends chart
+
+.lolc-grid {
+	stroke: rgba(255, 255, 255, 0.1);
+	stroke-dasharray: 1px;
+}
+.lolc-line {
+	fill: none;
+	stroke: $base-l;
+	stroke-width: 2px;
+}
+.lolc-point {
+	@extend .ts;
+	stroke: #fff;
+	stroke-width: 4px;
+	stroke-linecap: round;
+	&:hover {
+		stroke-width: 10px;
 	}
 }
