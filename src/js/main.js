@@ -107,14 +107,12 @@ $(function() {
 	Polygon.all = [];
 
 	Polygon.prototype.add = function() {
-		this.added = true;
-
 		this.alpha = 0;
 		this.size = 0;
 		this.vel = 0;
 		this.rotation = 0;
 
-		this.particle = physics.makeParticle(this.mass, 0, 0);
+		if (!this.added) this.particle = physics.makeParticle(this.mass, 0, 0);
 		this.particle.position.x = this.startX;
 		this.particle.position.y = this.startY;
 
@@ -127,8 +125,9 @@ $(function() {
 			velY = 1 * velY.getSign();
 		}
 
-		this.particle.velocity.x += velX;
-		this.particle.velocity.y += velY;
+		this.particle.velocity.x = velX;
+		this.particle.velocity.y = velY;
+		this.added = true;
 		//physics.makeAttraction(this.particle, this.anchor, 500000, canvas.height);
 	}
 
@@ -225,22 +224,27 @@ $(function() {
 		}, {
 			delay: 1300,
 			duration: 2500,
-			easing: easing.easeOutCubic,
-			complete: pulsate
+			easing: easing.easeOutCubic
 		});
 	}
 
 	pulsate();
 
+	var lastPulse = Date.now();
 	function renderFrame() {
-		if (!canvas) return;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		Polygon.all.forEach(function(polygon) {
-			polygon.update();
-			polygon.draw();
-		});
+		if (canvas) {
+			if (Date.now() - lastPulse > 4000) {
+				lastPulse = Date.now();
+				pulsate();
+			}
+
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			Polygon.all.forEach(function(polygon) {
+				polygon.update();
+				polygon.draw();
+			});
+		}
 		requestAnimationFrame(renderFrame);
 	}
-
 	renderFrame();
 });

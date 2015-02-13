@@ -53,7 +53,7 @@ var LeagueCard = React.createClass({
 							</div>
 						</div>
 						<div className="league-card-bottom">
-							{ matchFormat } - { moment(this.props.match.createDate).format('LL') }
+							{ matchFormat } / { Math.round(this.props.match.stats.timePlayed / 60) + ' mins' } / { moment(this.props.match.createDate).format('LL') }
 						</div>
 					</div>
 				</div>
