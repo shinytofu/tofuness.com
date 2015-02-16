@@ -29,19 +29,19 @@ function generateSeries(data) {
 					color: '#fff'
 				},
 				areaStyle: {
-					color: 'rgba(255,255,255, 0.3)',
+					color: 'rgba(255,255,255, 0.6)',
 					type: 'default'
 				},
-				borderWidth: 0,
-				borderColor: 'transparent'
+				borderWidth: 1,
+				borderColor: '#fff'
 			},
 			emphasis: {
-				borderColor: '#fff',
-				borderWidth: 1
+				borderColor: '#1e1433',
+				borderWidth: -1
 			}
 		},
 		symbol: 'circle',
-		symbolSize: 3.5
+		symbolSize: 3
 	}
 }
 
@@ -155,6 +155,22 @@ var LeagueMatchViewer = React.createClass({
 				y: 20,
 				y2: 60
 			},
+			tooltip: {
+				trigger: 'axis',
+				showDelay: 0,
+				hideDelay: 0,
+				transitionDuration: 0,
+				position: function(position) {
+					return [position[0] - 50, 40];
+				},
+				axisPointer: {
+					type: 'line',
+					lineStyle: {
+						color: 'rgba(255, 255, 255, 0.3)',
+						width: 0
+					}
+				}
+			},
 			xAxis: {
 				type: 'value',
 				axisLine: false,
@@ -176,6 +192,11 @@ var LeagueMatchViewer = React.createClass({
 					type: 'scatter',
 					symbolSize: 5,
 					data: killData,
+					itemStyle: {
+						normal: {
+							color: 'rgba(255, 255, 255, 0.6)'
+						}
+					},
 					symbolSize: function(point) {
 						return point[2] * 2;
 					}
@@ -183,6 +204,10 @@ var LeagueMatchViewer = React.createClass({
 			]
 		}
 		killsChart.setOption(killsChartOption);
+
+		goldChart.connect([ killsChart ]);
+		killsChart.connect([ goldChart ]);
+
 
 		this.animateIn();
 	},

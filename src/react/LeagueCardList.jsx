@@ -1,9 +1,10 @@
 'use strict';
 
 var React = require('react');
-var championsData = require('../champions.json').data;
 var _ = require('lodash');
+var championsData = require('../data/champions.json').data;
 var LeagueCard = require('./LeagueCard');
+var LeagueLoading = require('./LeagueLoading');
 
 var LeagueCardList = React.createClass({
 	getInitialState: function() {
@@ -11,7 +12,8 @@ var LeagueCardList = React.createClass({
 			loaded: false,
 			summonerName: 'Hameru',
 			summonerRegion: 'EUNE',
-			matches: []
+			matches: [],
+			error: null
 		}
 	},
 	componentWillMount: function() {
@@ -23,11 +25,24 @@ var LeagueCardList = React.createClass({
 					loaded: true,
 					matches: res
 				});
+				this.animateIn();
+			}.bind(this),
+			error: function() {
+				this.setState({
+					error: 'Riot API seems to be down :('
+				});
 			}.bind(this)
 		});
 	},
+	animateIn: function() {
+		$(this.refs.cardList.getDOMNode()).find('>div').velocity('transition.slideUpIn', {
+			duration: 600,
+			easing: [0.215, 0.61, 0.355, 1],
+			stagger: 50
+		});
+	},
 	render: function() {
-		if (!this.state.loaded) return <div />;
+		if (!this.state.loaded) return <LeagueLoading error={this.state.error} />;
 
 		var mergedMatches = this.state.matches.map(function(match) {
 			var championName = _.findKey(championsData, {
@@ -40,7 +55,7 @@ var LeagueCardList = React.createClass({
 		}.bind(this));
 
 		return (
-			<div className="cf">
+			<div className="cf" ref="cardList">
 				{
 					mergedMatches.map(function(match) {
 						return <LeagueCard match={match} key={match.gameId} />;

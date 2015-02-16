@@ -68,8 +68,11 @@ server.route({
 		Request
 		.get('https://eune.api.pvp.net/api/lol/eune/v1.3/game/by-summoner/' + RIOT.SUMMONER_ID + '/recent?api_key=' + RIOT.API_KEY)
 		.end(function(err, response) {
-			if (response.status !== 200) return reply({ status: response.status }, null);
-			reply(JSON.parse(response.text).games).type('text/json');
+			if (response.status !== 200){
+				reply(new Error(response.status));
+			} else {
+				reply(JSON.parse(response.text).games).type('text/json');
+			}
 		});
 	}
 });

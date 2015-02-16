@@ -34,13 +34,14 @@
 		</div>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react-with-addons.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.1.0/velocity.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.1/velocity.ui.min.js"></script>
+		<script type="text/javascript" src="/js/main.js"></script>
 		{{#is env 'development'}}
 		<script type="text/javascript" src="http://localhost:8090/webpack-dev-server.js"></script>
 		<script type="text/javascript" src="http://localhost:8090/assets/components.js"></script>
 		{{else}}
 		<script type="text/javascript" src="/js/components.js"></script>
 		{{/is}}
-		<script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>

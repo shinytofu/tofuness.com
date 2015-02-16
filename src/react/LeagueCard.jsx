@@ -48,7 +48,7 @@ var LeagueCard = React.createClass({
 									$: {Math.round(this.props.match.stats.goldEarned / 1000)}k gold
 								</span><br />
 								<span className="league-card-creeps">
-									#: {this.props.match.stats.minionsKilled + this.props.match.stats.neutralMinionsKilled} creeps
+									#: {this.props.match.stats.minionsKilled + Number(this.props.match.stats.neutralMinionsKilled || '0')} creeps
 								</span>
 							</div>
 						</div>
