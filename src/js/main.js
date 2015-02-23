@@ -67,10 +67,10 @@ $(function() {
 		this.inVision = true;
 
 		this.vel = 0;
-		this.targetVel = 4;
+		this.targetVel = 2;
 
 		this.size = 0;
-		this.targetSize = Math.random() * 10;
+		this.targetSize = Math.random() * 5;
 
 		this.alpha = 0;
 		this.targetAlpha = Math.random();
@@ -79,11 +79,12 @@ $(function() {
 		this.mass = this.targetSize / 4 + 1;
 
 		// Only if it should cicle arund something
+		/*
 		this.anchor = physics.makeParticle(1, 0, 0);
 		this.anchor.reset();
-		this.anchor.position.x = this.startX;
-		this.anchor.position.y = this.startY;
-		this.anchor.makeFixed();
+		this.anchor.position.x = canvas.width * Math.random();
+		this.anchor.position.y = canvas.height * Math.random();
+		this.anchor.makeFixed(); */
 
 		this._draw = function() {
 			ctx.fillStyle = 'rgba(243, 215, 127, ' + this.alpha + ')';
@@ -128,7 +129,7 @@ $(function() {
 		this.particle.velocity.x = velX;
 		this.particle.velocity.y = velY;
 		this.added = true;
-		//physics.makeAttraction(this.particle, this.anchor, 500000, canvas.height);
+		//physics.makeAttraction(this.particle, this.anchor, 50000, canvas.height);
 	}
 
 	Polygon.prototype.update = function() {
@@ -197,7 +198,7 @@ $(function() {
 	var addParticleInterval = setInterval(function() {
 		if (!canvas) clearInterval(addParticleInterval);
 		new Polygon();
-		if (Polygon.all.length >= 30) {
+		if (Polygon.all.length >= 50) {
 			clearInterval(addParticleInterval);
 		}
 	}, 100);
@@ -224,20 +225,15 @@ $(function() {
 		}, {
 			delay: 1300,
 			duration: 2500,
-			easing: easing.easeOutCubic
+			easing: easing.easeOutCubic,
+			complete: pulsate
 		});
 	}
 
-	pulsate();
+	if ($('#pulse')) pulsate();
 
-	var lastPulse = Date.now();
 	function renderFrame() {
 		if (canvas) {
-			if (Date.now() - lastPulse > 4000) {
-				lastPulse = Date.now();
-				pulsate();
-			}
-
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			Polygon.all.forEach(function(polygon) {
 				polygon.update();

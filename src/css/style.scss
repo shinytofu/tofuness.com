@@ -171,8 +171,12 @@ div {
 .me-section-desc {
 	@extend .calluna;
 	padding-top: 1em;
+	margin-bottom: 2em;
 	color: $text;
 	line-height: 2;
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 #canvas {
 	position: absolute;
@@ -286,4 +290,17 @@ div {
 	width: 30px;
 	height: 30px;
 	background-size: cover;
+}
+
+// Mesh
+
+#mesh {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
 }

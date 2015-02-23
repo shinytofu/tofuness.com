@@ -56,6 +56,14 @@ server.route({
 	}
 });
 
+server.route({
+	method: 'GET',
+	path: '/experiments',
+	handler: function(request, reply) {
+		reply.view('experiments');
+	}
+});
+
 var RIOT = {
 	API_KEY: process.env.RIOT_API_KEY,
 	SUMMONER_ID: 22045226
@@ -94,6 +102,7 @@ if (process.env.NODE_ENV === 'development') {
 	process.send({cmd: 'NODE_DEV', required: './views/index.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/projects.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/games.html'});
+	process.send({cmd: 'NODE_DEV', required: './views/experiments.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/partials/header.html'});
 	process.send({cmd: 'NODE_DEV', required: './views/partials/footer.html'});
 }

@@ -8,16 +8,14 @@
 	margin-left: 40px;
 	width: 560px;
 	@include border-radius(4px);
-}
-.league-card-bg {
 	background-size: cover;
 	background-position: 0 -50px;
 	@include box-shadow(inset 0 1px 0 rgba(255, 255, 255, 0.125));
-	@include border-radius(4px);
 }
 .league-card-ovl {
 	padding: 10px;
-	@include border-radius(4px);
+	@include border-radius(4px 4px 0 0);
+	@include border-radius(4px 4px 0 0);
 	background: -moz-linear-gradient(left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 82%, rgba(0,0,0,0) 100%);
 	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.6)), color-stop(82%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0)));
 	background: -webkit-linear-gradient(left, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);
@@ -38,8 +36,10 @@
 .league-card-kda {
 	@extend .oswald;
 	float: left;
+	padding-top: 5px;
 	color: #fff;
-	font-size: 28px;
+	font-size: 32px;
+	line-height: 1;
 }
 .league-card-finance {
 	@extend .soleil;
@@ -78,6 +78,26 @@
 	text-align: center;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
+}
+
+.league-card-meta {
+	@extend .cf;
+	width: 100%;
+	@include border-radius(0 0 4px 4px);
+	@include border-radius(0 0 4px 4px);
+}
+.league-card-item-wrap {
+	@extend .cf;
+	padding: 5px 0;
+	width: 100%;
+}
+.league-card-item {
+	float: left;
+	margin-right: 5px;
+	width: 24px;
+	height: 24px;
+	background-size: cover;
+	@include border-radius(4px);
 }
 
 /*
