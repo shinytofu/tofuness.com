@@ -136,6 +136,8 @@ div {
 	padding: 40px 0;
 }
 .me-image {
+	position: relative;
+	overflow: hidden;
 	margin-left: -40px;
 	width: 560px;
 	height: 287px;
@@ -199,7 +201,7 @@ div {
 	opacity: 0;
 	position: absolute;
 	top: -60px;
-	left: -120px;
+	left: -80px;
 	width: 800px;
 	height: 800px;
 	border: 1px solid $gold-dark;
@@ -209,7 +211,7 @@ div {
 	opacity: 0;
 	position: absolute;
 	top: -60px;
-	left: -120px;
+	left: -80px;
 	width: 800px;
 	height: 800px;
 	border: 4px solid $gold;
@@ -296,11 +298,8 @@ div {
 
 #mesh {
 	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	z-index: -1;
-	width: 100%;
-	height: 100%;
+	top: 50%;
+	left: 50%;
+	margin-left: -300px;
+	margin-top: -160px;
 }

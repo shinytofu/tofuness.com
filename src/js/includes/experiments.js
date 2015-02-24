@@ -1,15 +1,18 @@
 $(function() {
 	var canvas = document.getElementById('mesh');
-	if (canvas) var ctx = canvas.getContext('2d');
+	if (!canvas) return;
 
+	var ctx = canvas.getContext('2d');
 	var T = 0;
 
 	var currentMousePos = { x: 0, y: 0 };
 	var $window = $(window);
-	$window.on('mousemove', function(e) {
-		currentMousePos.x = e.pageX;
-		currentMousePos.y = e.pageY;
-	});
+	/*
+	var $me = $('#mesh');
+	$me.on('mousemove', function(e) {
+		currentMousePos.x = e.pageX - $me.offset().left;
+		currentMousePos.y = e.pageY - $me.offset().top;
+	}); */
 
 	var Dot =  function(posX, posY, x, y) {
 		this.posX = posX;
@@ -17,7 +20,7 @@ $(function() {
 		this.x = x;
 		this.y = y;
 		this.added = false;
-		this.alpha = 0;
+		this.alpha = 0.001;
 		this.radius = 0;
 
 		this._draw = function() {
@@ -46,16 +49,17 @@ $(function() {
 	Dot.prototype.update = function() {
 		if (!this.added) this.add();
 
-		var middle = DOTS_TOTAL / 4 - 0.5;
-		var mouseX = currentMousePos.x / $window.width() * DOTS_TOTAL;
-		var mouseY = currentMousePos.y / $window.height() * DOTS_TOTAL / 2 - 0.5;
-		var distance = Math.sqrt(Math.pow(middle - this.x, 2) + Math.pow(middle - this.y, 2)) / 2;
+		var middleX = DOTS_TOTAL_X / 2 - 1;
+		var middleY = DOTS_TOTAL_Y / 2 - 1;
+		var distance = Math.sqrt(Math.pow(middleX - this.x, 2) + Math.pow(middleY - this.y, 2)) / 2;
+		var sinValue = Math.sin(-distance + T);
+		var fadeIn = ((-distance + T) / (2 * Math.PI));
 
-		//var newVal = Math.sin((this.x * this.y / 5 + T) * 0.3) + 1;
-		//this.radius = Math.sin(this.x + T) + 1 + Math.sin(this.y + T) + 1;
-		this.radius = Math.sin(-distance + T) + 1.5;
-		this.posY += Math.sin(-distance + T) / 2;
-		this.alpha = Math.sin(-distance + T) + 2;
+		if (fadeIn > 1) fadeIn = 1;
+
+		this.radius = (sinValue + 2) * 0.5;
+		this.posY += sinValue / 2;
+		this.alpha = (sinValue + 1) * fadeIn;
 	}
 
 	Dot.prototype.draw = function() {
@@ -66,13 +70,13 @@ $(function() {
 
 	function reScaleCanvas() {
 		if (window.devicePixelRatio && canvas) {
-			var canvasWidth = $(window).width();
-			var canvasHeight = $(window).height();
+			var canvasWidth = 640;
+			var canvasHeight = 320;
 
 			canvas.width = canvasWidth * window.devicePixelRatio;
 			canvas.height = canvasHeight * window.devicePixelRatio;
 
-			$('#mesh').css({
+			$(canvas).css({
 				width: canvasWidth,
 				height: canvasHeight
 			});
@@ -81,17 +85,17 @@ $(function() {
 		}
 	}
 
-	if (canvas) reScaleCanvas();
+	reScaleCanvas();
 
-	var DOTS_TOTAL = 60;
+	var DOTS_TOTAL_X = 31;
+	var DOTS_TOTAL_Y = DOTS_TOTAL_X * canvas.height / canvas.width;
 
 	function initDots() {
-		if (!canvas) return false;
-		for (var ix = 0; ix < DOTS_TOTAL; ix++) {
-			for (var iy = 0; iy < DOTS_TOTAL; iy++) {
+		for (var ix = 0; ix < DOTS_TOTAL_X; ix++) {
+			for (var iy = 0; iy < DOTS_TOTAL_Y; iy++) {
 				new Dot(
-					ix / DOTS_TOTAL * canvas.height + 10,
-					iy / DOTS_TOTAL * canvas.height + 10,
+					ix / DOTS_TOTAL_X * $(canvas).width(),
+					iy / DOTS_TOTAL_Y * $(canvas).height(),
 					ix, iy
 				);
 			}
@@ -100,7 +104,7 @@ $(function() {
 
 	initDots();
 
-	var incrementValue = 0.5;
+	var incrementValue = 0.05;
 
 	function render() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -111,6 +115,5 @@ $(function() {
 		T += incrementValue;
 		requestAnimationFrame(render);
 	}
-
-	if (canvas) render();
+	setTimeout(function() { render(); }, 300);
 });
