@@ -20,7 +20,8 @@ $(function() {
 		this.x = x;
 		this.y = y;
 		this.added = false;
-		this.alpha = 0.001;
+		this.alpha = 0;
+		this.targetAlpha = 1;
 		this.radius = 0;
 
 		this._draw = function() {
@@ -53,13 +54,10 @@ $(function() {
 		var middleY = DOTS_TOTAL_Y / 2 - 1;
 		var distance = Math.sqrt(Math.pow(middleX - this.x, 2) + Math.pow(middleY - this.y, 2)) / 2;
 		var sinValue = Math.sin(-distance + T);
-		var fadeIn = ((-distance + T) / (2 * Math.PI));
-
-		if (fadeIn > 1) fadeIn = 1;
 
 		this.radius = (sinValue + 2) * 0.5;
 		this.posY += sinValue / 2;
-		this.alpha = (sinValue + 1) * fadeIn;
+		this.alpha += (this.targetAlpha - this.alpha) * 0.05;
 	}
 
 	Dot.prototype.draw = function() {
@@ -104,16 +102,19 @@ $(function() {
 
 	initDots();
 
-	var incrementValue = 0.05;
+	var incrementValue = 0.08;
 
 	function render() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		T += incrementValue;
 		Dot.all.forEach(function(dot) {
 			dot.update();
 			dot.draw();
 		});
-		T += incrementValue;
+		if (T >= 2 * Math.PI) {
+			T = 0;
+		}
 		requestAnimationFrame(render);
 	}
-	setTimeout(function() { render(); }, 300);
+	render();
 });

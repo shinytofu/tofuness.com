@@ -254,6 +254,12 @@ Vector = (function (_) {
 			return this.set(x, y);
 		},
 
+		scale: function(f) {
+			this.x *= f;
+			this.y *= f;
+			this.z *= f;
+		},
+
 		isZero: function() {
 			return (this.length() < 0.0001 /* almost zero */ );
 		}

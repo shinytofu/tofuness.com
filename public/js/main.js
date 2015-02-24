@@ -254,6 +254,12 @@ Vector = (function (_) {
 			return this.set(x, y);
 		},
 
+		scale: function(f) {
+			this.x *= f;
+			this.y *= f;
+			this.z *= f;
+		},
+
 		isZero: function() {
 			return (this.length() < 0.0001 /* almost zero */ );
 		}
@@ -1192,7 +1198,8 @@ $(function() {
 		this.x = x;
 		this.y = y;
 		this.added = false;
-		this.alpha = 0.001;
+		this.alpha = 0;
+		this.targetAlpha = 1;
 		this.radius = 0;
 
 		this._draw = function() {
@@ -1225,13 +1232,10 @@ $(function() {
 		var middleY = DOTS_TOTAL_Y / 2 - 1;
 		var distance = Math.sqrt(Math.pow(middleX - this.x, 2) + Math.pow(middleY - this.y, 2)) / 2;
 		var sinValue = Math.sin(-distance + T);
-		var fadeIn = ((-distance + T) / (2 * Math.PI));
-
-		if (fadeIn > 1) fadeIn = 1;
 
 		this.radius = (sinValue + 2) * 0.5;
 		this.posY += sinValue / 2;
-		this.alpha = (sinValue + 1) * fadeIn;
+		this.alpha += (this.targetAlpha - this.alpha) * 0.05;
 	}
 
 	Dot.prototype.draw = function() {
@@ -1276,18 +1280,21 @@ $(function() {
 
 	initDots();
 
-	var incrementValue = 0.05;
+	var incrementValue = 0.08;
 
 	function render() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		T += incrementValue;
 		Dot.all.forEach(function(dot) {
 			dot.update();
 			dot.draw();
 		});
-		T += incrementValue;
+		if (T >= 2 * Math.PI) {
+			T = 0;
+		}
 		requestAnimationFrame(render);
 	}
-	setTimeout(function() { render(); }, 300);
+	render();
 });
 
 /*global jQuery */
@@ -1995,6 +2002,368 @@ $(function() {
 	})();
 })(jQuery);
 
+;(function(root, factory) {
+
+	// Support AMD
+	if (typeof define === 'function' && define.amd) {
+		define([], factory);
+
+	// Support CommonJS
+	} else if (typeof exports === 'object') {
+		var randomColor = factory();
+
+		// Support NodeJS & Component, which allow module.exports to be a function
+		if (typeof module === 'object' && module && module.exports) {
+			exports = module.exports = randomColor;
+		}
+
+		// Support CommonJS 1.1.1 spec
+		exports.randomColor = randomColor;
+
+	// Support vanilla script loading
+	} else {
+		root.randomColor = factory();
+	};
+
+}(this, function() {
+
+	// Shared color dictionary
+	var colorDictionary = {};
+
+	// Populate the color dictionary
+	loadColorBounds();
+
+	var randomColor = function(options) {
+		options = options || {};
+
+		var H,S,B;
+
+		// Check if we need to generate multiple colors
+		if (options.count) {
+
+			var totalColors = options.count,
+					colors = [];
+
+			options.count = false;
+
+			while (totalColors > colors.length) {
+				colors.push(randomColor(options));
+			}
+
+			return colors;
+		}
+
+		// First we pick a hue (H)
+		H = pickHue(options);
+
+		// Then use H to determine saturation (S)
+		S = pickSaturation(H, options);
+
+		// Then use S and H to determine brightness (B).
+		B = pickBrightness(H, S, options);
+
+		// Then we return the HSB color in the desired format
+		return setFormat([H,S,B], options);
+	};
+
+	function pickHue (options) {
+
+		var hueRange = getHueRange(options.hue),
+				hue = randomWithin(hueRange);
+
+		// Instead of storing red as two seperate ranges,
+		// we group them, using negative numbers
+		if (hue < 0) {hue = 360 + hue}
+
+		return hue;
+
+	}
+
+	function pickSaturation (hue, options) {
+
+		if (options.luminosity === 'random') {
+			return randomWithin([0,100]);
+		}
+
+		if (options.hue === 'monochrome') {
+			return 0;
+		}
+
+		var saturationRange = getSaturationRange(hue);
+
+		var sMin = saturationRange[0],
+				sMax = saturationRange[1];
+
+		switch (options.luminosity) {
+
+			case 'bright':
+				sMin = 55;
+				break;
+
+			case 'dark':
+				sMin = sMax - 10;
+				break;
+
+			case 'light':
+				sMax = 55;
+				break;
+	 }
+
+		return randomWithin([sMin, sMax]);
+
+	}
+
+	function pickBrightness (H, S, options) {
+
+		var brightness,
+				bMin = getMinimumBrightness(H, S),
+				bMax = 100;
+
+		switch (options.luminosity) {
+
+			case 'dark':
+				bMax = bMin + 20;
+				break;
+
+			case 'light':
+				bMin = (bMax + bMin)/2;
+				break;
+
+			case 'random':
+				bMin = 0;
+				bMax = 100;
+				break;
+		}
+
+		return randomWithin([bMin, bMax]);
+
+	}
+
+	function setFormat (hsv, options) {
+
+		switch (options.format) {
+
+			case 'hsvArray':
+				return hsv;
+
+			case 'hsv':
+				return colorString('hsv', hsv);
+
+			case 'rgbArray':
+				return HSVtoRGB(hsv);
+
+			case 'rgb':
+				return colorString('rgb', HSVtoRGB(hsv));
+
+			default:
+				return HSVtoHex(hsv);
+		}
+
+	}
+
+	function getMinimumBrightness(H, S) {
+
+		var lowerBounds = getColorInfo(H).lowerBounds;
+
+		for (var i = 0; i < lowerBounds.length - 1; i++) {
+
+			var s1 = lowerBounds[i][0],
+					v1 = lowerBounds[i][1];
+
+			var s2 = lowerBounds[i+1][0],
+					v2 = lowerBounds[i+1][1];
+
+			if (S >= s1 && S <= s2) {
+
+				 var m = (v2 - v1)/(s2 - s1),
+						 b = v1 - m*s1;
+
+				 return m*S + b;
+			}
+
+		}
+
+		return 0;
+	}
+
+	function getHueRange (colorInput) {
+
+		if (typeof parseInt(colorInput) === 'number') {
+
+			var number = parseInt(colorInput);
+
+			if (number < 360 && number > 0) {
+				return [number, number];
+			}
+
+		}
+
+		if (typeof colorInput === 'string') {
+
+			if (colorDictionary[colorInput]) {
+				var color = colorDictionary[colorInput];
+				if (color.hueRange) {return color.hueRange}
+			}
+		}
+
+		return [0,360];
+
+	}
+
+	function getSaturationRange (hue) {
+		return getColorInfo(hue).saturationRange;
+	}
+
+	function getColorInfo (hue) {
+
+		// Maps red colors to make picking hue easier
+		if (hue >= 334 && hue <= 360) {
+			hue-= 360;
+		}
+
+		for (var colorName in colorDictionary) {
+			 var color = colorDictionary[colorName];
+			 if (color.hueRange &&
+					 hue >= color.hueRange[0] &&
+					 hue <= color.hueRange[1]) {
+					return colorDictionary[colorName];
+			 }
+		} return 'Color not found';
+	}
+
+	function randomWithin (range) {
+		return Math.floor(range[0] + Math.random()*(range[1] + 1 - range[0]));
+	}
+
+	function shiftHue (h, degrees) {
+		return (h + degrees)%360;
+	}
+
+	function HSVtoHex (hsv){
+
+		var rgb = HSVtoRGB(hsv);
+
+		function componentToHex(c) {
+				var hex = c.toString(16);
+				return hex.length == 1 ? "0" + hex : hex;
+		}
+
+		var hex = "#" + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
+
+		return hex;
+
+	}
+
+	function defineColor (name, hueRange, lowerBounds) {
+
+		var sMin = lowerBounds[0][0],
+				sMax = lowerBounds[lowerBounds.length - 1][0],
+
+				bMin = lowerBounds[lowerBounds.length - 1][1],
+				bMax = lowerBounds[0][1];
+
+		colorDictionary[name] = {
+			hueRange: hueRange,
+			lowerBounds: lowerBounds,
+			saturationRange: [sMin, sMax],
+			brightnessRange: [bMin, bMax]
+		};
+
+	}
+
+	function loadColorBounds () {
+
+		defineColor(
+			'monochrome',
+			null,
+			[[0,0],[100,0]]
+		);
+
+		defineColor(
+			'red',
+			[-26,18],
+			[[20,100],[30,92],[40,89],[50,85],[60,78],[70,70],[80,60],[90,55],[100,50]]
+		);
+
+		defineColor(
+			'orange',
+			[19,46],
+			[[20,100],[30,93],[40,88],[50,86],[60,85],[70,70],[100,70]]
+		);
+
+		defineColor(
+			'yellow',
+			[47,62],
+			[[25,100],[40,94],[50,89],[60,86],[70,84],[80,82],[90,80],[100,75]]
+		);
+
+		defineColor(
+			'green',
+			[63,158],
+			[[30,100],[40,90],[50,85],[60,81],[70,74],[80,64],[90,50],[100,40]]
+		);
+
+		defineColor(
+			'blue',
+			[159, 257],
+			[[20,100],[30,86],[40,80],[50,74],[60,60],[70,52],[80,44],[90,39],[100,35]]
+		);
+
+		defineColor(
+			'purple',
+			[258, 282],
+			[[20,100],[30,87],[40,79],[50,70],[60,65],[70,59],[80,52],[90,45],[100,42]]
+		);
+
+		defineColor(
+			'pink',
+			[283, 334],
+			[[20,100],[30,90],[40,86],[60,84],[80,80],[90,75],[100,73]]
+		);
+
+	}
+
+	function HSVtoRGB (hsv) {
+
+		// this doesn't work for the values of 0 and 360
+		// here's the hacky fix
+		var h = hsv[0];
+		if (h === 0) {h = 1}
+		if (h === 360) {h = 359}
+
+		// Rebase the h,s,v values
+		h = h/360;
+		var s = hsv[1]/100,
+				v = hsv[2]/100;
+
+		var h_i = Math.floor(h*6),
+			f = h * 6 - h_i,
+			p = v * (1 - s),
+			q = v * (1 - f*s),
+			t = v * (1 - (1 - f)*s),
+			r = 256,
+			g = 256,
+			b = 256;
+
+		switch(h_i) {
+			case 0: r = v, g = t, b = p;  break;
+			case 1: r = q, g = v, b = p;  break;
+			case 2: r = p, g = v, b = t;  break;
+			case 3: r = p, g = q, b = v;  break;
+			case 4: r = t, g = p, b = v;  break;
+			case 5: r = v, g = p, b = q;  break;
+		}
+		var result = [Math.floor(r*255), Math.floor(g*255), Math.floor(b*255)];
+		return result;
+	}
+
+	function colorString (prefix, values) {
+		return prefix + '(' + values.join(', ') + ')';
+	}
+
+	return randomColor;
+}));
+
 /**
  * Copyright (c) 2011-2014 Felix Gnass
  * Licensed under the MIT license
@@ -2393,6 +2762,7 @@ $(function() {
 	var canvas = document.getElementById('canvas');
 	if (canvas) var ctx = canvas.getContext('2d');
 	var physics = new Physics(0);
+	var mouseEnabled = false;
 
 	Number.prototype.toRads = function() {
 		return this * Math.PI / 180;
@@ -2402,22 +2772,45 @@ $(function() {
 		return this <= 0 ? -1 : 1;
 	}
 
+	if (mouseEnabled) {
+		var mouseParticle = physics.makeParticle(100, 0, 0);
+		mouseParticle.makeFixed();
+
+		$(window).on('mousemove', function(e) {
+			mouseParticle.position.x = (e.clientX - $(canvas).offset().left);
+			mouseParticle.position.y = (e.clientY - $(canvas).offset().top);
+		});
+	}
+
 	var centerVector = new Physics.Vector(280, 280);
 
+
 	var Polygon = function() {
-		this.startX = centerVector.x;
-		this.startY = centerVector.y;
+		this.sign = (Math.random() - Math.random()).getSign();
+		this.startX = this.sign === -1 ? 180 : 460;
+		this.startY = this.sign === -1 ? 320 : 320;
+		this.shape = Math.random() > 0.5 ? 'square' : 'cicle';
 		this.rotation = Math.random() * 360;
 		this.rotationDirection = Math.random() > 0.5 ? -1 : 1;
+		var randCol = randomColor({
+			hue: 'yellow',
+			format: 'rgbArray'
+		});
+
+		this.color = {
+			r: randCol[0],
+			g: randCol[1],
+			b: randCol[2]
+		}
 
 		this.added = false;
 		this.inVision = true;
 
 		this.vel = 0;
-		this.targetVel = 2;
+		this.targetVel = 10;
 
 		this.size = 0;
-		this.targetSize = Math.random() * 5;
+		this.targetSize = Math.random() * 6;
 
 		this.alpha = 0;
 		this.targetAlpha = Math.random();
@@ -2426,25 +2819,35 @@ $(function() {
 		this.mass = this.targetSize / 4 + 1;
 
 		// Only if it should cicle arund something
-		/*
 		this.anchor = physics.makeParticle(1, 0, 0);
 		this.anchor.reset();
-		this.anchor.position.x = canvas.width * Math.random();
-		this.anchor.position.y = canvas.height * Math.random();
-		this.anchor.makeFixed(); */
+		this.anchor.position.x = centerVector.x;
+		this.anchor.position.y = centerVector.y;
+		this.anchor.makeFixed();
 
 		this._draw = function() {
-			ctx.fillStyle = 'rgba(243, 215, 127, ' + this.alpha + ')';
+			//ctx.fillStyle = 'rgba(243, 215, 127, ' + this.alpha + ')';
+			ctx.fillStyle = 'rgba(' + this.color.r + ', ' + this.color.g + ', ' + this.color.b + ', ' + this.alpha + ')';
 			ctx.save();
 			ctx.beginPath();
 			ctx.translate(this.particle.position.x, this.particle.position.y);
-			ctx.rotate(this.rotation.toRads());
-			ctx.rect(
-				-this.size / 2,
-				-this.size / 2,
-				this.size,
-				this.size
-			);
+			if (this.shape === 'square') {
+				ctx.rotate(this.rotation.toRads());
+				ctx.rect(
+					-this.size / 2,
+					-this.size / 2,
+					this.size,
+					this.size
+				);
+			} else {
+				ctx.ellipse(
+					-this.size / 4,
+					-this.size / 4,
+					this.size / 2,
+					this.size / 2,
+					0, 0, 2 * Math.PI
+				);
+			}
 			ctx.fill();
 			ctx.restore();
 		}
@@ -2465,18 +2868,13 @@ $(function() {
 		this.particle.position.y = this.startY;
 
 		var velX = (Math.random() - Math.random()) * this.targetVel;
-		var velY = (Math.random() - Math.random()) * this.targetVel;
+		var velY = Math.random() * this.targetVel * this.sign;
 
-		if (Math.abs(velX) < 1) {
-			velX = 1 * velX.getSign();
-		} else if (Math.abs(velY) < 1){
-			velY = 1 * velY.getSign();
-		}
-
-		this.particle.velocity.x = velX;
+		this.particle.velocity.x = 0;
 		this.particle.velocity.y = velY;
 		this.added = true;
-		//physics.makeAttraction(this.particle, this.anchor, 50000, canvas.height);
+		this.spring = physics.makeSpring(this.anchor, this.particle, 0.0002, 0.03, 20);
+		if (mouseEnabled) this.repel = physics.makeAttraction(this.particle, mouseParticle, -1, 20);
 	}
 
 	Polygon.prototype.update = function() {
@@ -2486,11 +2884,16 @@ $(function() {
 
 		this.alpha += (this.targetAlpha - this.alpha) * 0.1;
 		this.size += (this.targetSize - this.size) * 0.1;
-
-		if (this.particle.position.distanceToSquared(centerVector) > 62500) {
+		var distance = this.particle.position.distanceToSquared(centerVector);
+		if (distance > 62500 || distance < 10000) {
 			this.targetAlpha = 0;
 		} else {
 			this.targetAlpha = this.initialTargetAlpha
+		}
+
+		var l = this.particle.velocity.lengthSquared();
+		if (l > this.targetVel) {
+			this.particle.velocity.scale(this.targetVel / l);
 		}
 
 		if (this.rotation > 360) this.rotation -= 360;
@@ -2503,6 +2906,7 @@ $(function() {
 			|| this.particle.position.x < -this.size
 			|| this.particle.position.y > $(document).height() + this.size
 			|| this.particle.position.y < -this.size
+			|| this.particle.position.distanceTo(centerVector) < 90
 		) {
 			this.add();
 		} else {
@@ -2545,10 +2949,10 @@ $(function() {
 	var addParticleInterval = setInterval(function() {
 		if (!canvas) clearInterval(addParticleInterval);
 		new Polygon();
-		if (Polygon.all.length >= 50) {
+		if (Polygon.all.length >= 300) {
 			clearInterval(addParticleInterval);
 		}
-	}, 100);
+	}, 20); // 20 * 200 ==> 4s
 
 	physics.play();
 

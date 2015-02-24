@@ -56,10 +56,10 @@ var LeagueCard = React.createClass({
 						</div>
 						<div className="league-card-finance">
 							<span className="league-card-gold">
-								$: {Math.round(this.props.match.stats.goldEarned / 1000)}k gold
+								{Math.round(this.props.match.stats.goldEarned / 1000)}k gold
 							</span><br />
 							<span className="league-card-creeps">
-								#: {this.props.match.stats.minionsKilled + Number(this.props.match.stats.neutralMinionsKilled || '0')} creeps
+								{this.props.match.stats.minionsKilled + Number(this.props.match.stats.neutralMinionsKilled || '0')} creeps
 							</span>
 						</div>
 					</div>
@@ -79,7 +79,7 @@ var LeagueCard = React.createClass({
 					</div>
 				</div>
 					<div className="league-card-bottom">
-						{ matchFormat } / { Math.round(this.props.match.stats.timePlayed / 60) + ' mins' } / { moment(this.props.match.createDate).format('LL') }
+						{ matchFormat } / { Math.round(this.props.match.stats.timePlayed / 60) + ' mins.' } / { moment(this.props.match.createDate).format('LL') }
 					</div>
 				</div>
 			</div>
