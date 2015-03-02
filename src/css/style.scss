@@ -220,10 +220,10 @@ div {
 
 .sideproject {
 	margin-top: 1em;
-	padding-top: 1em;
+	padding-bottom: 1em;
 	color: $text;
 	line-height: 2;
-	border-top: 1px dotted $base-l;
+	border-bottom: 1px solid $base-l;
 }
 .sideproject-title {
 	@extend .soleil;
@@ -302,4 +302,5 @@ div {
 	left: 50%;
 	margin-left: -300px;
 	margin-top: -160px;
+	background: $base;
 }

@@ -15,6 +15,8 @@ $(function() {
 	}); */
 
 	var Dot =  function(posX, posY, x, y) {
+		this.POS_X = posX;
+		this.POS_Y = posY;
 		this.posX = posX;
 		this.posY = posY;
 		this.x = x;
@@ -54,9 +56,10 @@ $(function() {
 		var middleY = DOTS_TOTAL_Y / 2 - 1;
 		var distance = Math.sqrt(Math.pow(middleX - this.x, 2) + Math.pow(middleY - this.y, 2)) / 2;
 		var sinValue = Math.sin(-distance + T);
+		var cosValue = Math.cos(-distance + T);
 
-		this.radius = (sinValue + 2) * 0.5;
-		this.posY += sinValue / 2;
+		this.radius = (sinValue + 1) / 2;
+		this.posY = - sinValue * 4 + this.POS_Y;
 		this.alpha += (this.targetAlpha - this.alpha) * 0.05;
 	}
 
@@ -85,7 +88,7 @@ $(function() {
 
 	reScaleCanvas();
 
-	var DOTS_TOTAL_X = 31;
+	var DOTS_TOTAL_X = 60;
 	var DOTS_TOTAL_Y = DOTS_TOTAL_X * canvas.height / canvas.width;
 
 	function initDots() {
@@ -111,7 +114,7 @@ $(function() {
 			dot.update();
 			dot.draw();
 		});
-		if (T >= 2 * Math.PI) {
+		if (T >= 4 * Math.PI) {
 			T = 0;
 		}
 		requestAnimationFrame(render);
