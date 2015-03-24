@@ -1185,6 +1185,7 @@ $(function() {
 
 	var currentMousePos = { x: 0, y: 0 };
 	var $window = $(window);
+
 	/*
 	var $me = $('#mesh');
 	$me.on('mousemove', function(e) {
@@ -1232,11 +1233,11 @@ $(function() {
 
 		var middleX = DOTS_TOTAL_X / 2 - 1;
 		var middleY = DOTS_TOTAL_Y / 2 - 1;
-		var distance = Math.sqrt(Math.pow(middleX - this.x, 2) + Math.pow(middleY - this.y, 2)) / 2;
+		var distance = Math.sqrt(Math.pow(middleX - this.x, 2) + Math.pow(middleY - this.y, 2)) / 2.5;
 		var sinValue = Math.sin(-distance + T);
 		var cosValue = Math.cos(-distance + T);
 
-		this.radius = (sinValue + 1) / 2;
+		this.radius = (sinValue + 1) / 3;
 		this.posY = - sinValue * 4 + this.POS_Y;
 		this.alpha += (this.targetAlpha - this.alpha) * 0.05;
 	}
@@ -1266,7 +1267,7 @@ $(function() {
 
 	reScaleCanvas();
 
-	var DOTS_TOTAL_X = 60;
+	var DOTS_TOTAL_X = 54;
 	var DOTS_TOTAL_Y = DOTS_TOTAL_X * canvas.height / canvas.width;
 
 	function initDots() {
@@ -1283,7 +1284,7 @@ $(function() {
 
 	initDots();
 
-	var incrementValue = 0.08;
+	var incrementValue = 0.06;
 
 	function render() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2949,6 +2950,8 @@ $(function() {
 
 	// Add particles and start simulation
 
+	/*
+
 	var addParticleInterval = setInterval(function() {
 		if (!canvas) clearInterval(addParticleInterval);
 		new Polygon();
@@ -2958,6 +2961,18 @@ $(function() {
 	}, 20); // 20 * 200 ==> 4s
 
 	physics.play();
+
+	function renderFrame() {
+		if (canvas) {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			Polygon.all.forEach(function(polygon) {
+				polygon.update();
+				polygon.draw();
+			});
+		}
+		requestAnimationFrame(renderFrame);
+	}
+	renderFrame();*/
 
 	// Hompage pulsating square
 
@@ -2985,16 +3000,4 @@ $(function() {
 	}
 
 	if ($('#pulse')) pulsate();
-
-	function renderFrame() {
-		if (canvas) {
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			Polygon.all.forEach(function(polygon) {
-				polygon.update();
-				polygon.draw();
-			});
-		}
-		requestAnimationFrame(renderFrame);
-	}
-	renderFrame();
 });

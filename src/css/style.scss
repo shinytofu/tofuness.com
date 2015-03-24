@@ -29,12 +29,17 @@ Modular scale
 	font-family: 'soleil', sans-serif;
 }
 .calluna {
-	font-family: 'calluna', serif;
+	font-family: 'adobe-garamond-pro', serif;
 }
+.adobe {
+	font-family: 'adobe-garamond-pro', serif;
+}
+
 html {
 	color: $black;
 	font-size: 16px;
 	font-family: 'Helvetica', sans-serif;
+	letter-spacing: 0.01em;
 	background: $base;
 }
 div {

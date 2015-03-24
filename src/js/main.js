@@ -230,6 +230,8 @@ $(function() {
 
 	// Add particles and start simulation
 
+	/*
+
 	var addParticleInterval = setInterval(function() {
 		if (!canvas) clearInterval(addParticleInterval);
 		new Polygon();
@@ -239,6 +241,18 @@ $(function() {
 	}, 20); // 20 * 200 ==> 4s
 
 	physics.play();
+
+	function renderFrame() {
+		if (canvas) {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			Polygon.all.forEach(function(polygon) {
+				polygon.update();
+				polygon.draw();
+			});
+		}
+		requestAnimationFrame(renderFrame);
+	}
+	renderFrame();*/
 
 	// Hompage pulsating square
 
@@ -266,16 +280,4 @@ $(function() {
 	}
 
 	if ($('#pulse')) pulsate();
-
-	function renderFrame() {
-		if (canvas) {
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			Polygon.all.forEach(function(polygon) {
-				polygon.update();
-				polygon.draw();
-			});
-		}
-		requestAnimationFrame(renderFrame);
-	}
-	renderFrame();
 });

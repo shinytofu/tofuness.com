@@ -56,14 +56,6 @@ server.route({
 	}
 });
 
-server.route({
-	method: 'GET',
-	path: '/experiments',
-	handler: function(request, reply) {
-		reply.view('experiments');
-	}
-});
-
 var RIOT = {
 	API_KEY: process.env.RIOT_API_KEY,
 	SUMMONER_ID: 22045226
