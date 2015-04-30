@@ -127,6 +127,8 @@ div {
 	-letter-kern: 0 4px;
 }
 
+
+
 // Me
 
 #me {
@@ -146,7 +148,8 @@ div {
 	margin-left: -40px;
 	width: 560px;
 	height: 287px;
-	background: $base-l;
+	background-color: $base-l;
+	background-size: cover;
 }
 .me-image-caption {
 	margin-left: -40px;

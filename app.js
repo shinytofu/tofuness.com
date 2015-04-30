@@ -36,7 +36,7 @@ server.route({
 	method: 'GET',
 	path: '/',
 	handler: function(request, reply) {
-		reply.view('index');
+		reply.view('index' , { title: 'About'});
 	}
 });
 
@@ -44,7 +44,7 @@ server.route({
 	method: 'GET',
 	path: '/projects',
 	handler: function(request, reply) {
-		reply.view('projects');
+		reply.view('projects', { title: 'Projects' });
 	}
 });
 
@@ -52,7 +52,7 @@ server.route({
 	method: 'GET',
 	path: '/games',
 	handler: function(request, reply) {
-		reply.view('games');
+		reply.view('games', { title: 'Games & Fun' });
 	}
 });
 
