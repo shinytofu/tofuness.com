@@ -1,0 +1,47 @@
+@media (max-width: 640px) {
+	#logo-wrap {
+		padding-left: 42px;
+	}
+	#navigation {
+		margin-left: 40px;
+		width: calc(100% - 80px);
+	}
+	#intro {
+		padding: 80px 40px;
+		width: 100%;
+	}
+	#intro-mid {
+		width: 100%;
+		font-size: 36px;
+	}
+	#me {
+		width: 100%;
+		padding: 0 40px;
+	}
+	.me-image {
+		width: calc(100% + 80px);
+	}
+	.me-image-caption {
+		margin-left: 0;
+	}
+	#footer {
+		padding: 40px;
+		width: 100%;
+	}
+	#tools-sentence {
+		display: none;
+	}
+	// LoL
+	.league-card {
+		width: 100%;
+		margin-top: 0;
+		margin-left: 0;
+		@include border-radius(0);
+	}
+	.league-card-ovl {
+		@include border-radius(0);
+	}
+	.league-loading {
+		width: 100%;
+	}
+}

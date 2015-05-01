@@ -14,8 +14,7 @@
 }
 .league-card-ovl {
 	padding: 10px;
-	@include border-radius(4px 4px 0 0);
-	@include border-radius(4px 4px 0 0);
+	@include border-radius(4px);
 	background: -moz-linear-gradient(left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 82%, rgba(0,0,0,0) 100%);
 	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.6)), color-stop(82%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0)));
 	background: -webkit-linear-gradient(left, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0) 82%,rgba(0,0,0,0) 100%);

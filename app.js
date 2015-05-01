@@ -36,7 +36,7 @@ server.route({
 	method: 'GET',
 	path: '/',
 	handler: function(request, reply) {
-		reply.view('index' , { title: 'About'});
+		reply.view('index' , { title: 'About', animate_logo: true });
 	}
 });
 

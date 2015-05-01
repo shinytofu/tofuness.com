@@ -3,7 +3,6 @@
 @import 'default.scss';
 @import 'league.scss';
 @import 'leaguematch.scss';
-
 /*
 Modular scale
 64
@@ -148,7 +147,6 @@ div {
 	margin-left: -40px;
 	width: 560px;
 	height: 287px;
-	background-color: $base-l;
 	background-size: cover;
 }
 .me-image-caption {
@@ -312,3 +310,5 @@ div {
 	margin-top: -160px;
 	background: $base;
 }
+
+@import 'mobile.scss';

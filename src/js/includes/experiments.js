@@ -6,7 +6,6 @@ $(function() {
 	var T = 0;
 
 	var currentMousePos = { x: 0, y: 0 };
-	var $window = $(window);
 
 	/*
 	var $me = $('#mesh');
