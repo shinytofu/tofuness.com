@@ -3,7 +3,7 @@ $(function() {
 	var easing = {
 		easeInCubic: [0.55, 0.055, 0.675, 0.19],
 		easeOutCubic: [0.215, 0.61, 0.355, 1]
-	}
+	};
 
 	// Logo animation
 
@@ -14,8 +14,8 @@ $(function() {
 		rotateZ: [45, -45]
 	}, {
 		easing: easing.easeOutCubic,
-		duration: $('#logo').data('animate') == true ? 1000 : 0,
-		delay: $('#logo').data('animate') == true ? 600 : 0
+		duration: $('#logo').data('animate') === true ? 1000 : 0,
+		delay: $('#logo').data('animate') === true ? 600 : 0
 	});
 
 	// Footer tooltip
@@ -43,6 +43,7 @@ $(function() {
 
 	// Change stuff on resizing
 
+	var $window = $(window);
 
 	$window.on('resize', function() {
 		$('#pulse').css({
@@ -77,5 +78,7 @@ $(function() {
 		});
 	}
 
-	if ($('#pulse')) pulsate();
+	if ($('#pulse')) {
+		pulsate();
+	}
 });

@@ -1,4 +1,5 @@
 $(function() {
+	var retina = window.devicePixelRatio > 1;
 	var canvas = document.getElementById('mesh');
 	if (!canvas) return;
 
@@ -56,9 +57,8 @@ $(function() {
 		var middleY = DOTS_TOTAL_Y / 2 - 1;
 		var distance = Math.sqrt(Math.pow(middleX - this.x, 2) + Math.pow(middleY - this.y, 2)) / 2.5;
 		var sinValue = Math.sin(-distance + T);
-		var cosValue = Math.cos(-distance + T);
 
-		this.radius = (sinValue + 1) / 3;
+		this.radius = retina ? (sinValue + 1) / 4 : (sinValue + 1) / 2;
 		this.posY = - sinValue * 4 + this.POS_Y;
 		this.alpha += (this.targetAlpha - this.alpha) * 0.05;
 	}
