@@ -17,6 +17,7 @@ server.views({
 	path: Path.join(__dirname, 'views'),
 	partialsPath: Path.join(__dirname, 'views/partials'),
 	context: {
+		// Available to all views
 		env: process.env.NODE_ENV
 	}
 });
@@ -50,9 +51,13 @@ server.route({
 
 server.route({
 	method: 'GET',
-	path: '/games',
+	path: '/games/{slide?}',
 	handler: function(request, reply) {
-		reply.view('games', { title: 'Games & Fun' });
+		if (['hearthstone', 'league', 'other'].indexOf(request.params.slide) > -1 || !request.params.slide) {
+			reply.view('games', { title: 'Games & Fun' });
+		} else {
+			reply.view('404', { title: 'Page not found' }).code(404);
+		}
 	}
 });
 

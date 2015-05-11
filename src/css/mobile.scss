@@ -2,6 +2,9 @@
 	#logo-wrap {
 		padding-left: 42px;
 	}
+	#wrap {
+		width: 100%;
+	}
 	#navigation {
 		margin-left: 40px;
 		width: calc(100% - 80px);
@@ -24,24 +27,50 @@
 	.me-image-caption {
 		margin-left: 0;
 	}
+
 	#footer {
-		padding: 40px;
+		padding: 0 40px;
 		width: 100%;
 	}
 	#tools-sentence {
 		display: none;
 	}
+	#me-slide-frame {
+		width: 100%;
+		margin-left: 0;
+	}
+	#me-slide-wrap {
+		margin-left: -100%;
+		padding-left: 0;
+		width: 300%;
+	}
+	.me-slide {
+		padding-right: 0;
+		padding: 0 40px;
+		width: calc(33.333% - 80px);
+	}
+
 	// LoL
 	.league-card {
 		width: 100%;
-		margin-top: 0;
 		margin-left: 0;
-		@include border-radius(0);
-	}
-	.league-card-ovl {
-		@include border-radius(0);
 	}
 	.league-loading {
+		width: 100%;
+	}
+
+	// Hearth
+	.hearth-deck {
+		width: 100%;
+		margin-left: 0;
+	}
+	.hearth-deck-left {
+		float: none;
+		width: 100%;
+		padding-bottom: 20px;
+	}
+	.hearth-deck-cards {
+		float: none;
 		width: 100%;
 	}
 }

@@ -1,0 +1,106 @@
+.hearth-deck-wrap {
+	padding-top: 40px;
+	&:first-child {
+		padding-top: 0;
+	}
+}
+.hearth-deck {
+	@extend .cf;
+	margin-left: -40px;
+	width: 560px;
+}
+.hearth-deck-left {
+	float: left;
+	width: 186px;
+}
+.hearth-deck-class {
+	@extend .soleil;
+	color: $text-hover;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+.hearth-deck-name {
+	@extend .adobe;
+	color: #fff;
+	font-weight: 600;
+	font-size: 18px;
+}
+.hearth-deck-cards {
+	overflow: hidden;
+	float: left;
+	padding-left: 30px;
+	width: 374px;
+}
+.hearth-card {
+	@extend .cf;
+	@extend .soleil;
+	height: 30px;
+	font-size: 11px;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-color: #2f3334;
+	border-bottom: 1px solid $base;
+	&:first-child {
+		-webkit-border-top-left-radius: 4px;
+		-webkit-border-top-right-radius: 4px;
+		-moz-border-radius-topleft: 4px;
+		-moz-border-radius-topright: 4px;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+	}
+	&:last-child {
+		-webkit-border-bottom-right-radius: 4px;
+		-webkit-border-bottom-left-radius: 4px;
+		-moz-border-radius-bottomright: 4px;
+		-moz-border-radius-bottomleft: 4px;
+		border-bottom-right-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+	&:hover {
+		background: #393e40;
+	}
+}
+.hearth-card-image {
+	display: none;
+	z-index: 1000;
+	position: absolute;
+	width: 231px;
+	height: 320px;
+	background-position: center center;
+	background-size: cover;
+}
+.hearth-card-cost {
+	float: left;
+	margin-left: -30px;
+	width: 30px;
+	color: #ccc;
+	text-align: center;
+	line-height: 30px;
+}
+.hearth-card-name {
+	@extend .soleil;
+	float: left;
+	padding-left: 10px;
+	color: #fff;
+	line-height: 30px;
+	letter-spacing: 0.05em;
+}
+.hearth-card-misc {
+	float: right;
+	opacity: 0;
+	width: 30px;
+	color: $gold;
+	text-align: center;
+	line-height: 30px;
+	&.legendary {
+
+	}
+}
+
+#babyrage {
+	width: 15px;
+	height: 15px;
+	vertical-align: middle;
+}

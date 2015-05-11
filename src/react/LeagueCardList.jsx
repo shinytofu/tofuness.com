@@ -2,7 +2,7 @@
 
 var React = require('react');
 var _ = require('lodash');
-var championsData = require('../data/champions.json').data;
+var championsData = require('../data/lol_champions').data;
 var LeagueCard = require('./LeagueCard');
 var LeagueLoading = require('./LeagueLoading');
 
@@ -23,7 +23,7 @@ var LeagueCardList = React.createClass({
 			success: function(res) {
 				this.setState({
 					loaded: true,
-					matches: res
+					matches: res.splice(0, 8)
 				});
 				this.animateIn();
 			}.bind(this),
@@ -35,6 +35,7 @@ var LeagueCardList = React.createClass({
 		});
 	},
 	animateIn: function() {
+		$('#me-slide-wrap').css('height', $('.me-slide').eq(1).height());
 		$(this.refs.cardList.getDOMNode()).find('>div').velocity('transition.slideUpIn', {
 			duration: 600,
 			easing: [0.215, 0.61, 0.355, 1],

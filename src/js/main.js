@@ -18,6 +18,55 @@ $(function() {
 		delay: $('#logo').data('animate') === true ? 600 : 0
 	});
 
+	// Slides
+	var slidePaths = ['hearthstone', 'league', 'other'];
+	var currentPath = window.location.pathname.replace('/games/', '');
+	var currentIndex =  currentPath !== '/games' ? slidePaths.indexOf(currentPath) : 1;
+
+	function setSlide(index) {
+		if (index < 0 || index > $('.me-slide').length - 1) return false;
+
+		var $slide = $('.me-slide').eq(index);
+		var $dot = $('.me-slide-nav-dot').eq(index);
+
+		currentIndex = index;
+
+		$('.me-slide').removeClass('active');
+		$slide.addClass('active');
+
+		$('.me-slide-nav-dot').removeClass('active');
+		$dot.addClass('active');
+
+		$('#me-slide-wrap').stop().velocity({
+			marginLeft: index * -$('.me-slide').eq(index).outerWidth(),
+			height: $slide.height()
+		}, {
+			easing: easing.easeOutCubic,
+			duration: 300
+		});
+
+		if (window.history) {
+			window.history.replaceState({
+				currentSlide: currentIndex
+			}, document.title, '/games/' + slidePaths[index]);
+		}
+	}
+
+	Mousetrap.bind('right', function(){
+		setSlide(currentIndex + 1)
+	});
+	Mousetrap.bind('left', function(){
+		setSlide(currentIndex - 1)
+	});
+
+	$('.me-slide, .me-slide-nav-dot').on('click', function() {
+		setSlide($(this).index());
+	});
+
+	$('.me-slide').not('.active').on('click', function(e) {
+		e.preventDefault();
+	});
+
 	// Footer tooltip
 
 	var $tooltip = $('#tools-tip-wrap');
@@ -49,6 +98,9 @@ $(function() {
 		$('#pulse').css({
 			height: $(document).height()
 		});
+		// Re-position slider
+		console.log(currentIndex);
+		setSlide(currentIndex);
 	});
 
 	$window.resize();
