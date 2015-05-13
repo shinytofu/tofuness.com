@@ -32,6 +32,9 @@ var HearthstoneDeckList = React.createClass({
 							});
 							return card;
 						});
+						deck.cards = _.sortBy(deck.cards, function(card) {
+							return card.cost;
+						});
 						return (
 							<div className="hearth-deck-wrap">
 								<HearthstoneDeck deck={deck} />

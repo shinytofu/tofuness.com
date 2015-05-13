@@ -39,7 +39,7 @@ $(function() {
 
 		$('#me-slide-wrap').stop().velocity({
 			marginLeft: index * -$('.me-slide').eq(index).outerWidth(),
-			height: $slide.height()
+			height: $('.me-slide-content').eq(index).height()
 		}, {
 			easing: easing.easeOutCubic,
 			duration: 300
@@ -61,10 +61,6 @@ $(function() {
 
 	$('.me-slide, .me-slide-nav-dot').on('click', function() {
 		setSlide($(this).index());
-	});
-
-	$('.me-slide').not('.active').on('click', function(e) {
-		e.preventDefault();
 	});
 
 	// Footer tooltip
@@ -99,7 +95,6 @@ $(function() {
 			height: $(document).height()
 		});
 		// Re-position slider
-		console.log(currentIndex);
 		setSlide(currentIndex);
 	});
 

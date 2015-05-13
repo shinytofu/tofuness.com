@@ -4,16 +4,16 @@ var HearthstoneCard = React.createClass({
 	getInitialState: function() {
 		return {
 			imageLoaded: false,
-			imageUrl: 'none'
+			imageUrl: null
 		};
 	},
 	moveImage: function(e) {
 		$(this.refs.cardImage.getDOMNode()).css({
 			position: 'absolute',
-			left: e.pageX,
-			top: e.pageY,
-			marginLeft: -241,
-			marginTop: -170
+			left: e.pageX - $('#hearth-slide').offset().left,
+			top: e.pageY - $('#hearth-slide').offset().top,
+			marginLeft: -109,
+			marginTop: -330
 		});
 	},
 	showImage: function() {
@@ -29,7 +29,8 @@ var HearthstoneCard = React.createClass({
 		$card.show().stop().velocity({
 			scale: [1, 0.8],
 			opacity: [1, 0],
-			translateX: [0, 50]
+			translateY: [0, 10],
+			rotateX: [0, 50]
 		}, {
 			duration: 350,
 			easing: [220, 20]
@@ -47,11 +48,14 @@ var HearthstoneCard = React.createClass({
 		if (card.rarity === 'Legendary') {
 			misc = (<div className="hearth-card-misc legendary">{String.fromCharCode(9733)}</div>);
 		}
-		var style = {
-			backgroundImage: this.state.imageUrl
+
+		if (this.state.imageUrl) {
+			var style = {
+				backgroundImage: this.state.imageUrl
+			}
 		}
 		return (
-			<div className="hearth-card" onMouseMove={this.moveImage} onMouseEnter={this.showImage} onMouseLeave={this.hideImage}>
+			<div className="hearth-card" onMouseMove={this.moveImage} onMouseEnter={this.showImage} onMouseLeave={this.hideImage} ref="cardWrap">
 				<div className="hearth-card-image" ref="cardImage" style={style}>
 				</div>
 				<div className="hearth-card-cost">

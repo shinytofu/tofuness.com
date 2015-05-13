@@ -35,12 +35,12 @@ var LeagueCardList = React.createClass({
 		});
 	},
 	animateIn: function() {
-		$('#me-slide-wrap').css('height', $('.me-slide').eq(1).height());
 		$(this.refs.cardList.getDOMNode()).find('>div').velocity('transition.slideUpIn', {
 			duration: 600,
 			easing: [0.215, 0.61, 0.355, 1],
 			stagger: 50
 		});
+		$(window).resize();
 	},
 	render: function() {
 		if (!this.state.loaded) return <LeagueLoading error={this.state.error} />;

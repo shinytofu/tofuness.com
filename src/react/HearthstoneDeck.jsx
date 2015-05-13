@@ -9,10 +9,6 @@ var HearthstoneDeck = React.createClass({
 			stagger: 80,
 			delay: 500
 		});
-		$(this.refs.deckList.getDOMNode()).find('.hearth-card-cost').velocity('transition.slideRightIn', {
-			durtion: 300,
-			stagger: 80
-		});
 	},
 	componentDidMount: function() {
 		this.animateIn();
