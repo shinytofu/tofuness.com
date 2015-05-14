@@ -8,7 +8,7 @@ var Handlebars = require('handlebars');
 require('swag').registerHelpers(Handlebars);
 
 var server = new Hapi.Server();
-server.connection({ port: 1337 });
+server.connection({ port: process.env.PORT || 1337 });
 
 server.views({
 	engines: {
