@@ -2,6 +2,9 @@
   "name": "desuvader",
   "version": "0.0.0",
   "description": "Desuvader portfolio",
+  "engines" : {
+    "node" : "0.12.x"
+  },
   "main": "index.js",
   "scripts": {
     "build": "set NODE_ENV=production && webpack --config webpack-prod.config.js --progress --profile --colors && gulp build",
