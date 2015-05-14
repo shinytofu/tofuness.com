@@ -1,3 +1,4 @@
+// Card order doesn't matter here. They will be sorted by cost in the component.
 module.exports = [
 	{
 		name: 'Ramperino',
@@ -38,6 +39,7 @@ module.exports = [
 		name: 'Imperial Freeze',
 		class: 'Mage',
 		cards: [
+			'Pyroblast',
 			'Ice Lance',
 			'Ice Lance',
 			'Frostbolt',
@@ -66,8 +68,7 @@ module.exports = [
 			'Flamestrike',
 			'Flamestrike',
 			'Archmage Antonidas',
-			'Alexstrasza',
-			'Pyroblast'
+			'Alexstrasza'
 		]
 	}
 ]
