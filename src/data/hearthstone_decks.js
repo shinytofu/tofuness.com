@@ -6,7 +6,6 @@ module.exports = [
 		cards: [
 			'Innervate',
 			'Innervate',
-			'Zombie Chow',
 			'Wild Growth',
 			'Wild Growth',
 			'Wrath',
@@ -24,6 +23,7 @@ module.exports = [
 			'Piloted Shredder',
 			'Piloted Shredder',
 			'Azure Drake',
+			'Sludge Belcher',
 			'Azure Drake',
 			'Druid of the Claw',
 			'Druid of the Claw',
