@@ -5,12 +5,6 @@ $(function() {
 		return check;
 	}
 
-	// Please safari.
-
-	if (navigator.userAgent.indexOf('Safari') > -1){
-		$('#mesh').closest('.me-image-wrap').hide();
-	}
-
 	var retina = window.devicePixelRatio > 1;
 	var canvas = document.getElementById('mesh');
 	if (!canvas) return;

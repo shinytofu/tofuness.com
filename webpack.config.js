@@ -22,7 +22,7 @@ module.exports = function(options){
 		entry: './src/react/app.jsx',
 		output: {
 			filename: 'components.js',
-			path: './public/js/',
+			path: './build',
 			publicPath: options.devServer ? 'http://localhost:8090/assets' : './public/js/'
 		},
 		module: {

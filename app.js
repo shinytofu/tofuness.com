@@ -18,7 +18,8 @@ server.views({
 	partialsPath: Path.join(__dirname, 'views/partials'),
 	context: {
 		// Available to all views
-		env: process.env.NODE_ENV
+		env: process.env.NODE_ENV,
+		revManifest: require('./build/rev-manifest.json')
 	}
 });
 
@@ -28,6 +29,17 @@ server.route({
 	handler: {
 		directory: {
 			path: 'public',
+			listing: false
+		}
+	}
+});
+
+server.route({
+	method: 'GET',
+	path: '/assets/{param}',
+	handler: {
+		directory: {
+			path: 'build',
 			listing: false
 		}
 	}

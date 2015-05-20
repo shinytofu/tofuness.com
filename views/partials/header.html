@@ -6,18 +6,25 @@
 
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content='{{title}} - Dennis "Desuvader" Jin' />
-	<meta property="og:image" content="" />
+	<meta property="og:image" content="/img/OpieOp.jpg" />
 	<meta property="og:description" content="{{description}}" />
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@thesotaku" />
 
 	<meta itemprop="name" content='{{title}} - Dennis "Desuvader" Jin' />
 	<meta itemprop="description" content="{{description}}" />
-	<meta itemprop="image" content="" />
+	<meta itemprop="image" content="/img/OpieOp.jpg" />
 
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
 	<title>{{title}} - Dennis "Desuvader" Jin</title>
 	<link href="//fonts.googleapis.com/css?family=Oswald:300,400" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" type="text/css" href="/css/style.css" />
+	{{#is env 'development'}}
+		<link rel="stylesheet" type="text/css" href="/assets/style.css" />
+	{{else}}
+		<link rel="stylesheet" type="text/css" href="/assets/{{revManifest.[style.css]}}" />
+	{{/is}}
 	<script src="//use.typekit.net/mnl7tcp.js"></script>
 	<script>
 		try {
