@@ -26,7 +26,7 @@ module.exports = [
 			'Kill Command',
 			'Kill Command',
 			'Unleash the Hounds',
-			'Unleadh the Hounds',
+			'Unleash the Hounds',
 			'Arcane Golem',
 			'Arcane Golem',
 			'Wolfrider',
