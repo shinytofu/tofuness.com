@@ -14,7 +14,7 @@ var LeagueLoading = React.createClass({
 			trail: 70,
 			zIndex: 2,
 			hwaccel: true,
-		}
+		};
 		var spinner = new Spinner(opts).spin();
 		$(this.refs.spinner.getDOMNode()).prepend(spinner.el);
 	},

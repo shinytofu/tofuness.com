@@ -38,7 +38,7 @@ var HearthstoneDeck = React.createClass({
 				<div className="hearth-deck-cards">
 					{
 						groupedDeck.map(function(card) {
-							return <HearthstoneCard card={card} />
+							return <HearthstoneCard card={card} />;
 						})
 					}
 				</div>

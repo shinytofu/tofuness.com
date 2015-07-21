@@ -49,10 +49,11 @@ var HearthstoneCard = React.createClass({
 			misc = (<div className="hearth-card-misc legendary">{String.fromCharCode(9733)}</div>);
 		}
 
+		var style;
 		if (this.state.imageUrl) {
-			var style = {
+			style = {
 				backgroundImage: this.state.imageUrl
-			}
+			};
 		}
 		return (
 			<div className="hearth-card" onMouseMove={this.moveImage} onMouseEnter={this.showImage} onMouseLeave={this.hideImage} ref="cardWrap">
@@ -66,7 +67,7 @@ var HearthstoneCard = React.createClass({
 				</div>
 				{misc}
 			</div>
-		)
+		);
 	}
 });
 

@@ -53,10 +53,10 @@ $(function() {
 	}
 
 	Mousetrap.bind('right', function(){
-		setSlide(currentIndex + 1)
+		setSlide(currentIndex + 1);
 	});
 	Mousetrap.bind('left', function(){
-		setSlide(currentIndex - 1)
+		setSlide(currentIndex - 1);
 	});
 
 	$('.me-slide, .me-slide-nav-dot').on('click', function() {

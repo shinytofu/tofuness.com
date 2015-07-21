@@ -14,7 +14,7 @@ var LeagueCardList = React.createClass({
 			summonerRegion: 'EUNE',
 			matches: [],
 			error: null
-		}
+		};
 	},
 	componentWillMount: function() {
 		$.ajax({

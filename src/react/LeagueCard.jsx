@@ -18,7 +18,7 @@ var LeagueCard = React.createClass({
 	render: function() {
 		var style = {
 			backgroundImage: 'url(' + this.props.match.champion.cover + ')'
-		}
+		};
 		var matchFormat = mapreplace(this.props.match.subType, {
 			'NONE': 'Custom',
 			'NORMAL': 'Normal 5v5',
@@ -68,8 +68,8 @@ var LeagueCard = React.createClass({
 						{
 							itemIds.map(function(itemId) {
 								var itemStyle = {
-									backgroundImage: itemId === 0 ? 'url(/img/empty.png)' : 'url(http://ddragon.leagueoflegends.com/cdn/5.5.1/img/item/' + itemId + '.png)'
-								}
+									backgroundImage: itemId === 0 ? 'url(/img/empty.png)' : 'url(http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/' + itemId + '.png)'
+								};
 								return (
 									<div className="league-card-item" style={itemStyle}>
 									</div>
