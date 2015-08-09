@@ -21,11 +21,14 @@ var LeagueCardList = React.createClass({
 			type: 'GET',
 			url: '/recent-matches',
 			success: function(res) {
-				this.setState({
-					loaded: true,
-					matches: res.splice(0, 8)
-				});
-				this.animateIn();
+				// Prevent laggy animations
+				setTimeout(function() {
+					this.setState({
+						loaded: true,
+						matches: res.splice(0, 8)
+					});
+					this.animateIn();
+				}.bind(this), 500);
 			}.bind(this),
 			error: function() {
 				this.setState({
