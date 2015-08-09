@@ -68,7 +68,7 @@ var LeagueCard = React.createClass({
 						{
 							itemIds.map(function(itemId) {
 								var itemStyle = {
-									backgroundImage: itemId === 0 ? 'url(/img/empty.png)' : 'url(http://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/' + itemId + '.png)'
+									backgroundImage: itemId === 0 ? 'url(/img/empty.png)' : 'url(https://ddragon.leagueoflegends.com/cdn/5.14.1/img/item/' + itemId + '.png)'
 								};
 								return (
 									<div className="league-card-item" style={itemStyle}>
