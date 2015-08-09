@@ -22,10 +22,9 @@ var HearthstoneCard = React.createClass({
 		if (!this.state.imageLoaded) {
 			this.setState({
 				imageLoaded: true,
-				imageUrl: 'url(http://wow.zamimg.com/images/hearthstone/cards/enus/original/' + this.props.card.id + '.png)'
+				imageUrl: 'url(https://wow.zamimg.com/images/hearthstone/cards/enus/original/' + this.props.card.id + '.png)'
 			});
 		}
-
 		$card.show().stop().velocity({
 			scale: [1, 0.8],
 			opacity: [1, 0],

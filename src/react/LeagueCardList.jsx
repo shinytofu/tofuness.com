@@ -50,7 +50,7 @@ var LeagueCardList = React.createClass({
 				'key': '' + match.championId
 			});
 			var champion = championsData[championName];
-			champion.cover = 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champion.id + '_0.jpg';
+			champion.cover = 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champion.id + '_0.jpg';
 			match.champion = champion;
 			return match;
 		}.bind(this));
