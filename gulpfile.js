@@ -26,7 +26,7 @@ var path = {
 		files: './src/js/**/*.js',
 		dest: './build'
 	}
-}
+};
 
 gulp.task('sass', ['preclean'], function() {
 	return gulp.src(path.scss.src)
