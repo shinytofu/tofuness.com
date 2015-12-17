@@ -309,7 +309,8 @@ div {
 	opacity: 0;
 	position: absolute;
 	top: -60px;
-	left: -80px;
+	left: 50%;
+	margin-left: -400px;
 	width: 800px;
 	height: 800px;
 	border: 1px solid $gold-dark;
@@ -319,7 +320,8 @@ div {
 	opacity: 0;
 	position: absolute;
 	top: -60px;
-	left: -80px;
+	left: 50%;
+	margin-left: -400px;
 	width: 800px;
 	height: 800px;
 	border: 4px solid $gold;

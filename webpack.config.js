@@ -39,5 +39,5 @@ module.exports = function(options){
 		resolve: {
 			extensions: ['', '.js', '.jsx']
 		}
-	}
-}
+	};
+};

@@ -28,7 +28,7 @@ var LeagueCardList = React.createClass({
 						matches: res.splice(0, 8)
 					});
 					this.animateIn();
-				}.bind(this), 500);
+				}.bind(this), 10);
 			}.bind(this),
 			error: function() {
 				this.setState({
@@ -46,7 +46,9 @@ var LeagueCardList = React.createClass({
 		$(window).resize();
 	},
 	render: function() {
-		if (!this.state.loaded) return <LeagueLoading error={this.state.error} />;
+		if (!this.state.loaded) {
+			return <LeagueLoading error={this.state.error} />;
+		}
 
 		var mergedMatches = this.state.matches.map(function(match) {
 			var championName = _.findKey(championsData, {
