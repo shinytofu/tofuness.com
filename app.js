@@ -76,7 +76,7 @@ server.route({
 var RIOT = {
 	API_KEY: process.env.RIOT_API_KEY,
 	SUMMONER_ID: 22045226
-}
+};
 
 server.route({
 	method: 'GET',
@@ -101,7 +101,9 @@ server.route({
 		Request
 		.get('https://eune.api.pvp.net/api/lol/eune/v2.2/match/' + request.params.match_id +'?includeTimeline=true&api_key=' + RIOT.API_KEY)
 		.end(function(err, response) {
-			if (response.status !== 200) return reply({ status: response.status }, null);
+			if (response.status !== 200) {
+				return reply({ status: response.status }, null);
+			}
 			reply(err, JSON.parse(response.text)).type('text/json');
 		});
 	}
