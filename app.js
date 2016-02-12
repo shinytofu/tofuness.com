@@ -10,39 +10,50 @@ require('swag').registerHelpers(Handlebars);
 var server = new Hapi.Server();
 server.connection({ port: process.env.PORT || 1337 });
 
-server.views({
-	engines: {
-		html: Handlebars
-	},
-	path: Path.join(__dirname, 'views'),
-	partialsPath: Path.join(__dirname, 'views/partials'),
-	context: {
-		// Available to all views
-		env: process.env.NODE_ENV,
-		revManifest: require('./build/rev-manifest.json')
+server.register(require('vision'), (err) => {
+	if (err) {
+		throw err;
 	}
+	server.views({
+		engines: {
+			html: Handlebars
+		},
+		path: Path.join(__dirname, 'views'),
+		partialsPath: Path.join(__dirname, 'views/partials'),
+		context: {
+			// Available to all views
+			env: process.env.NODE_ENV,
+			revManifest: require('./build/rev-manifest.json')
+		}
+	});
 });
 
-server.route({
-	method: 'GET',
-	path: '/{param*}',
-	handler: {
-		directory: {
-			path: 'public',
-			listing: false
-		}
+server.register(require('inert'), (err) => {
+	if (err) {
+		throw err;
 	}
-});
 
-server.route({
-	method: 'GET',
-	path: '/assets/{param}',
-	handler: {
-		directory: {
-			path: 'build',
-			listing: false
+	server.route({
+		method: 'GET',
+		path: '/{param*}',
+		handler: {
+			directory: {
+				path: 'public',
+				listing: false
+			}
 		}
-	}
+	});
+
+	server.route({
+		method: 'GET',
+		path: '/assets/{param}',
+		handler: {
+			directory: {
+				path: 'build',
+				listing: false
+			}
+		}
+	});
 });
 
 server.route({
@@ -85,7 +96,9 @@ server.route({
 		Request
 		.get('https://eune.api.pvp.net/api/lol/eune/v1.3/game/by-summoner/' + RIOT.SUMMONER_ID + '/recent?api_key=' + RIOT.API_KEY)
 		.end(function(err, response) {
-			if (response.status !== 200){
+			if (err) {
+				reply(new Error(err));
+			} else if (response.status !== 200){
 				reply(new Error(response.status));
 			} else {
 				reply(JSON.parse(response.text).games).type('text/json');
