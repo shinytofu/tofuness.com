@@ -7,7 +7,9 @@ var Request = require('superagent');
 var Handlebars = require('handlebars');
 require('swag').registerHelpers(Handlebars);
 
-var server = new Hapi.Server();
+var server = new Hapi.Server({
+
+});
 server.connection({ port: process.env.PORT || 1337 });
 
 server.register(require('vision'), (err) => {
@@ -97,6 +99,8 @@ server.route({
 		.get('https://eune.api.pvp.net/api/lol/eune/v1.3/game/by-summoner/' + RIOT.SUMMONER_ID + '/recent?api_key=' + RIOT.API_KEY)
 		.end(function(err, response) {
 			if (err) {
+				console.log(err);
+				console.log(response);
 				reply(new Error(err));
 			} else if (response.status !== 200){
 				reply(new Error(response.status));
