@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Desuvader portfolio",
   "engines": {
-    "node": "0.12.x"
+    "node": "5.6.0"
   },
   "main": "index.js",
   "scripts": {
