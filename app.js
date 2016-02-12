@@ -103,6 +103,7 @@ server.route({
 				console.log(response);
 				reply(new Error(err));
 			} else if (response.status !== 200){
+				console.log(response);
 				reply(new Error(response.status));
 			} else {
 				reply(JSON.parse(response.text).games).type('text/json');
