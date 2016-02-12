@@ -46,41 +46,10 @@ div {
 .link {
 	color: $text;
 	text-decoration: none;
-	text-shadow:
-		0 1px 0 $base,
-		1px 1px 0 $base,
-		-1px 1px 0 $base,
-		2px 1px 0 $base,
-		-2px 1px 0 $base,
-		0 2px 0 $base,
-		-1px 2px 0 $base,
-		1px 2px 0 $base,
-		-2px 2px 0 $base,
-		2px 2px 0 $base;
 	@include box-shadow(0 1px 0 $gold);
 	&:hover {
 		color: $gold;
 		@include box-shadow(0 1px 0 $gold);
-	}
-}
-.link-2 {
-	color: $text;
-	text-decoration: none;
-	text-shadow:
-		0 1px 0 $base,
-		1px 1px 0 $base,
-		-1px 1px 0 $base,
-		2px 1px 0 $base,
-		-2px 1px 0 $base,
-		0 2px 0 $base,
-		-1px 2px 0 $base,
-		1px 2px 0 $base,
-		-2px 2px 0 $base,
-		2px 2px 0 $base;
-	@include box-shadow(0 1px 0 $text);
-	&:hover {
-		color: $text-hover;
-		@include box-shadow(0 1px 0 $text-hover);
 	}
 }
 
@@ -140,10 +109,8 @@ div {
 	font-weight: 700;
 	line-height: 1.5em;
 	letter-spacing: 0.01em;
-	-letter-kern: 0 4px;
+	text-rendering: optimizeLegibility;
 }
-
-
 
 // Me
 
