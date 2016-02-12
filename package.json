@@ -10,7 +10,7 @@
     "start": "node app.js",
     "build": "set NODE_ENV=production && webpack --config webpack-prod.config.js --progress --profile --colors && gulp build",
     "dev": "webpack-dev-server --config webpack-dev-server.config.js --progress --colors --port 8090",
-    "postinstall": "webpack -p --config webpack-prod.config.js && ./node_modules/gulp build"
+    "postinstall": "webpack -p --config webpack-prod.config.js && gulp build"
   },
   "author": "Dennis Jin <desuvader@gmail.com>",
   "license": "MIT",
