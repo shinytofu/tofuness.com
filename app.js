@@ -7,9 +7,7 @@ var Request = require('superagent');
 var Handlebars = require('handlebars');
 require('swag').registerHelpers(Handlebars);
 
-var server = new Hapi.Server({
-
-});
+var server = new Hapi.Server();
 server.connection({ port: process.env.PORT || 1337 });
 
 server.register(require('vision'), (err) => {
@@ -43,6 +41,12 @@ server.register(require('inert'), (err) => {
 				path: 'public',
 				listing: false
 			}
+		},
+		config: {
+			cache: {
+				expiresIn: 12 * 3600 * 1000,
+				privacy: 'private'
+			}
 		}
 	});
 
@@ -53,6 +57,12 @@ server.register(require('inert'), (err) => {
 			directory: {
 				path: 'build',
 				listing: false
+			}
+		},
+		config: {
+			cache: {
+				expiresIn: 12 * 3600 * 1000,
+				privacy: 'private'
 			}
 		}
 	});
