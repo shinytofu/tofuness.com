@@ -99,33 +99,4 @@ $(function() {
 	});
 
 	$window.resize();
-
-	// Hompage pulsating square
-
-	function pulsate() {
-		$('#pulse-outer').velocity({
-			opacity: [0, 1],
-			scale: [1, 0],
-			rotateZ: [45, 45]
-		}, {
-			delay: 1000,
-			duration: 2000,
-			easing: easing.easeOutCubic // easeOutCubic
-		});
-
-		$('#pulse-inner').velocity({
-			opacity: [0, 1],
-			scale: [0.9, 0],
-			rotateZ: [45, 45]
-		}, {
-			delay: 1300,
-			duration: 2500,
-			easing: easing.easeOutCubic,
-			complete: pulsate
-		});
-	}
-
-	if ($('#pulse')) {
-		pulsate();
-	}
 });
