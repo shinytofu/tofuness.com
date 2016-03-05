@@ -35,7 +35,7 @@ server.register(require('inert'), (err) => {
 
 	server.route({
 		method: 'GET',
-		path: '/{param*}',
+		path: '/public/{param*}',
 		handler: {
 			directory: {
 				path: 'public',
@@ -136,6 +136,15 @@ server.route({
 		});
 	}
 });
+
+server.route({
+	method: '*',
+	path: '/{p*}',
+	handler: function(request, reply) {
+		return reply.view('404', { title: 'Page not found' }).code(404);
+	}
+});
+
 
 if (process.env.NODE_ENV === 'development') {
 	process.send({cmd: 'NODE_DEV', required: './views/index.html'});

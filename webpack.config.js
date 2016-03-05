@@ -29,12 +29,13 @@ module.exports = function(options){
 			loaders: [
 				{
 					test: /\.jsx$/,
-					loader: 'jsx-loader?insertPragma=React.DOM&harmony'
+					loader: 'babel-loader',
+					exclude: /node_modules/,
+					query: {
+						presets: ['react', 'es2015']
+					}
 				}
 			]
-		},
-		externals: {
-			'react': 'React'
 		},
 		resolve: {
 			extensions: ['', '.js', '.jsx']

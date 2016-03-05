@@ -4,7 +4,7 @@ var HearthstoneCard = require('./HearthstoneCard');
 
 var HearthstoneDeck = React.createClass({
 	animateIn: function() {
-		$(this.refs.deckList.getDOMNode()).find('.hearth-card-misc').velocity('transition.slideRightIn', {
+		$(this.refs.deckList).find('.hearth-card-misc').velocity('transition.slideRightIn', {
 			durtion: 300,
 			stagger: 80,
 			delay: 500

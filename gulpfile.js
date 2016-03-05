@@ -18,8 +18,6 @@ var path = {
 	},
 	js: {
 		src: [
-			'./src/js/includes/lodash.js',
-			'./src/js/includes/traer.js',
 			'./src/js/includes/*.js',
 			'./src/js/main.js'
 		],

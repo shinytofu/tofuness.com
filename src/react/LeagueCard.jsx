@@ -2,7 +2,7 @@ var React = require('react');
 var moment = require('moment');
 var mapreplace = require('mapreplace');
 var PubSub = require('pubsub-js');
-var cx = React.addons.classSet;
+var cx = require('classnames');
 var _ = require('lodash');
 
 var LeagueCard = React.createClass({
@@ -68,7 +68,7 @@ var LeagueCard = React.createClass({
 						{
 							itemIds.map(function(itemId) {
 								var itemStyle = {
-									backgroundImage: itemId === 0 ? 'url(/img/empty.png)' : 'url(https://ddragon.leagueoflegends.com/cdn/6.3.1/img/item/' + itemId + '.png)'
+									backgroundImage: itemId === 0 ? 'url(/public/img/empty.png)' : 'url(https://ddragon.leagueoflegends.com/cdn/6.3.1/img/item/' + itemId + '.png)'
 								};
 								return (
 									<div className="league-card-item" style={itemStyle}>

@@ -4,6 +4,7 @@
 @import 'hearth.scss';
 @import 'league.scss';
 @import 'leaguematch.scss';
+@import '404.scss';
 /*
 Modular scale
 64
@@ -32,11 +33,17 @@ Modular scale
 html {
 	color: $black;
 	font-size: 16px;
-	font-family: 'Helvetica', sans-serif;
+	font-family: 'Arial', sans-serif;
 	letter-spacing: 0.01em;
 	background: $base;
 	overflow-y: scroll;
 	overflow-x: hidden;
+	&.wf-loading body {
+		opacity: 0;
+	}
+}
+body {
+	@extend .ts;
 }
 div {
 	-webkit-box-sizing: border-box;
@@ -87,7 +94,7 @@ div {
 }
 #wrap {
 	margin: 0 auto;
-	padding-top: 80px;
+	padding-top: 40px;
 	width: 480px;
 }
 #intro {
@@ -318,6 +325,7 @@ div {
 	width: 480px;
 	color: $base-l;
 	font-size: 14px;
+	text-align: center;
 }
 #tools-link {
 	position: relative;

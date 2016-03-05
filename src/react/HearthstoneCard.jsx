@@ -8,7 +8,7 @@ var HearthstoneCard = React.createClass({
 		};
 	},
 	moveImage: function(e) {
-		$(this.refs.cardImage.getDOMNode()).css({
+		$(this.refs.cardImage).css({
 			position: 'absolute',
 			left: e.pageX - $('#hearth-slide').offset().left,
 			top: e.pageY - $('#hearth-slide').offset().top,
@@ -17,7 +17,7 @@ var HearthstoneCard = React.createClass({
 		});
 	},
 	showImage: function() {
-		var $card = $(this.refs.cardImage.getDOMNode());
+		var $card = $(this.refs.cardImage);
 		if (!$card.closest('.me-slide').hasClass('active')) return false;
 		if (!this.state.imageLoaded) {
 			this.setState({
@@ -36,7 +36,7 @@ var HearthstoneCard = React.createClass({
 		});
 	},
 	hideImage: function() {
-		$(this.refs.cardImage.getDOMNode()).hide();
+		$(this.refs.cardImage).hide();
 	},
 	render: function() {
 		var misc;

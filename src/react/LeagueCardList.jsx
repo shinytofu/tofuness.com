@@ -28,7 +28,7 @@ var LeagueCardList = React.createClass({
 						matches: res.splice(0, 8)
 					});
 					this.animateIn();
-				}.bind(this), 10);
+				}.bind(this), 400);
 			}.bind(this),
 			error: function() {
 				this.setState({
@@ -38,12 +38,12 @@ var LeagueCardList = React.createClass({
 		});
 	},
 	animateIn: function() {
-		$(this.refs.cardList.getDOMNode()).find('>div').velocity('transition.slideUpIn', {
+		$(window).resize();
+		$(this.refs.cardList).find('>div').velocity('transition.slideUpIn', {
 			duration: 600,
 			easing: [0.215, 0.61, 0.355, 1],
 			stagger: 50
 		});
-		$(window).resize();
 	},
 	render: function() {
 		if (!this.state.loaded) {

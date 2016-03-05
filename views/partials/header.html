@@ -4,9 +4,11 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
+	<!-- Open Graph data -->
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content='{{title}} - Dennis "tofuness" Jin' />
+	<meta property="og:title" content='{{title}}' />
 	<meta property="og:image" content="/img/OpieOp.jpg" />
+	<meta property="og:site_name" content="Dennis Jin, Software Developer"/>
 	<meta property="og:description" content="{{description}}" />
 
 	<meta name="twitter:card" content="summary" />
@@ -16,7 +18,7 @@
 	<meta itemprop="description" content="{{description}}" />
 	<meta itemprop="image" content="/img/OpieOp.jpg" />
 
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="/public/favicon.ico" type="image/x-icon" />
 
 	<title>{{title}} - Dennis "tofuness" Jin</title>
 	<link href="//fonts.googleapis.com/css?family=Oswald:400" rel="stylesheet" type="text/css" />
@@ -34,6 +36,20 @@
 	    },
 	    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
 	  })(document);
+	</script>
+	<script>
+		this.zenfonts=function(e){"use strict";var t="serif",n=e.documentElement,a=function s(e,t){return function(n){if(n||e.offsetWidth!==t){var a=e.parentNode;return a&&a.removeChild(e),!0}}},i=function o(e){e&&(n.className=n.className.replace(new RegExp("(^|\\s)*"+e+"(\\s|$)*","g")," "))};return function r(s,o){if(s instanceof Array||(s=[s]),o=o||{},!e.body)return setTimeout(function(){r(s,o)},1);for(var f=[],l=s.length;l--;){var c=s[l];"string"==typeof c&&(c={family:c});var u=c.family,m=e.createElement("div");m.style.cssText="position:absolute;top:-999px;left:-9999px;visibility:hidden;white-space:nowrap;font-size:20em;font-family:"+t+";"+c.style||"",m.appendChild(e.createTextNode("// Zenfonts([{}]);")),e.body.appendChild(m);var p=a(m,m.offsetWidth);m.style.fontFamily="'"+u+"',"+t,p()||f.push(p)}var d=o.fallbackClass,v=function b(){i(d),o.onSuccess&&o.onSuccess()};if(0===f.length)return v();var h=o.loadingClass;h&&(n.className+=" "+h);var y=o.fallback||2e3;if(d){var g=setTimeout(function x(){i(h),n.className+=" "+d},y),w=v;v=function(){clearTimeout(g),w()}}var T=(new Date).getTime()+Math.max(y,o.swap||9999);!function N(e){setTimeout(function(){var t=(new Date).getTime()>=T;t&&o.onSwap&&o.onSwap();for(var n=f.length;n--;)f[n](t)&&f.splice(n,1);0===f.length?(t||v(),i(h)):N(1.5*e)},e)}(9)}}(document);
+	</script>
+	<script>
+		zenfonts(['soleil', 'adobe-garamond-pro'],
+			{
+				fallbackClass: 'wf-fallback',
+				loadingClass: 'wf-loading',
+				onSuccess: function() {
+					console.log('excellent');
+				}
+			}
+		);
 	</script>
 </head>
 <body>

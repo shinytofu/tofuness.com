@@ -16,7 +16,14 @@ var LeagueLoading = React.createClass({
 			hwaccel: true,
 		};
 		var spinner = new Spinner(opts).spin();
-		$(this.refs.spinner.getDOMNode()).prepend(spinner.el);
+		$(this.refs.spinner)
+			.prepend(spinner.el)
+			.velocity({
+				opacity: [1, 0]
+			}, {
+				easing: 'easeOutExpo',
+				duration: 200
+			});
 	},
 	render: function() {
 		return (

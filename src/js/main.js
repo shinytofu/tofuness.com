@@ -1,5 +1,4 @@
 $(function() {
-
 	var easing = {
 		easeInCubic: [0.55, 0.055, 0.675, 0.19],
 		easeOutCubic: [0.215, 0.61, 0.355, 1]
@@ -86,14 +85,13 @@ $(function() {
 		});
 	});
 
+	$('.tools-icon').imgpreload();
+
 	// Change stuff on resizing
 
 	var $window = $(window);
 
 	$window.on('resize', function() {
-		$('#pulse').css({
-			height: $(document).height()
-		});
 		// Re-position slider
 		setSlide(currentIndex);
 	});

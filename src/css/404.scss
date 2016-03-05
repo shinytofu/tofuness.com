@@ -1,0 +1,18 @@
+#fourofour {
+	@extend .soleil;
+	color: #fff;
+	padding: 80px 0 40px 0;
+	width: 480px;
+	text-align: center;
+}
+#fourofour-top {
+	font-size: 11px;
+	text-transform: uppercase;
+	line-height: 1;
+}
+#fourofour-bottom {
+	padding-top: 40px;
+	@extend .adobe;
+	font-size: 200px;
+	line-height: 1;
+}
