@@ -44,8 +44,8 @@ server.register(require('inert'), (err) => {
 		},
 		config: {
 			cache: {
-				expiresIn: 12 * 3600 * 1000,
-				privacy: 'private'
+				expiresIn: 7 * 24 * 3600 * 1000,
+				privacy: 'public'
 			}
 		}
 	});
@@ -61,8 +61,8 @@ server.register(require('inert'), (err) => {
 		},
 		config: {
 			cache: {
-				expiresIn: 12 * 3600 * 1000,
-				privacy: 'private'
+				expiresIn: 7 * 24 * 3600 * 1000,
+				privacy: 'public'
 			}
 		}
 	});
