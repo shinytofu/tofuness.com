@@ -28,6 +28,19 @@ server.register(require('vision'), (err) => {
 	});
 });
 
+server.register({
+	register: require('hapi-sitemap'),
+	options: {
+		endpoint: '/sitemap',
+		baseUri: 'https://tofuness.com'
+	},
+	function(err) {
+		if (err) {
+			console.log(err);
+		}
+	}
+});
+
 server.register(require('inert'), (err) => {
 	if (err) {
 		throw err;
@@ -43,6 +56,11 @@ server.register(require('inert'), (err) => {
 			}
 		},
 		config: {
+			plugins: {
+				sitemap: {
+					exclude: true
+				}
+			},
 			cache: {
 				expiresIn: 7 * 24 * 3600 * 1000,
 				privacy: 'public'
@@ -60,6 +78,11 @@ server.register(require('inert'), (err) => {
 			}
 		},
 		config: {
+			plugins: {
+				sitemap: {
+					exclude: true
+				}
+			},
 			cache: {
 				expiresIn: 7 * 24 * 3600 * 1000,
 				privacy: 'public'
@@ -119,6 +142,13 @@ server.route({
 				reply(JSON.parse(response.text).games).type('text/json');
 			}
 		});
+	},
+	config: {
+		plugins: {
+			sitemap: {
+				exclude: true
+			}
+		}
 	}
 });
 
@@ -134,6 +164,13 @@ server.route({
 			}
 			reply(err, JSON.parse(response.text)).type('text/json');
 		});
+	},
+	config: {
+		plugins: {
+			sitemap: {
+				exclude: true
+			}
+		}
 	}
 });
 
@@ -142,6 +179,13 @@ server.route({
 	path: '/{p*}',
 	handler: function(request, reply) {
 		return reply.view('404', { title: 'Page not found' }).code(404);
+	},
+	config: {
+		plugins: {
+			sitemap: {
+				exclude: true
+			}
+		}
 	}
 });
 
